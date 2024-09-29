@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
@@ -8,12 +9,11 @@
     <script defer type="text/javascript" src="metadata.js"></script>
     <script defer type="text/javascript" src="script.js"></script>
     <script type="text/javascript" src="theme.js"></script>
-    <title>Sinotcaの雑記帳</title>
+    <title></title>
   </head>
-
-  <body data-page="index">
+  <body data-page="tag">
     <template id="card-template">
-      <a class="card" href="LINK">
+      <a class="card" href="">
         <div class="card-header">TITLE</div>
         <div class="card-meta">
           <div class="card-date">DATE</div>
@@ -53,14 +53,11 @@
 </div>
 
     <main>
-      <section>
-        <div id="contents-list"></div>
-      </section>
-      <section>
-        <div id="tags-list" style="overflow-wrap: keep-all"></div>
-      </section>
+      <div id="tag-title">
+        <div>Filter:</div>
+      </div>
+      <div id="contents-list"></div>
     </main>
-
     <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
   </body>
 </html>

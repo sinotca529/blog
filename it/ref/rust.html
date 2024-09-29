@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="date" content="2024-05-03" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="path_to_root" content="../..">
+    <link rel="stylesheet" href="../../katex/katex.min.css" />
+    <link rel="stylesheet" href="../../style.css" />
+    <script defer type="text/javascript" src="../../metadata.js"></script>
+    <script defer type="text/javascript" src="../../script.js"></script>
+    <script type="text/javascript" src="../../theme.js"></script>
+    <title>Rust 簡易リファレンス</title>
+  </head>
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-05-03 ~ 2024-05-03
+      </div>
+      <div> <a class="tag" href="../../tag.html?tag=lang">lang</a> <a class="tag" href="../../tag.html?tag=rust">rust</a></div>
+      <div id="main-content">
+        <h1>Rust 簡易リファレンス</h1>
+<h2>便利クレート集</h2>
+<ul>
+<li>indoc : 文字列リテラルを gobble する。</li>
+</ul>
+<h2><code>static</code> 定数</h2>
+<p>一度しか初期化しないが、コンパイル時に初期値が定まらない値を使いたいとき。</p>
+<pre><code class="language-rs">fn dst_dir() -&gt; &amp;'static PathBuf {
+    static BUILD_DIR: OnceLock&lt;PathBuf&gt; = OnceLock::new();
+    BUILD_DIR.get_or_init(|| {
+        std::env::current_dir()
+            .expect("Failed to get the current directry")
+            .join("build")
+    })
+}
+</code></pre>
+<h2>Re-export</h2>
+<pre><code class="language-rs">pub use crate::sub_module1::Foo;
+</code></pre>
+<h2>ローカルのプロジェクトをインストール</h2>
+<pre><code class="language-sh">cargo install --path . --locked
+</code></pre>
+<h2>プロンプトを出す</h2>
+<p><code>dialoguer</code> クレートを使う。</p>
+<pre><code class="language-rust">println!("ほんとうによろしいですか？");
+
+let choices = &amp;["はい", "いいえ"];
+let choice: usize = Select::new()
+    .items(choices)
+    .default(0)
+    .interact()?;
+</code></pre>
+<h2>オプショナル引数的なことをする</h2>
+<pre><code class="language-rs">fn main() {
+    range(1, 10);
+    range(1, None);
+    range(None, 14);
+    range(None, None);
+}
+
+fn range(min: impl Into&lt;Option&lt;usize&gt;&gt;, max: Into&lt;Option&lt;usize&gt;&gt;) {
+    dbg!(min, max);
+}
+</code></pre>
+<h2>参照を束縛する</h2>
+<pre><code class="language-rs">let a = (String::from("Hello"), 123);
+let b = &amp;a;
+
+let &amp;(ref c, d) = b;
+println!("{:?}, {:?}, {}, {}", a, b, c, d);
+</code></pre>
+<h2><code>&amp;str</code> と <code>&amp;[u8]</code> の変換</h2>
+<pre><code class="language-rs">let str = "Hello World";
+let slice = s.as_bytes();
+let str = std::str::from_utf8(slice).unwrap();
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>
