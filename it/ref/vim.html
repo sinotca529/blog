@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="date" content="2024-08-18" />
+    <meta name="date" content="2024-09-29" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="path_to_root" content="../..">
     <link rel="stylesheet" href="../../katex/katex.min.css" />
@@ -10,7 +10,7 @@
     <script defer type="text/javascript" src="../../metadata.js"></script>
     <script defer type="text/javascript" src="../../script.js"></script>
     <script type="text/javascript" src="../../theme.js"></script>
-    <title>Zsh 簡易リファレンス</title>
+    <title>vim 簡易リファレンス</title>
   </head>
   <body>
     <header>
@@ -50,46 +50,30 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-08-18 ~ 2024-08-18
+        2024-09-29 ~ 2024-09-29
       </div>
-      <div> <a class="tag" href="../../tag.html?tag=ref">ref</a> <a class="tag" href="../../tag.html?tag=zsh">zsh</a></div>
+      <div> <a class="tag" href="../../tag.html?tag=ref">ref</a> <a class="tag" href="../../tag.html?tag=vim">vim</a></div>
       <div id="main-content">
-        <h1>Zsh 簡易リファレンス</h1>
-<h2>キーバインディング</h2>
-<p>カーソル移動系</p>
-<table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">カーソルの移動先</th></tr></thead><tbody>
-<tr><td style="text-align: left"><code>C-f</code></td><td style="text-align: left">右</td></tr>
-<tr><td style="text-align: left"><code>C-b</code></td><td style="text-align: left">左</td></tr>
-<tr><td style="text-align: left"><code>C-n</code></td><td style="text-align: left">下</td></tr>
-<tr><td style="text-align: left"><code>C-p</code></td><td style="text-align: left">上</td></tr>
-<tr><td style="text-align: left"><code>M-f</code></td><td style="text-align: left">次の単語</td></tr>
-<tr><td style="text-align: left"><code>M-b</code></td><td style="text-align: left">前の単語</td></tr>
-<tr><td style="text-align: left"><code>C-e</code></td><td style="text-align: left">行末</td></tr>
-<tr><td style="text-align: left"><code>C-a</code></td><td style="text-align: left">行頭</td></tr>
-</tbody></table>
-<p>文字操作系列</p>
-<table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">効果</th></tr></thead><tbody>
-<tr><td style="text-align: left"><code>C-h</code></td><td style="text-align: left">BS</td></tr>
-<tr><td style="text-align: left"><code>C-d</code></td><td style="text-align: left">DEL</td></tr>
-<tr><td style="text-align: left"><code>C-w</code></td><td style="text-align: left">単語を切り取り</td></tr>
-<tr><td style="text-align: left"><code>M-d</code></td><td style="text-align: left">次の単語を切り取り</td></tr>
-<tr><td style="text-align: left"><code>C-k</code></td><td style="text-align: left">行末まで切り取り</td></tr>
-<tr><td style="text-align: left"><code>C-u</code></td><td style="text-align: left">1行切り取り</td></tr>
-<tr><td style="text-align: left"><code>C-y</code></td><td style="text-align: left">貼り付け</td></tr>
-<tr><td style="text-align: left"><code>C-/</code></td><td style="text-align: left">undo</td></tr>
-</tbody></table>
-<p>履歴</p>
-<table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">効果</th></tr></thead><tbody>
-<tr><td style="text-align: left"><code>C-r</code></td><td style="text-align: left">コマンド履歴を検索</td></tr>
-</tbody></table>
-<h2>コマンド履歴を残さない</h2>
-<p>コマンドの頭にスペースを入れると履歴が残らないようにする設定があります。</p>
-<pre><code class="language-.zshrc">setopt hist_ignore_space
+        <h1>vim 簡易リファレンス</h1>
+<h2>ファイルの暗号化</h2>
+<pre><code class="language-sh"># 開くときに暗号化
+vim -x file
+
+# パスワード変更 (新パスワードを未入力にすると暗号化解除)
+vim +X file
 </code></pre>
-<p>ちなみに bash の場合は</p>
-<pre><code class="language-.bashrc">HISTCONTROL=ignorespace
-</code></pre>
-<p>とします。</p>
+<ul>
+<li>編集中に暗号化を有効にするには、 <code>:X</code> を押します。</li>
+<li>暗号化方式を指定するには <code>:set cryptmethod</code> を使用します。</li>
+</ul>
+<h2>正規表現</h2>
+<p>TODO</p>
+<h2>レジスタ</h2>
+<p>TODO</p>
+<h2>sudo</h2>
+<p><code>sudo vim file</code> は推奨されません。
+起動した vim の中で作成したファイルの権限が root になってしまうからです。
+変わりに <code>vim-suda</code> などのプラグインが利用されます。</p>
 
       </div>
     </main>

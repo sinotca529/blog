@@ -56,37 +56,40 @@
       <div id="main-content">
         <h1>Segmenter によるトーカナイズ</h1>
 <textarea id="inputText" rows="10" style="resize: none; width: 100%;">ここにテキストを入力</textarea>
-<p><button onclick="main()">トーカナイズ</button></p>
+<p><button onclick="private.main()">トーカナイズ</button></p>
 <div id="output"></div>
-<script>
-    async function main() {
-        const input = document.getElementById("inputText").value;
-        const output = await tokenize(input);
+<script defer>
+    let private = {
+        main: async function() {
+            const input = document.getElementById("inputText").value;
+            const output = await private.tokenize(input);
 
-        const container = document.getElementById("output");
-        container.innerHTML = "";
-        if (output) container.appendChild(output);
-    }
+            const container = document.getElementById("output");
+            container.innerHTML = "";
+            if (output) container.appendChild(output);
+        },
 
-    async function tokenize(text) {
-        if (!('Segmenter' in Intl)) {
-            alert("このブラウザはSegmenterをサポートしていません。");
-            return null;
+        tokenize: async function(text) {
+            if (!('Segmenter' in Intl)) {
+                alert("このブラウザはSegmenterをサポートしていません。");
+                return null;
+            }
+            const colors = ["#ffcccc", "#ccffcc", "#ccccff","#ccffff", "#ffccff", "#ccffff"];
+
+            const segmenter = new Intl.Segmenter("ja", { granularity: "word" });
+            const segments = segmenter.segment(text)[Symbol.iterator]();
+
+            const output = document.createDocumentFragment();
+            segments.forEach((segment, idx) => {
+                const span = document.createElement("span");
+                span.textContent = segment.segment;
+                span.style.backgroundColor = colors[idx % colors.length];
+                span.style.color = 'black';
+                output.appendChild(span);
+            });
+
+            return output;
         }
-        const colors = ["#ffcccc", "#ccffcc", "#ccccff","#ccffff", "#ffccff", "#ccffff"];
-
-        const segmenter = new Intl.Segmenter("ja", { granularity: "word" });
-        const segments = segmenter.segment(text)[Symbol.iterator]();
-
-        const output = document.createDocumentFragment();
-        segments.forEach((segment, idx) => {
-            const span = document.createElement("span");
-            span.textContent = segment.segment;
-            span.style.backgroundColor = colors[idx % colors.length];
-            output.appendChild(span);
-        });
-
-        return output;
     }
 </script>
 <h2>コード</h2>
