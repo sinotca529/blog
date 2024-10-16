@@ -2,17 +2,17 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="date" content="2024-05-12" />
+    <meta name="date" content="2024-10-16" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="path_to_root" content="..">
-    <link rel="stylesheet" href="../katex/katex.min.css" />
-    <link rel="stylesheet" href="../style.css" />
-    <script defer type="text/javascript" src="../metadata.js"></script>
-    <script defer type="text/javascript" src="../script.js"></script>
-    <script type="text/javascript" src="../theme.js"></script>
-    <title>暗号化テスト</title>
+    <meta name="path_to_root" content="../..">
+    <link rel="stylesheet" href="../../katex/katex.min.css" />
+    <link rel="stylesheet" href="../../style.css" />
+    <script defer type="text/javascript" src="../../metadata.js"></script>
+    <script defer type="text/javascript" src="../../script.js"></script>
+    <script type="text/javascript" src="../../theme.js"></script>
+    <title>Excel 簡易リファレンス</title>
   </head>
-  <body data-page="crypto" data-cypher="tWTgzqvpL1DMoWjhjvAJCuZkhq859m2WqYGu79Zhw5o5Ynb/ldXUDkGWalLHm5/ewmRrZntYpVhyumkzTlpFlPX/bwMJFRxqm0hKuTwKBAXUKRL8snD2bV+6dMsNr1lRtpdCxqKlDlljgVJgLwHPgQ==">
+  <body>
     <header>
   <div id="menu-bar">
     <div id="menu-left-buttons">
@@ -23,7 +23,7 @@
         </svg>
       </button>
     </div>
-    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <h1 id="menu-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
     <div id="menu-right-buttons">
       <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
@@ -50,19 +50,26 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-05-12 ~ 2024-05-12
+        2024-10-16 ~ 2024-10-16
       </div>
-      <div> <a class="tag" href="../tag.html?tag=test">test</a></div>
+      <div> <a class="tag" href="../../tag.html?tag=ref">ref</a> <a class="tag" href="../../tag.html?tag=excel">excel</a></div>
       <div id="main-content">
-        <h1>This page is protected.</h1>
-        <input
-          autofocus
-          type="password"
-          id="decrypt-key"
-          placeholder="Enter your secret key"
-        />
-        <button id="decrypt-btn">Decode</button>
+        <h1>Excel 簡易リファレンス</h1>
+<h2>ショートカット</h2>
+<table><thead><tr><th style="text-align: left">説明</th><th style="text-align: left">操作</th></tr></thead><tbody>
+<tr><td style="text-align: left">行の削除 (行の選択 → 削除)</td><td style="text-align: left"><code>&lt;S-Space&gt;&lt;C--&gt;</code></td></tr>
+<tr><td style="text-align: left">列の削除 (列の選択 → 削除)</td><td style="text-align: left"><code>&lt;C-Space&gt;&lt;C--&gt;</code></td></tr>
+</tbody></table>
+<h2>条件付き書式</h2>
+<h3>1列目の値が変わる度に背景色を変える</h3>
+<pre><code class="language-excel">=ISODD(SUMPRODUCT(--($A$2:$A2&lt;&gt;$A$1:$A1)))
+</code></pre>
+<h3>A列の値が一致する行について、値にバリエーションがある列をハイライト</h3>
+<pre><code class="language-excel">=COUNTIF($A:$A, $A2)&lt;&gt;COUNTIFS($A:$A, $A2, A:A, A2)
+</code></pre>
+
       </div>
     </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
   </body>
 </html>
