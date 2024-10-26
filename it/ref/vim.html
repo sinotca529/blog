@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="date" content="2024-09-29" />
+    <meta name="date" content="2024-10-26" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="path_to_root" content="../..">
     <link rel="stylesheet" href="../../katex/katex.min.css" />
@@ -50,7 +50,7 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-09-29 ~ 2024-09-29
+        2024-09-29 ~ 2024-10-26
       </div>
       <div> <a class="tag" href="../../tag.html?tag=ref">ref</a> <a class="tag" href="../../tag.html?tag=vim">vim</a></div>
       <div id="main-content">
@@ -66,6 +66,26 @@ vim +X file
 <li>編集中に暗号化を有効にするには、 <code>:X</code> を押します。</li>
 <li>暗号化方式を指定するには <code>:set cryptmethod</code> を使用します。</li>
 </ul>
+<h2>エンコードを指定して開きなおす</h2>
+<pre><code class="language-vim">:e ++enc=sjis
+</code></pre>
+<h2>Netrw (ファイラ)</h2>
+<p>基本操作</p>
+<table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
+<tr><td style="text-align: left">開く</td><td style="text-align: left"><code>:e .</code></td></tr>
+<tr><td style="text-align: left">ディレクトリ作成</td><td style="text-align: left"><code>d</code></td></tr>
+<tr><td style="text-align: left">ファイル作成</td><td style="text-align: left"><code>%</code></td></tr>
+<tr><td style="text-align: left">削除</td><td style="text-align: left"><code>D</code></td></tr>
+<tr><td style="text-align: left">mv</td><td style="text-align: left"><code>R</code></td></tr>
+</tbody></table>
+<p>高度な操作</p>
+<table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
+<tr><td style="text-align: left">親ディレクトリへ</td><td style="text-align: left"><code>-</code></td></tr>
+<tr><td style="text-align: left">ファイルのマーク</td><td style="text-align: left"><code>mf</code></td></tr>
+<tr><td style="text-align: left">移動先ディレクトリのマーク</td><td style="text-align: left"><code>mt</code></td></tr>
+<tr><td style="text-align: left"><code>mf</code> したものを <code>mt</code> した場所へコピー</td><td style="text-align: left"><code>mc</code></td></tr>
+<tr><td style="text-align: left"><code>mf</code> したものを <code>mt</code> した場所へ移動</td><td style="text-align: left"><code>mm</code></td></tr>
+</tbody></table>
 <h2>正規表現</h2>
 <p>TODO</p>
 <h2>レジスタ</h2>

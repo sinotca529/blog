@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="date" content="2024-10-26" />
+    <meta name="date" content="2023-04-21" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="path_to_root" content="../..">
     <link rel="stylesheet" href="../../katex/katex.min.css" />
@@ -10,7 +10,7 @@
     <script defer type="text/javascript" src="../../metadata.js"></script>
     <script defer type="text/javascript" src="../../script.js"></script>
     <script type="text/javascript" src="../../theme.js"></script>
-    <title>Windows 簡易リファレンス</title>
+    <title>Bracketed Paste を使ってターミナルに複数行のテキストを貼り付ける</title>
   </head>
   <body>
     <header>
@@ -50,32 +50,44 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-09-14 ~ 2024-10-26
+        2023-04-21 ~ 2023-04-21
       </div>
-      <div> <a class="tag" href="../../tag.html?tag=ref">ref</a> <a class="tag" href="../../tag.html?tag=windows">windows</a></div>
+      <div> <a class="tag" href="../../tag.html?tag=shell">shell</a></div>
       <div id="main-content">
-        <h1>Windows 簡易リファレンス</h1>
-<h2>ユーザー環境変数を設定する</h2>
-<p>ユーザー環境変数の設定に管理者権限は不要です。
-コントロールパネルから「ユーザーアカウント &gt; ユーザーアカウント &gt; 環境変数の変更」と進むことで設定画面を開けます。
-あるいは、 <code>Win + R</code> のダイアログに次を入力することでも設定画面を開けます。</p>
-<pre><code class="language-txt">rundll32 sysdm.cpl,EditEnvironmentVariables
+        <h1>Bracketed Paste を使ってターミナルに複数行のテキストを貼り付ける</h1>
+<h2>貼り付け大暴走</h2>
+<p>改行の含まれた文字列をターミナルに貼り付けると、コマンドが実行されてしまうことがあります。
+例えば次のような感じになったりします。</p>
+<pre><code class="language-txt">user@pc1:~
+$ #include &lt;stdio.h&gt;                  // クリップボードの内容
+zsh: parse error near `\n'            //   #include &lt;stdio.h&gt;
+user@pc1:~                            //   int main(void) {
+$ int main(void) {                    //       puts("Hello world!");
+zsh: unknown file attribute: v        //       return 0;
+user@pc1:~                            //   }
+$     puts("Hello world!");
+dquote&gt;     return 0;
+dquote&gt; }
 </code></pre>
-<h2>ウィンドウの角丸をやめる</h2>
-<pre><code class="language-reg">Windows Registry Editor Version 5.00
-
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM]
-"ForceEffectMode"=dword:00000002
+<p>うっかり変なコマンドを実行しちゃいそうで怖いですね。</p>
+<h2>Bracketed Paste</h2>
+<p>これを防ぐ仕組みが <a href="https://en.wikipedia.org/wiki/Bracketed-paste">bracketed paste</a> です。
+Bracketed Paste が有効になっていると、複数行の貼り付けをしてもコマンドの実行が起こりません。</p>
+<pre><code class="language-txt">user@pc1:~
+$ #include &lt;stdio.h&gt;
+int main(void) {
+    puts("Hello World!");
+    return 0;
+}
 </code></pre>
-<h2>Git Bash で対話的ソフトを使う</h2>
-<p>Python インタプリタなどを Git Bash でそのまま動かそうとするとハングする。
-これは、 pythone.exe と Git Bash に互換性がないから。
-<code>winpty</code> を嚙ませると、このあたりの問題が解消する。</p>
-<p>ただし、16色しか使えない。</p>
-<pre><code class="language-bash">winpty python
-</code></pre>
-<p>のように使う。</p>
-<p>TODO: より深い調査。</p>
+<h2>Bracketed Paste のしくみ</h2>
+<p>仕組みは単純です。
+貼り付け内容の前後に特殊な文字をつけることで、
+単純なキー入力とクリップボードからの貼り付けを区別しています。</p>
+<ul>
+<li><code>ESC[200~</code> : 貼り付けの開始</li>
+<li><code>ESC[201~</code> : 貼り付けの終了</li>
+</ul>
 
       </div>
     </main>

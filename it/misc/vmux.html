@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="date" content="2024-10-26" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="path_to_root" content="../..">
+    <link rel="stylesheet" href="../../katex/katex.min.css" />
+    <link rel="stylesheet" href="../../style.css" />
+    <script defer type="text/javascript" src="../../metadata.js"></script>
+    <script defer type="text/javascript" src="../../script.js"></script>
+    <script type="text/javascript" src="../../theme.js"></script>
+    <title>tmux がなければ vim を使えばいいじゃない</title>
+  </head>
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-10-26 ~ 2024-10-26
+      </div>
+      <div> <a class="tag" href="../../tag.html?tag=vim">vim</a> <a class="tag" href="../../tag.html?tag=tmux">tmux</a> <a class="tag" href="../../tag.html?tag=tips">tips</a></div>
+      <div id="main-content">
+        <h1>tmux がなければ vim を使えばいいじゃない</h1>
+<p>この記事は Zenn にも投稿した記事と同じものです。</p>
+<h2><code>tmux</code> がない環境で暮らすには</h2>
+<p>ターミナルでの快適な暮らしに <code>tmux</code> は欠かせません。
+しかしながら世の中には <code>tmux</code> が使えない環境というものがあります。
+そんな環境で暮らしていくには、どうすればよいでしょうか。</p>
+<p><code>vim</code> を使いましょう。
+<code>vim</code> はターミナルを開けます。
+画面の分割もできます。
+タブだってあります。</p>
+<h2>目標はシェルをたくさん開くこと</h2>
+<p>目標は端末上でシェルをたくさん開くことです。
+セッションのことは考えません。</p>
+<h2>作ったもの</h2>
+<p>いきなりですが、こちらが作ったものです。
+細かな解説は省略します。</p>
+<details>
+<summary>作ったもの (長いので折りたたんでいます)</summary>
+<pre><code class="language-vim">"----------------------------------------
+"  一般
+"----------------------------------------
+
+set encoding=utf-8
+set visualbell t_vb=
+set clipboard=unnamed,unnamedplus
+
+"----------------------------------------
+"  見た目の調整
+"----------------------------------------
+
+set showtabline=2
+set laststatus=0
+
+" ウィンドウ分割線をシンプルにする
+set statusline=─
+set fillchars+=stl:─,stlnc:─
+set fillchars+=vert:│
+highlight! link StatusLineTerm Comment
+highlight! link StatusLineTermNC Comment
+highlight! link VertSplit Comment
+highlight! link TabLineFill ToolbarButton
+
+" タブラインをシンプルにする
+function! MyTabLine()
+  let s = ''
+  for i in range(tabpagenr('$'))
+    " タブ番号の設定
+    let tabnr = i + 1
+    " アクティブなタブの強調表示
+    let s ..= (tabnr == tabpagenr() ? '%#TabLineSel#' : '%#TabLine#')
+    let s ..= '%' .. tabnr .. 'T'
+    " タブ番号の表示
+    let s ..= ' ' .. tabnr .. ' '
+  endfor
+  " タブページ後の空白を埋める
+  let s ..= '%T%#TabLineFill#%='
+  return s
+endfunction
+
+set tabline=%!MyTabLine()
+
+"----------------------------------------
+"  キーバインディング
+"----------------------------------------
+
+" INFO: alt を認識してくれない問題への対処
+"   https://vi.stackexchange.com/questions/2350/how-to-map-alt-key
+"   :help :set-termcap
+for i in range(97,122)
+  let c = nr2char(i)
+  exec "set &lt;M-" .. c .. "&gt;=\e" .. c
+  exec "nno &lt;M-" .. c .. "&gt; " .. c
+endfor
+
+let g:mapleader="\&lt;C-q&gt;"
+set termwinkey=&lt;C-@&gt;
+
+" タブの作成
+tno &lt;silent&gt; &lt;Leader&gt;c &lt;C-\&gt;&lt;C-n&gt;:tab terminal&lt;CR&gt;
+tno &lt;silent&gt; &lt;M-m&gt; &lt;C-\&gt;&lt;C-n&gt;:tab terminal&lt;CR&gt;
+
+" タブの移動
+tno &lt;expr&gt;&lt;silent&gt; &lt;Leader&gt;n tabpagenr('$') &gt; 1 ? '&lt;C-\&gt;&lt;C-n&gt;:tabnext&lt;CR&gt;' : ''
+tno &lt;expr&gt;&lt;silent&gt; &lt;Leader&gt;p tabpagenr('$') &gt; 1 ? '&lt;C-\&gt;&lt;C-n&gt;:tabprevious&lt;CR&gt;' : ''
+
+" 画面分割
+tno &lt;silent&gt; &lt;Leader&gt;" &lt;C-\&gt;&lt;C-n&gt;:bel term&lt;CR&gt;
+tno &lt;silent&gt; &lt;Leader&gt;% &lt;C-\&gt;&lt;C-n&gt;:bel vert term&lt;CR&gt;
+tno &lt;silent&gt; &lt;M-n&gt; &lt;C-\&gt;&lt;C-n&gt;:call SplitWindow()&lt;CR&gt;
+
+" ウィンドウが横長なら垂直分割、縦長なら水平分割
+function! SplitWindow()
+  if winwidth(0) &lt; winheight(0) * 2
+    bel term
+  else
+    bel vert term
+  endif
+endfunction
+
+" コピー/貼り付け
+tno &lt;silent&gt; &lt;Leader&gt;[ &lt;C-\&gt;&lt;C-n&gt;
+tno &lt;silent&gt; &lt;Leader&gt;] &lt;C-@&gt;"+
+
+" ウィンドウ間を移動
+tno &lt;silent&gt; &lt;M-h&gt; &lt;C-@&gt;h
+tno &lt;silent&gt; &lt;M-j&gt; &lt;C-@&gt;j
+tno &lt;silent&gt; &lt;M-k&gt; &lt;C-@&gt;k
+tno &lt;silent&gt; &lt;M-l&gt; &lt;C-@&gt;l
+
+" ウィンドウのサイズ変更 (tmux の resize-pane 風)
+function! ResizeVert(c)
+  if winnr('h') != winnr('l')
+    let l:c = winnr() == winnr('l') ? -a:c : a:c
+    exe 'vert resize ' .. printf('%+d', l:c)
+  endif
+  if mode() == 'n'
+    norm! i
+  endif
+endfunction
+
+function! ResizeHori(c)
+  if winnr('j') != winnr('k')
+    let l:c = winnr() == winnr('j') ? -a:c : a:c
+    exe 'resize ' .. printf('%+d', l:c)
+  endif
+  if mode() == 'n'
+    norm! i
+  endif
+endfunction
+
+tno &lt;silent&gt; &lt;M-a&gt; &lt;C-\&gt;&lt;C-n&gt;:call ResizeVert(-1)&lt;CR&gt;
+tno &lt;silent&gt; &lt;M-s&gt; &lt;C-\&gt;&lt;C-n&gt;:call ResizeHori(+1)&lt;CR&gt;
+tno &lt;silent&gt; &lt;M-w&gt; &lt;C-\&gt;&lt;C-n&gt;:call ResizeHori(-1)&lt;CR&gt;
+tno &lt;silent&gt; &lt;M-d&gt; &lt;C-\&gt;&lt;C-n&gt;:call ResizeVert(+1)&lt;CR&gt;
+
+" ウィンドウのキル
+tno &lt;silent&gt; &lt;Leader&gt;x &lt;C-@&gt;&lt;C-c&gt;
+
+"----------------------------------------
+" その他挙動の調整
+"----------------------------------------
+
+" Vim 起動時にターミナルを開く
+autocmd VimEnter * term ++curwin
+
+" タブ切り替え時に insert モードに入る
+autocmd BufEnter * if &amp;buftype ==# 'terminal' &amp;&amp; mode() ==# 'n' | exe "norm! i" | endif
+
+" Yank したら insert mode に移行
+autocmd TextYankPost * if &amp;buftype ==# 'terminal' &amp;&amp; mode() ==# 'n' | exe "norm! i" | endif
+</code></pre>
+</details>
+<p>この設定では次のことができます。
+(<code>&lt;Leader&gt;</code> は <code>&lt;C-q&gt;</code> です。)</p>
+<table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">動作</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>&lt;Leader&gt;c</code> または <code>&lt;M-m&gt;</code></td><td style="text-align: left">タブを新規作成</td></tr>
+<tr><td style="text-align: left"><code>&lt;Leader&gt;n</code></td><td style="text-align: left">次のタブへ</td></tr>
+<tr><td style="text-align: left"><code>&lt;Leader&gt;p</code></td><td style="text-align: left">前のタブへ</td></tr>
+<tr><td style="text-align: left"><code>&lt;Leader&gt;"</code></td><td style="text-align: left">画面を水平分割</td></tr>
+<tr><td style="text-align: left"><code>&lt;Leader&gt;%</code></td><td style="text-align: left">画面を垂直分割</td></tr>
+<tr><td style="text-align: left"><code>&lt;M-n&gt;</code></td><td style="text-align: left">アクティブなウィンドウが縦長なら水平分割、横長なら垂直分割</td></tr>
+<tr><td style="text-align: left"><code>&lt;Leader&gt;[</code></td><td style="text-align: left">ノーマルモードへ移行</td></tr>
+<tr><td style="text-align: left"><code>&lt;Leader&gt;]</code></td><td style="text-align: left">貼り付け</td></tr>
+<tr><td style="text-align: left"><code>&lt;M-h/j/k/l&gt;</code></td><td style="text-align: left">指定方向のウィンドウに移動</td></tr>
+<tr><td style="text-align: left"><code>&lt;M-w/a/s/d&gt;</code></td><td style="text-align: left">アクティブウィンドウのサイズを変更</td></tr>
+</tbody></table>
+<p>このコードを <code>.vimrc-tmux</code> として保存して、 <code>vim -Nu .vimrc-tmux</code> で読み込んで起動します。 <code>.bashrc</code> などにエイリアスを作っておくと便利です。</p>
+<pre><code class="language-bash">alias vmux='vim -Nu ~/.vimrc-tmux'
+</code></pre>
+<h2>課題</h2>
+<p>この設定にはまだまだ課題もあります。</p>
+<h3>プレフィックスの挙動が怪しい</h3>
+<p>プレフィックス (<code>&lt;Leader&gt;</code>) を <code>&lt;C-q&gt;</code> に設定していますが、一部の環境<sup class="footnote-reference"><a href="#1">1</a></sup>ではこれが正しく動きません。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Windows 上の <code>mintty</code> で動く Git Bash で問題が起きました。
+マルチプレクサ上で <code>vim</code> を開いた状態 (<code>vim</code> が入れ子になっている状態) で <code>&lt;C-q&gt;</code> を押すと、
+入力がマルチプレクサではなく内側の <code>vim</code> に吸われます。
+原因は分かっていませんが、 <code>mintty</code> の代わりに <code>conhost.exe</code> を使うことで回避できます。
+また、 winpty を使うことでも問題を回避できることを確認しました。</p>
+</div>
+<h3>Meta キーの挙動が怪しい</h3>
+<p><code>&lt;M-xx&gt;</code> の形をしたキーバインドがいくつかあります。
+こちらも環境によって動いたり動かなかったりするので注意が必要です。
+本当は <code>&lt;M-H/J/K/L&gt;</code> なども活用したかったのですが、手元の環境ではうまく動かせませんでした。</p>
+<h1>おわりに</h1>
+<p>ライトなユースケースには十分耐えうるかと思います。
+ただ機能不足感は否めないので、改善案等ありましたらコメントいただけると嬉しいです。</p>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

@@ -10,7 +10,7 @@
     <script defer type="text/javascript" src="../../metadata.js"></script>
     <script defer type="text/javascript" src="../../script.js"></script>
     <script type="text/javascript" src="../../theme.js"></script>
-    <title>Windows 簡易リファレンス</title>
+    <title>スライド最小値</title>
   </head>
   <body>
     <header>
@@ -50,32 +50,59 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-09-14 ~ 2024-10-26
+        2024-10-26 ~ 2024-10-26
       </div>
-      <div> <a class="tag" href="../../tag.html?tag=ref">ref</a> <a class="tag" href="../../tag.html?tag=windows">windows</a></div>
+      <div> <a class="tag" href="../../tag.html?tag=algo">algo</a></div>
       <div id="main-content">
-        <h1>Windows 簡易リファレンス</h1>
-<h2>ユーザー環境変数を設定する</h2>
-<p>ユーザー環境変数の設定に管理者権限は不要です。
-コントロールパネルから「ユーザーアカウント &gt; ユーザーアカウント &gt; 環境変数の変更」と進むことで設定画面を開けます。
-あるいは、 <code>Win + R</code> のダイアログに次を入力することでも設定画面を開けます。</p>
-<pre><code class="language-txt">rundll32 sysdm.cpl,EditEnvironmentVariables
-</code></pre>
-<h2>ウィンドウの角丸をやめる</h2>
-<pre><code class="language-reg">Windows Registry Editor Version 5.00
+        <h1>スライド最小値</h1>
+<dl>
+<dt>問題</dt>
+<dd>サイズ <code>N</code> の配列 <code>x</code> とウィンドウ幅 <code>w</code> が与えられる。<br>
+<code>y[i] == x[i..(i+w)].min()</code> となる配列 <code>y</code> を求めよ。</dd>
+</dl>
+<h2><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span> の解法</h2>
+<p>両端キューをうまく使う。</p>
+<pre><code class="language-rust">use std::collections::VecDeque;
 
-[HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM]
-"ForceEffectMode"=dword:00000002
+fn slide_min_val(x: &amp;[i32], w: usize) -&gt; Vec&lt;i32&gt; {
+    let mut deq = VecDeque::with_capacity(w + 1);
+    let mut y = Vec::with_capacity(x.len() - w + 1);
+
+    for (i, &amp;xi) in x.iter().enumerate() {
+        // x[i] 以上の値は不要なので消す。
+        while deq.back().map_or(false, |&amp;b| x[b] &gt;= xi) {
+            deq.pop_back();
+        }
+
+        // 着目点をキューに追加
+        deq.push_back(i);
+
+        // ウィンドウからはみ出たものを除去
+        if i - deq[0] &gt;= w {
+            deq.pop_front();
+        }
+
+        // この時点で、
+        //   1. deq にはウィンドウ内のインデックスしかない
+        //   2. deq[k] は単調増加
+        //   3. x[deq[k]] は単調増加
+        // x[deq[0]] が最小値なので y に書き込む。
+        if i &gt;= w - 1 {
+            y.push(x[deq[0]]);
+        }
+    }
+
+    y
+}
+
+fn main() {
+    let x = vec![9, 5, 2, 7, 8, 7, 4, 6, 3];
+    let w = 3;
+
+    let y = slide_min_val(&amp;x, w);
+    assert_eq!(&amp;y, &amp;[2, 2, 2, 7, 4, 4, 3]);
+}
 </code></pre>
-<h2>Git Bash で対話的ソフトを使う</h2>
-<p>Python インタプリタなどを Git Bash でそのまま動かそうとするとハングする。
-これは、 pythone.exe と Git Bash に互換性がないから。
-<code>winpty</code> を嚙ませると、このあたりの問題が解消する。</p>
-<p>ただし、16色しか使えない。</p>
-<pre><code class="language-bash">winpty python
-</code></pre>
-<p>のように使う。</p>
-<p>TODO: より深い調査。</p>
 
       </div>
     </main>
