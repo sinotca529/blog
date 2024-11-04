@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="date" content="2024-11-04" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="path_to_root" content="../../..">
+    <link rel="stylesheet" href="../../../katex/katex.min.css" />
+    <link rel="stylesheet" href="../../../style.css" />
+    <script defer type="text/javascript" src="../../../metadata.js"></script>
+    <script defer type="text/javascript" src="../../../script.js"></script>
+    <script type="text/javascript" src="../../../theme.js"></script>
+    <title>Azure 簡易リファレンス</title>
+  </head>
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../../../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-10-26 ~ 2024-11-04
+      </div>
+      <div> <a class="tag" href="../../../tag.html?tag=cloud">cloud</a></div>
+      <div id="main-content">
+        <h1>Azure 簡易リファレンス</h1>
+<p>筆者は Azure エアプです。
+このページの内容は至極乱雑で、他人がこのページから知識を得ることを想定していません。</p>
+<h2>クラウドの性質</h2>
+<dl>
+<dt>弾力性 (elasticity)</dt>
+<dd>負荷に応じて<strong>自動的</strong>にスケールする性質。</dd>
+<dt>機敏性 (俊敏性, agility)</dt>
+<dd>変化に素早く対応できる能力。
+環境の作成・破壊が容易だということ。</dd>
+</dl>
+<h2>マシンの配置</h2>
+<dl>
+<dt>ゾーン</dt>
+<dd>
+<p>1つのデータセンター (建物) に対応する。</p>
+</dd>
+<dt>可用性ゾーン</dt>
+<dd>
+<p>異なるゾーンにある物理マシンにに仮想マシンをホストする。
+2024/07 現在、西日本リージョンは非対応。</p>
+</dd>
+<dt>可用性セット</dt>
+<dd>
+<p>同一ゾーン内の異なるドメインにある物理マシンに仮想マシンをホストする。</p>
+<dl>
+<dt>障害ドメイン</dt>
+<dd>同じ電源・NW機器を共有する範囲 (≒ サーバラック)。
+最大で3個のドメインに分散できる。</dd>
+<dt>更新ドメイン</dt>
+<dd>メンテナンスリブートが同時に起こる範囲。
+最大で20個のドメインに分散できる。</dd>
+</dl>
+</dd>
+</dl>
+<h2>リソースの管理</h2>
+<dl>
+<dt>サブスクリプション</dt>
+<dd>契約の単位。</dd>
+</dl>
+<pre><code class="language-txt">管理グループ
+|
++--+- サブスクリプション1
+|  |
+|  +--+- リソースグループ1
+|  |  |
+|  |  +---- リソース1
+|  |  |
+|  |  +---- リソース2
+|  |
+|  +---- リソースグループ2
+|
++--- サブスクリプション2
+</code></pre>
+<h2>ストレージ</h2>
+<dl>
+<dt>Azure Storage (分類 : IaaS)</dt>
+<dd>耐久性・拡張性・安全性に優れる。
+保存データは自動的に暗号化される。
+マネージドディスクとストレージアカウントからなる。</dd>
+<dt>マネージドディスク</dt>
+<dd>Disk</dd>
+</dl>
+<h3>ストレージアカウント</h3>
+<p>これを作成しないと以下の物を作れない。
+作成時にはアカウント名や地域・性能・冗長性などを指定する。
+アカウント名は接続時の URL として使われるので、全世界でユニークな名前を指定する。</p>
+<dl>
+<dt>BLOB</dt>
+<dd>大量の非構造化データの格納に使う。
+ストリーミング配信する動画や長期保管するバックアップデータの保存に使う。
+ディレクトリ構造は持たない。
+安価。
+アクセス頻度に応じてホット・クール・コールド・アーカイブから選択する。
+ホット以外は一定期間より早くデータを移動しようとすると別料金を取られる。</dd>
+<dt>File (Azure Files, ファイル共有)</dt>
+<dd>SMB/NFS プロトコルに対応したファイル共有サービス。
+Windows/Linux/macOS にマウント可能。
+ファイルサーバーの代わりとして使用する。
+BLOB の3倍ほどの価格。</dd>
+<dt>Table</dt>
+<dd>Json, Yaml などを格納する NoSQL キーバリューストア。</dd>
+<dt>Queue</dt>
+<dd>コンポーネント間の非同期通信に使うメッセージングサービス。</dd>
+</dl>
+<h3>ファイルの移動</h3>
+<dl>
+<dt>Azure Storage Explorer</dt>
+<dd>Azure Storage 用の explorer.exe 的なもの。
+GUI でファイルやフォルダを管理できる。
+Windows/Linux/macOS で使える。</dd>
+<dt>AzCopy</dt>
+<dd>CUI ツール。
+Windows/Linux/macOS で使える。
+コマンド体系は <code>azcopy [操作] [引数]</code>。</dd>
+<dt>Azure File Sync</dt>
+<dd>ファイル共有を Windows Server にキャッシュする。
+OneDrive などに似ている。
+オンプレミスのファイルサーバーをクラウドに拡張できる。</dd>
+<dt>Azure Data Box</dt>
+<dd>オンプレミスのデータを Azure に移行したり、その逆をしたりするサービス。
+専用の記憶メディアで物理的に輸送する。</dd>
+</dl>
+<h3>ストレージの冗長オプション</h3>
+<ul>
+<li>ローカル冗長ストレージ (LRS)</li>
+<li>ゾーン冗長ストレージ (ZRS)</li>
+<li>ジオ冗長ストレージ (GRS)</li>
+<li>ジオゾーン冗長ストレージ (GZRS)</li>
+</ul>
+<h2>移行</h2>
+<dl>
+<dt>Azure Migrate</dt>
+<dd>オンプレミスや他社クラウドから Azure への移行を支援。
+一元的な管理画面を提供。</dd>
+</dl>
+<h2>ネットワーク</h2>
+<dl>
+<dt>仮想ネットワーク (VNet)</dt>
+<dd>
+<p>Azure 上にプライベートネットワークを構築する。</p>
+</dd>
+<dt>サブネット</dt>
+<dd>
+<p>仮想ネットワークをサブネットに分割する。
+リソースはサブネットに配置する。
+同一仮想ネットワーク内にある別サブネットとは通信できる。</p>
+</dd>
+<dt>仮想ネットワークピアリング</dt>
+<dd>
+<p>同一リージョン内の仮想ネットワークを接続。</p>
+</dd>
+<dt>グローバル仮想ネットワークピアリング</dt>
+<dd>
+<p>異なるリージョン間の仮想ネットワークを接続。</p>
+</dd>
+<dt>VPNゲートウェイ</dt>
+<dd>
+<p>オンプレミス等と Azure を VPN で接続。
+接続形態が3つある。</p>
+<ul>
+<li>サイト間接続 (Site to Site, S2S)</li>
+<li>ポイント対サイト接続 (Point to Site, P2S)</li>
+<li>VNet 間接続</li>
+</ul>
+</dd>
+<dt>ExpressRoute</dt>
+<dd>
+<p>オンプレミスなどと Azure を専用回線で接続する。
+専用回線は別途、回線事業者との契約が必要。</p>
+</dd>
+<dt>エンドポイント</dt>
+<dd>
+<p>Azure リソースには URL が割り当たる。
+この URL をエンドポイントと呼ぶ。</p>
+<p>URL がプライベートIPアドレスとして解決されるかパブリックIPアドレスとして解決されるかは設定次第。</p>
+</dd>
+</dl>
+<table><thead><tr><th style="text-align: left">サービス名</th><th style="text-align: left">経路</th><th style="text-align: left">接続先</th></tr></thead><tbody>
+<tr><td style="text-align: left">VPNゲートウェイ</td><td style="text-align: left">インターネット</td><td style="text-align: left">オンプレミス等</td></tr>
+<tr><td style="text-align: left">ExpressRoute</td><td style="text-align: left">専用回線</td><td style="text-align: left">オンプレミス等</td></tr>
+<tr><td style="text-align: left">プライベートエンドポイント</td><td style="text-align: left">Azureバックボーン</td><td style="text-align: left">プライベートIPアドレス</td></tr>
+<tr><td style="text-align: left">パブリックエンドポイント</td><td style="text-align: left">インターネット</td><td style="text-align: left">パブリックIPアドレス</td></tr>
+<tr><td style="text-align: left">サービスエンドポイント</td><td style="text-align: left">Azureバックボーン</td><td style="text-align: left">パブリックIPアドレス</td></tr>
+<tr><td style="text-align: left">パブリックエンドポイント</td><td style="text-align: left">Azureバックボーン</td><td style="text-align: left">プライベートIPアドレス</td></tr>
+</tbody></table>
+<dl>
+<dt>サービスエンドポイント</dt>
+<dd>インターネットを経由せずに PaaS のリソースに接続できる。無料で使える。
+アクセス元を仮想ネットワークのみに限定できる。</dd>
+</dl>
+<!-- -->
+<dl>
+<dt>Azure DNS</dt>
+<dd>Pass</dd>
+</dl>
+<p><img src="./vnet.drawio.svg" alt="拠点間の通信" /></p>
+<h2>PaaS</h2>
+<dl>
+<dt>Azure App Service</dt>
+<dd>ウェブアプリを動かす環境を提供する。
+CD, 負荷分散, 自動スケール機能付き。</dd>
+</dl>
+<h2>ID 管理</h2>
+<dl>
+<dt>Microsoft Entra ID (旧 Azure ID)</dt>
+<dd>アカウント管理をする。
+SAML, OpenID, Oauth をサポート。
+Azure 固有ではなく、 M365 などみの使われる。
+1つの Entra ID に複数のサブスクリプションを紐づけられる。
+1つのサブスクリプションに複数の Entra ID を紐づけることはできない。</dd>
+<dt>AD (Active Directory Domain Service)</dt>
+<dd>Windows サーバーの機能。
+LDAP, Kerberos をサポート。
+オンプレミスで使う認証サービス。
+Entra ID とは互換性がない。</dd>
+<dt>Microsoft Defender for Identity</dt>
+<dd>ユーザーアクティビティの監視・ ID の保護。</dd>
+<dt>Microsoft Entra Domain Services</dt>
+<dd>AD の PaaS 版。
+「Azure 上の VM として用意した Windows Server に AD を立てた環境」を PaaS として提供するイメージ。</dd>
+<dt>Microsoft Entra Connect</dt>
+<dd>AD で管理する ID を Entra ID に同期する。
+ハイブリッドクラウドで利用する。</dd>
+<dt>RBAC (Roll Based Access Control, アールバック)</dt>
+<dd>どのグループ (管理者グループ, 運用グループ, …) に、どのロール (所有者, 共同作成者, …) を割り当てるかを決める。
+ユーザー以外にもロールを割り当てられることに注意。
+例えばアプリがストレージにアクセスする際にも権限が必要。</dd>
+</dl>
+<h2>IoT</h2>
+<dl>
+<dt>IoT Central</dt>
+<dd>IoTデバイスの中庸管理。</dd>
+<dt>IoT Hub</dt>
+<dd>デバイスの通信管理に特化。</dd>
+</dl>
+<h2>メンテナンス系統</h2>
+<dl>
+<dt>Azure Adovisor</dt>
+<dd>信頼性・セキュリティ・パフォーマンス・運用性について推奨事項を表示。
+これ自体は無料で使えるが、サジェストには有料のサービスも含まれる。</dd>
+<dt>Service Trust Portal</dt>
+<dd>Microsoft のセキュリティ・プライバシー・コンプライアンスの情報がある。
+監査レポート・証明書・侵入テストのレポートなどがある。
+一部のデータはログインしないと見られない。</dd>
+</dl>
+<h2>監視</h2>
+<dl>
+<dt>Azure Service Health</dt>
+<dd>
+<p>障害や計画メンテナンスの把握に使う。
+Azure の状態・サービス正常性・リソース正常性からなる。</p>
+<dl>
+<dt>Azure の状態</dt>
+<dd>リージョンごとのサービスの正常性を確認できる。
+ログインしていなくても見れる。</dd>
+<dt>サービス正常性 (Service Health)</dt>
+<dd>使っているサービスの正常性が見れる。
+ラック単位の不具合を調べることはできない。
+アラートの設定もできる。
+ログイン中のみ使える。</dd>
+<dt>リソース正常性 (Resource Health)</dt>
+<dd>リソースの正常性について30日分の履歴が見れる。
+ラック単位の不具合もわかる。
+履歴を見たりアラート設定をしたりできる。</dd>
+</dl>
+</dd>
+</dl>
+<dl>
+<dt>Azure Monitor</dt>
+<dd>
+<p>オンプレミス・他社クラウドをまたいだ利用上の収集・分析・監視。
+アクティビティログ, アラート, メトリック (CPU利用率など),
+ログ (分析), Application Insights などがある。</p>
+</dd>
+<dt>Microsoft Purview</dt>
+<dd>
+<p>組織のデータを管理・保護する。
+オンプレミス・他社クラウドを含め、データの分類などを横断的に行える。</p>
+</dd>
+<dt>Azure Policy</dt>
+<dd>
+<dl>
+<dt>ポリシー定義</dt>
+<dd>「リージョンは東西日本のみ」や「仮想マシンのサイズはD2s」のみのような制約。</dd>
+<dt>イニシアチブ定義</dt>
+<dd>ポリシー定義をまとめたもの。</dd>
+</dl>
+<p>管理グループ・サブスクリプション・リソースに
+イニシアチブ定義やポリシー定義を割り当てられる。
+ポリシーが適用されるのは割当後に作成したリソースのみ。</p>
+</dd>
+<dt>リソースロック</dt>
+<dd><table><thead><tr><th style="text-align: left"></th><th style="text-align: center">変更</th><th style="text-align: center">削除</th></tr></thead><tbody>
+<tr><td style="text-align: left">削除ロック</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
+<tr><td style="text-align: left">読み取り専用ロック</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
+</tbody></table>
+<p>意味はないが、両方のロックを適用することもできる。</p>
+</dd>
+</dl>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>
