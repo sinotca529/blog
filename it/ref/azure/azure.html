@@ -69,7 +69,8 @@
 <dl>
 <dt>ゾーン</dt>
 <dd>
-<p>1つのデータセンター (建物) に対応する。</p>
+<p>1つのデータセンター (建物) に対応する。
+可用性ゾーンのあるリージョンには3つ以上のゾーンがある。</p>
 </dd>
 <dt>可用性ゾーン</dt>
 <dd>
@@ -203,14 +204,32 @@ OneDrive などに似ている。
 <dt>ExpressRoute</dt>
 <dd>
 <p>オンプレミスなどと Azure を専用回線で接続する。
-専用回線は別途、回線事業者との契約が必要。</p>
+専用回線は別途、回線事業者との契約が必要。
+上り (to Azure) は無料。</p>
 </dd>
 <dt>エンドポイント</dt>
 <dd>
-<p>Azure リソースには URL が割り当たる。
+<p>Azure の PaaS には、それにアクセスするための URL が割り当たる。
 この URL をエンドポイントと呼ぶ。</p>
-<p>URL がプライベートIPアドレスとして解決されるかパブリックIPアドレスとして解決されるかは設定次第。</p>
+<dl>
+<dt>サービスエンドポイント</dt>
+<dd>インターネットを経由せずに PaaS のリソースに接続できる。
+アクセス元を仮想ネットワークのみに限定できる。
+無料。</dd>
+<dt>プライベートエンドポイント</dt>
+<dd>VNet 内からプライベート IP アドレスでリソースに接続する。
+有料。</dd>
+</dl>
 </dd>
+</dl>
+<dl>
+<dt>Azure Application Gateway</dt>
+<dd>ウェブアプリに対するトラフィックを管理できる L7 ロードバランサ。
+URL やヘッダーなど、 HTTP リクエストの属性に基づいてルーティングを決定できる。</dd>
+<dt>ローカルネットワークゲートウェイ</dt>
+<dd>TODO</dd>
+<dt>Azure Logic Apps</dt>
+<dd>ワークフローの作成。</dd>
 </dl>
 <table><thead><tr><th style="text-align: left">サービス名</th><th style="text-align: left">経路</th><th style="text-align: left">接続先</th></tr></thead><tbody>
 <tr><td style="text-align: left">VPNゲートウェイ</td><td style="text-align: left">インターネット</td><td style="text-align: left">オンプレミス等</td></tr>
@@ -220,11 +239,6 @@ OneDrive などに似ている。
 <tr><td style="text-align: left">サービスエンドポイント</td><td style="text-align: left">Azureバックボーン</td><td style="text-align: left">パブリックIPアドレス</td></tr>
 <tr><td style="text-align: left">パブリックエンドポイント</td><td style="text-align: left">Azureバックボーン</td><td style="text-align: left">プライベートIPアドレス</td></tr>
 </tbody></table>
-<dl>
-<dt>サービスエンドポイント</dt>
-<dd>インターネットを経由せずに PaaS のリソースに接続できる。無料で使える。
-アクセス元を仮想ネットワークのみに限定できる。</dd>
-</dl>
 <!-- -->
 <dl>
 <dt>Azure DNS</dt>
@@ -233,9 +247,13 @@ OneDrive などに似ている。
 <p><img src="./vnet.drawio.svg" alt="拠点間の通信" /></p>
 <h2>PaaS</h2>
 <dl>
-<dt>Azure App Service</dt>
+<dt>Azure App Service (種別 : PaaS)</dt>
 <dd>ウェブアプリを動かす環境を提供する。
 CD, 負荷分散, 自動スケール機能付き。</dd>
+<dt>Azure SQL Database (種別 : PaaS)</dt>
+<dd>TODO</dd>
+<dt>Azure Information Protection</dt>
+<dd>ルール・ドキュメントの保護 (?)</dd>
 </dl>
 <h2>ID 管理</h2>
 <dl>
@@ -279,6 +297,10 @@ Entra ID とは互換性がない。</dd>
 <dd>Microsoft のセキュリティ・プライバシー・コンプライアンスの情報がある。
 監査レポート・証明書・侵入テストのレポートなどがある。
 一部のデータはログインしないと見られない。</dd>
+<dt>トラストセンター</dt>
+<dd>Azure の運営方針が書いてある。</dd>
+<dt>コンプライアンスマネージャー</dt>
+<dd>Microsoft 関連企業のコンプライアンスに関する情報を追える。</dd>
 </dl>
 <h2>監視</h2>
 <dl>
@@ -334,6 +356,10 @@ Azure の状態・サービス正常性・リソース正常性からなる。</
 <p>意味はないが、両方のロックを適用することもできる。</p>
 </dd>
 </dl>
+<h2>お金</h2>
+<ul>
+<li>SLA 未達成時はクレジットがもらえる。</li>
+</ul>
 
       </div>
     </main>
