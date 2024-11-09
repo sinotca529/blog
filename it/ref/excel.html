@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../katex/katex.min.css" />
     <link rel="stylesheet" href="../../style.css" />
     <script defer type="text/javascript" src="../../metadata.js"></script>
+    <script defer type="text/javascript" src="../../segmenter.js"></script>
     <script defer type="text/javascript" src="../../script.js"></script>
     <script type="text/javascript" src="../../theme.js"></script>
     <title>Excel 簡易リファレンス</title>
@@ -90,6 +91,13 @@
 </code></pre>
 <h3>A列の値が一致する行について、値にバリエーションがある列をハイライト</h3>
 <pre><code class="language-excel">=COUNTIF($A:$A, $A2)&lt;&gt;COUNTIFS($A:$A, $A2, A:A, A2)
+</code></pre>
+<h2><code>Range.find</code> は非表示セルを検索しない</h2>
+<p><a href="https://learn.microsoft.com/ja-jp/office/vba/api/excel.range.find">公式ドキュメント</a>には記述がないですが、
+<code>Range.find</code> メソッドは非表示のセルを検索しないようです。</p>
+<p>VBA で非表示のセルを検索するには下のようにします。</p>
+<pre><code class="language-vba">// Me.Rows(1).Find("X", LookIn:=xlValues).Column
+Application.WorksheetFunction.Match("X", Me.Rows(1), 0)
 </code></pre>
 
       </div>
