@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="date" content="2024-11-04" />
+    <meta name="date" content="2024-11-18" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="path_to_root" content="../../..">
     <link rel="stylesheet" href="../../../katex/katex.min.css" />
@@ -51,7 +51,7 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-10-26 ~ 2024-11-04
+        2024-10-26 ~ 2024-11-18
       </div>
       <div> <a class="tag" href="../../../tag.html?tag=cloud">cloud</a></div>
       <div id="main-content">
@@ -231,6 +231,14 @@ URL やヘッダーなど、 HTTP リクエストの属性に基づいてルー�
 <dd>TODO</dd>
 <dt>Azure Logic Apps</dt>
 <dd>ワークフローの作成。</dd>
+<dt>NSG</dt>
+<dd>IPパケットレベルでの保護を提供する。
+仮想ネットワークサブネットとNICに紐づけられる。
+仮想ネットワークには紐づけられない。</dd>
+<dt>ASG</dt>
+<dd>NSGの拡張機能。
+NICのグループを作り、そこにNSGを適用できる。
+このグループをASGと呼ぶ。</dd>
 </dl>
 <table><thead><tr><th style="text-align: left">サービス名</th><th style="text-align: left">経路</th><th style="text-align: left">接続先</th></tr></thead><tbody>
 <tr><td style="text-align: left">VPNゲートウェイ</td><td style="text-align: left">インターネット</td><td style="text-align: left">オンプレミス等</td></tr>
@@ -246,16 +254,6 @@ URL やヘッダーなど、 HTTP リクエストの属性に基づいてルー�
 <dd>Pass</dd>
 </dl>
 <p><div class="zakki-img"><div>拠点間の通信</div><object type="image/svg+xml" data="./vnet.drawio.svg" title="" id=""></object></div></p>
-<h2>PaaS</h2>
-<dl>
-<dt>Azure App Service (種別 : PaaS)</dt>
-<dd>ウェブアプリを動かす環境を提供する。
-CD, 負荷分散, 自動スケール機能付き。</dd>
-<dt>Azure SQL Database (種別 : PaaS)</dt>
-<dd>TODO</dd>
-<dt>Azure Information Protection</dt>
-<dd>ルール・ドキュメントの保護 (?)</dd>
-</dl>
 <h2>ID 管理</h2>
 <dl>
 <dt>Microsoft Entra ID (旧 Azure ID)</dt>
@@ -263,14 +261,22 @@ CD, 負荷分散, 自動スケール機能付き。</dd>
 SAML, OpenID, Oauth をサポート。
 Azure 固有ではなく、 M365 などみの使われる。
 1つの Entra ID に複数のサブスクリプションを紐づけられる。
-1つのサブスクリプションに複数の Entra ID を紐づけることはできない。</dd>
+1つのサブスクリプションに複数の Entra ID を紐づけることはできない。
+参加できるデバイスは Windows10, 11 のみ。</dd>
 <dt>AD (Active Directory Domain Service)</dt>
 <dd>Windows サーバーの機能。
 LDAP, Kerberos をサポート。
 オンプレミスで使う認証サービス。
 Entra ID とは互換性がない。</dd>
+<dt>Micorosoft Entra ID Protection</dt>
+<dd>不審なアクセスに自動対処する。
+パスワードが正しくても正常なログインとは限らない。
+アクセス元の位置情報や行動パターンなどに基づいて、不審なアクセスを検知し、
+それをブロックしたりMFAを要求したりできる。
+不審なアクセスに対する処置はユーザーが設定する。</dd>
 <dt>Microsoft Defender for Identity</dt>
-<dd>ユーザーアクティビティの監視・ ID の保護。</dd>
+<dd>オンプレミス上の情報を収集し、クラウド側で分析をする。
+不審なアクセスの検知はするが、対処はしない。対処は別途ユーザーが行う。</dd>
 <dt>Microsoft Entra Domain Services</dt>
 <dd>AD の PaaS 版。
 「Azure 上の VM として用意した Windows Server に AD を立てた環境」を PaaS として提供するイメージ。</dd>
@@ -281,13 +287,6 @@ Entra ID とは互換性がない。</dd>
 <dd>どのグループ (管理者グループ, 運用グループ, …) に、どのロール (所有者, 共同作成者, …) を割り当てるかを決める。
 ユーザー以外にもロールを割り当てられることに注意。
 例えばアプリがストレージにアクセスする際にも権限が必要。</dd>
-</dl>
-<h2>IoT</h2>
-<dl>
-<dt>IoT Central</dt>
-<dd>IoTデバイスの中庸管理。</dd>
-<dt>IoT Hub</dt>
-<dd>デバイスの通信管理に特化。</dd>
 </dl>
 <h2>メンテナンス系統</h2>
 <dl>
@@ -357,10 +356,88 @@ Azure の状態・サービス正常性・リソース正常性からなる。</
 <p>意味はないが、両方のロックを適用することもできる。</p>
 </dd>
 </dl>
+<h2>その他のセキュリティ</h2>
+<dl>
+<dt>Azure Information Protection</dt>
+<dd>MIP の機能の一部。
+ファイルを暗号化し、特定の人しか触れないようにする。
+メールアドレス単位で編集/閲覧/印刷などの権限を与える。
+認証には Entra ID を使う。対応しているファイルフォーマットは限定的。
+MS Office 関連のもの、 PDF などに対応している。</dd>
+<dt>Microsoft Purview Information Protection</dt>
+<dd>(旧 Microsoft Information Protection)
+機密度レベルを設定し Microsoft 365 で作成したメール、 Word 、 Excel 、 Power Point などのデータを保護できる。
+具体的には、ファイルに対する編集・印刷・転送などの操作権限や有効期限を設定し、
+情報漏洩を防ぐ仕組みです。</dd>
+</dl>
+<h2>その他リソース</h2>
+<dl>
+<dt>Azure App Service</dt>
+<dd>ウェブアプリを動かす環境を提供する PaaS。
+CD, 負荷分散, 自動スケール機能付き。</dd>
+<dt>Azure SQL Database</dt>
+<dd>TODO</dd>
+<dt>IoT Central</dt>
+<dd>IoTデバイスの中庸管理。</dd>
+<dt>IoT Hub</dt>
+<dd>デバイスの通信管理に特化。</dd>
+<dt>Azure App Service</dt>
+<dd>.NET, Java, Node.js, Python などから好きな言語を選んで開発し、それをデプロイする。
+セキュリティ・負荷分散・自動スケーリング・自動管理などを勝手にやってくれる。
+CI/CDやパッケージ管理、TLS/SSL証明書などの DevOps 機能もある。</dd>
+<dt>Azure Cosmos DB</dt>
+<dd>NoSQLデータベースのPaaS。
+高速な応答、スケーラビリティ、高可用性、高セキュリティ、フルマネージド。</dd>
+<dt>Azure Cache for Redis</dt>
+<dd>Redis をもとにしたインメモリデータストア。</dd>
+<dt>Azure DevTest Labs</dt>
+<dd>Azure内にテスト環境を設定できる。
+仮想マシンの数と設定内容を記した Azure Resource Manager テンプレートを利用する。</dd>
+<dt>Azure Reserved VM Instances</dt>
+<dd>インスタンスを予約購入して価格を割り引く。</dd>
+</dl>
+<h2>サポート</h2>
+<dl>
+<dt>Azure サポートリクエスト (サポートチケット)</dt>
+<dd>ポータル上で作成と管理ができる。
+Azure サポートチケット REST API や Azure CLI からも作成できる。</dd>
+<dt>料金計算ツール</dt>
+<dd>リソースの月額コストの見積もりに使う。</dd>
+<dt>Azure TCO 計算ツール</dt>
+<dd>光熱費や人件費・データセンターの維持コスト等も踏まえて、
+オンプレミスから Azure に移行した際の費用を比較・見積もりする。</dd>
+<dt>コストの管理と請求 (Azure Cost Management)</dt>
+<dd>過去の利用料を参照する。</dd>
+</dl>
 <h2>お金</h2>
 <ul>
 <li>SLA 未達成時はクレジットがもらえる。</li>
+<li>可用性ゾーン間のデータ転送は有料。</li>
+<li>同一の可用性ゾーン内のデータ転送は無料。</li>
 </ul>
+<!-- ## 適当に VM を立てると作られるもの -->
+<!---->
+<!-- リソースが1つもない状態で VM を作成すると、必要なリソースも一緒に作成されます。 -->
+<!---->
+<!-- - NIC -->
+<!-- - nsg -->
+<!-- - ipconfig -->
+<!-- - ip -->
+<!-- - z3 -->
+<!-- - z2 -->
+<!-- - vm -->
+<!---->
+<!-- 問題は VM2 に紐づいたパブリックIPアドレスが存在しないことです。 -->
+<!---->
+<!-- 可用性ゾーンというのは、単に同一のサブネット内に同じ構成の VM を複数立てる機能に過ぎないようです。 -->
+<!-- ソフトウェアのインストール等は各 VM に個別にする必要がありそうです。 -->
+<!---->
+<!-- VM2 にアクセスするためには、 NIC を開いて、紐づいている ipconfig をクリックし、 -->
+<!-- パブリック IP アドレスを追加する必要がありました。 -->
+<!---->
+<!-- --- -->
+<!---->
+<!-- Bastion -->
 
       </div>
     </main>

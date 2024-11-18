@@ -160,44 +160,45 @@ if sys.platform == "win32":
     CloseHandle.argtypes = [HANDLE]
     CloseHandle.restype = ctypes.c_bool
 
+    def custom_opener(path, flags):
+        if flags &amp; os.O_RDONLY:
+            access = GENERIC_READ
+        elif flags &amp; os.O_WRONLY:
+            access = GENERIC_WRITE
+        elif flags &amp; os.O_RDWR:
+            access = GENERIC_READ | GENERIC_WRITE
+
+        if flags &amp; os.O_CREAT and flags &amp; os.O_TRUNC: # 'w'
+            create = CREATE_ALWAYS
+        elif flags &amp; os.O_CREAT and flags &amp; os.O_APPEND: # 'a'
+            # 本来は OPEN_ALWAYS だけでは不十分で、 ファイル末尾に seek が必要
+            # なのだが、 CPython が seek してくれるので、ここではサボる。
+            create = OPEN_ALWAYS
+        elif flags &amp; os.O_CREAT and flags &amp; os.O_EXCL: # 'x'
+            create = CREATE_NEW
+        else: # 'r'
+            create = OPEN_EXISTING
+
+        handle = CreateFile(
+            path,
+            access,
+            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+            None,
+            create,
+            FILE_ATTRIBUTE_NORMAL,
+            None,
+        )
+
+        # CloseHandle は使わず、 _close で閉じること。
+        # CPython はたぶん _close で閉じてくれる。
+        fd = msvcrt.open_osfhandle(handle, flags)
+        return fd
+
     original_open = builtins.open
 
     def patched_open(file, mode="r", buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None):
-        def custom_opener(path, flags):
-            if flags &amp; os.O_RDONLY:
-                access = GENERIC_READ
-            elif flags &amp; os.O_WRONLY:
-                access = GENERIC_WRITE
-            elif flags &amp; os.O_RDWR:
-                access = GENERIC_READ | GENERIC_WRITE
-
-            if flags &amp; os.O_CREAT and flags &amp; os.O_TRUNC: # 'w'
-                create = CREATE_ALWAYS
-            elif flags &amp; os.O_CREAT and flags &amp; os.O_APPEND: # 'a'
-                create = OPEN_ALWAYS
-            elif flags &amp; os.O_CREAT and flags &amp; os.O_EXCL: # 'x'
-                create = CREATE_NEW
-            else: # 'r'
-                create = OPEN_EXISTING
-
-            handle = CreateFile(
-                path,
-                access,
-                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                None,
-                create,
-                FILE_ATTRIBUTE_NORMAL,
-                None,
-            )
-
-            # CloseHandle は使わず、 _close で閉じること。
-            # CPython はたぶん _close で閉じてくれる。
-            fd = msvcrt.open_osfhandle(handle, flags)
-            return fd
-
         if opener is None:
             opener = custom_opener
-
         return original_open(file, mode, buffering, encoding, errors, newline, closefd, opener)
 
     builtins.open = patched_open
