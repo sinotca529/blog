@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="date" content="2024-08-18" />
+    <meta name="date" content="2024-12-22" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="path_to_root" content="../..">
     <link rel="stylesheet" href="../../katex/katex.min.css" />
@@ -51,9 +51,9 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-08-18 ~ 2024-08-18
+        2024-08-18 ~ 2024-12-22
       </div>
-      <div> <a class="tag" href="../../tag.html?tag=ref">ref</a> <a class="tag" href="../../tag.html?tag=zsh">zsh</a></div>
+      <div> <a class="tag" href="../../tag.html?tag=ref">ref</a> <a class="tag" href="../../tag.html?tag=shell">shell</a></div>
       <div id="main-content">
         <h1>AWK 簡易リファレンス</h1>
 <p>AWK はスクリプト言語です。
@@ -63,16 +63,26 @@ Python と同様にコードを書いたファイルを用意して実行する�
 <p>入力データは行列のように認識されます。
 行はレコード、その中の要素はフィールドと呼びます。
 レコードとフィールドの区切り文字はそれぞれ、ビルトイン変数 RF と FS で指定します。</p>
-<h2>基本文法</h2>
-<p>処理対象のパターンと処理内容を指定します。</p>
-<pre><code>foo | awk 'pattern { action }'
-</code></pre>
-<p>パターンやアクションでは、レコードやフィールドを参照できます。
-レコードを参照するには <code>$0</code> と書きます。
+<p>スクリプト内でレコードを参照するには <code>$0</code> と書きます。
 <code>N</code> 番目のフィールドを参照するには <code>$N</code> と書きます。</p>
+<h2>基本文法</h2>
+<p>基本的には次の3つを組み合わせます。</p>
+<table><thead><tr><th style="text-align: left">記法</th><th style="text-align: left">意味</th><th style="text-align: left">使いどころ</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>BEGIN { &lt;action&gt; }</code></td><td style="text-align: left">初めに <code>&lt;action&gt;</code> を実行</td><td style="text-align: left">変数の初期化</td></tr>
+<tr><td style="text-align: left"><code>END { &lt;action&gt; }</code></td><td style="text-align: left">終わりに <code>&lt;action&gt;</code> を実行</td><td style="text-align: left">集約結果の出力</td></tr>
+<tr><td style="text-align: left"><code>&lt;pattern&gt; { &lt;action&gt; }</code></td><td style="text-align: left"><code>&lt;pattern&gt;</code> を満たす各行に対し <code>&lt;action&gt;</code> を実行</td><td style="text-align: left">処理全般</td></tr>
+</tbody></table>
+<p>例えば、</p>
+<pre><code class="language-sql">SELECT kind, COUNT(*) FROM table GROUP BY kind
+</code></pre>
+<p>に相当する処理は</p>
+<pre><code class="language-sh"># 1. 2行目以降の各行 (非ヘッダ行) について、カテゴリ ($1) を参照して連想配列 c を更新
+# 2. 最後に、連想配列の中身を表示
+awk 'NR&gt;1 { c[$1]+=1 } END { for (i in c) print i, c[i] }'
+</code></pre>
+<p>のように書きます。</p>
 <h2>パターン</h2>
-<p>パターンには条件式を使えます。</p>
-<p>パターンには正規表現も使えます。</p>
+<p>パターンには条件式や正規表現を使えます。</p>
 <pre><code># ABC を含むレコードにマッチ
 foo | awk '/ABC/ { ... }'
 
