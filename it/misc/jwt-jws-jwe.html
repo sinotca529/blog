@@ -1,18 +1,14 @@
 <!doctype html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="date" content="2024-12-28" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="path_to_root" content="../..">
-    <link rel="stylesheet" href="../../katex/katex.min.css" />
-    <link rel="stylesheet" href="../../style.css" />
-    <script defer type="text/javascript" src="../../metadata.js"></script>
-    <script defer type="text/javascript" src="../../segmenter.js"></script>
-    <script defer type="text/javascript" src="../../script.js"></script>
-    <script type="text/javascript" src="../../theme.js"></script>
-    <title>JWT/JWS/JWE (アクセストークン)</title>
-  </head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../..">
+  <link rel="stylesheet" href="../../style.css" />
+  <script defer type="text/javascript" src="../../metadata.js"></script><script defer type="text/javascript" src="../../script.js"></script><script defer type="text/javascript" src="../../theme.js"></script>
+  <title>JWT/JWS/JWE (アクセストークン)</title>
+</head>
+
   <body>
     <header>
   <div id="menu-bar">
@@ -53,7 +49,7 @@
         </svg>
         2024-12-28 ~ 2024-12-28
       </div>
-      <div> <a class="tag" href="../../tag.html?tag=it">it</a></div>
+      <div> <a class="tag" href="../../index.html?tag=it">it</a></div>
       <div id="main-content">
         <h1>JWT/JWS/JWE (アクセストークン)</h1>
 <p>JWT は、ステートレスな Web アプリでアクセストークンのやり取りに使うフォーマットです。
@@ -70,7 +66,7 @@ JWS は JWT に署名を付けたもので、 JWE は JWT を暗号化したも�
           │                            │
           │ Base64                     │ Base64
           v                            v
-   eyJ0eXAiOiJKV1QifQ==  .  eyJzdWIiOiJ1c2VyMDEiLCJleHAiOjE3MzUzNTk3ODN9
+   eyJ0eXAiOiJKV1QifQ    .  eyJzdWIiOiJ1c2VyMDEiLCJleHAiOjE3MzUzNTk3ODN9
 </code></pre>
 <p>ヘッダとクレームをそれぞれ Base64 に変換して、 <code>.</code> で繋げます。
 作った文字列は HTTP の <code>Authorization</code> ヘッダにもたせます。</p>
