@@ -47,7 +47,7 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-05-03 ~ 2024-05-03
+        2024-05-03 ~ 2025-01-06
       </div>
       <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a></div>
       <div id="main-content">
@@ -76,6 +76,65 @@ for (int number: numbers) {
 <p><code>System.out.println("a = " + 5)</code> の <code>+</code> はコンパイラに特別扱いされている。</p>
 <h2>不変参照</h2>
 <p>ない。</p>
+<h2>エディション</h2>
+<ul>
+<li>
+<p>Java SE (Standard Edition)</p>
+<ul>
+<li>最低限の API</li>
+</ul>
+</li>
+<li>
+<p>Java EE (Enterprise Edition)</p>
+<ul>
+<li>SE + 大規模システムに必要なライブラリ (Servlet など)</li>
+</ul>
+</li>
+<li>
+<p>Java ME (Micro Edition)</p>
+<ul>
+<li>組み込み・モバイル用途</li>
+</ul>
+</li>
+<li>
+<p>JRE : JVM + 標準クラスライブラリ</p>
+</li>
+<li>
+<p>JDK : JRE + 開発ツール (コンパイラ、デバッガなど)</p>
+</li>
+</ul>
+<p>標準クラスライブラリ : 基本ライブラリ + 統合ライブラリ + UIライブラリ</p>
+<h2>パッケージ</h2>
+<p>パッケージは Rust のモジュールや C++ の namespace に似た概念だ。
+<code>package xxx.yyy.zzz;</code> のように宣言して、 <code>import xxx.yyy.zzz;</code> のように読み込む。
+パッケージ名はディレクトリ構造と同じでなくてはならない。</p>
+<p>複数のファイルが同じパッケージに属すこともある。
+例えば <code>foo/bar/A.java</code> と <code>foo/bar/B.java</code> は同じパッケージ (<code>foo.bar</code>) に属す。</p>
+<p>Java のクラスは必ずパッケージに属する必要がある。
+パッケージ宣言がないファイルに書かれたクラスは、デフォルトパッケージに属することになる。</p>
+<h2>アクセス修飾子</h2>
+<table><thead><tr><th>修飾子</th><th style="text-align: center">クラス内</th><th style="text-align: center">同じパッケージ</th><th style="text-align: center">別のパッケージ サブクラス</th><th style="text-align: center">別のパッケージ 非サブクラス</th></tr></thead><tbody>
+<tr><td><code>public</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td></tr>
+<tr><td><code>protected</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
+<tr><td>-</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
+<tr><td><code>private</code></td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
+</tbody></table>
+<h2>コンストラクタ</h2>
+<ul>
+<li>ユーザ定義コンストラクタがある場合、デフォルトコンストラクタは定義されない。</li>
+<li><code>super()</code> や <code>this()</code> はコンストラクタの先頭で合計1回しか呼べない。</li>
+</ul>
+<h2>シグネチャ (sigature)</h2>
+<p>Java において、シグネチャは (メソッド名, 引数) を指す。アクセス修飾子や戻り型は含まれない。 (JLS 8.4.2 Method Signature)
+メソッド名が同じだがシグネチャが異なる場合にオーバーロードが許される。</p>
+<h2><code>static</code> メンバ</h2>
+<ul>
+<li><code>static</code> メンバはインスタンスからアクセス可能。</li>
+</ul>
+<h2>インタフェース</h2>
+<ul>
+<li>メソッドは暗黙的に <code>abstract public</code> になる。明示的に書いても良い。</li>
+</ul>
 
       </div>
     </main>
