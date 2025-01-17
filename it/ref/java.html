@@ -148,6 +148,25 @@ import java.util.ArrayList;
 <li>メソッドは暗黙的に <code>abstract public</code> になる。明示的に書いても良い。</li>
 <li>メンバは暗黙的に <code>static final</code> になる。明示的に書いても良い。</li>
 </ul>
+<pre><code class="language-java">public interface TestInterface {
+    // 暗黙的に public static final
+    int VALUE=100;
+
+    // 暗黙的に public abstract
+    void method();
+
+    // デフォルトメソッド (Java8 以降)
+    // 暗黙的に public
+    default void defaultMethod() { System.out.println("default"); }
+
+    // 静的メソッド (Java8 以降)
+    static void staticMethod() { System.out.println("static"); }
+
+    // プライベートメソッド (Java9 以降)
+    // 静的メソッドやデフォルトメソッドから呼ぶのに使える
+    private void privateMethod() { System.out.println("private"); }
+}
+</code></pre>
 <h2>MISC</h2>
 <ul>
 <li><code>System.out.println(null)</code> は合法</li>
@@ -155,6 +174,10 @@ import java.util.ArrayList;
 <li>Java10 以降では、型推論 (<code>var i = 10</code>) が使える。</li>
 <li>演算子オーバーロードは無いが、 <code>1 + " a " + 2</code> の <code>+</code> はコンパイラに特別扱いされている。</li>
 <li>不変参照はない。</li>
+<li>カプセル化 : 関係するデータと処理をまとめること (いい感じなクラスを作ること)</li>
+<li>データ隠蔽 : メンバを直接触れなくすること (<code>private</code> にして適宜 setter/getter をつけること)</li>
+<li>情報隠蔽 : 実装を隠すこと (インタフェースや抽象クラスを使うこと)</li>
+<li>代入は式。 <code>a = (b = 10)</code> は合法。</li>
 </ul>
 
       </div>
