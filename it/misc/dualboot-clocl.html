@@ -6,7 +6,7 @@
   <meta name="path_to_root" content="../..">
   <link rel="stylesheet" href="../../style.css" />
   <script defer type="text/javascript" src="../../metadata.js"></script><script defer type="text/javascript" src="../../script.js"></script><script defer type="text/javascript" src="../../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../../gtag.js"></script>
-  <title>Python 簡易リファレンス</title>
+  <title>Linux と Windows を並用すると時計がずれる</title>
 </head>
 
   <body>
@@ -47,73 +47,27 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2025-01-09 ~ 2025-01-21
+        2025-01-21 ~ 2025-01-21
       </div>
-      <div> <a class="tag" href="../../index.html?tag=it">it</a> <a class="tag" href="../../index.html?tag=ref">ref</a></div>
+      <div> <a class="tag" href="../../index.html?tag=misc">misc</a></div>
       <div id="main-content">
-        <h1>Python 簡易リファレンス</h1>
-<p>たまに使うけど忘れてしまうテクなどを書いていきます。</p>
-<h2><code>stdout</code>, <code>stderr</code> を  <code>/dev/null</code> に捨てる</h2>
-<pre><code class="language-py">from contextlib import redirect_stdout, redirect_stderr
-
-with open('/dev/null') as devnull:
-    with redirect_stdout(devnull), redirect_stderr(devnull):
-        # この中で print しても表示されずに捨てられる
-        some_function()
+        <h1>Linux と Windows を並用すると時計がずれる</h1>
+<p>Linux を起動したあとのマシンで Windows を起動すると、時計がずれていることがある。
+この問題は、 Linux と Windows でハードウェアクロックの使い方が違うことに起因する。</p>
+<table><thead><tr><th>OS</th><th>ハードウェアクロックの使い方</th></tr></thead><tbody>
+<tr><td>Linux</td><td>世界標準時をセット</td></tr>
+<tr><td>Windows</td><td>ローカルの時刻をセット</td></tr>
+</tbody></table>
+<p>例えば日本だと9時間のズレが生じることになる。</p>
+<p>この問題を解消するには、 Linux か Windows の設定を変えてやれば良い。
+簡単なのは Linux で、次のコマンドを実行すれば良い。</p>
+<pre><code>sudo timedatectl set-local-rtc 1
 </code></pre>
-<h2>一時ファイル・ディレクトリを作成する</h2>
-<pre><code class="language-py">import tempfile
-
-# 一時ファイル
-with tempfile.NamedTemporaryFile() as f:
-    print(f.name)
-
-# 一時ディレクトリ
-with tempfile.TemporaryDirectory() as d:
-    print(d)
-</code></pre>
-<h2>コマンドライン引数の処理</h2>
-<pre><code class="language-py">import argparse
-
-parser = argparse.ArgumentParser(description='Example Program')
-
-# 位置引数
-# nargs で受け取る引数の数を指定 (+: 1以上, *: 0以上, ?: 0 or 1)
-parser.add_argument('integers', type=int, nargs='+', help='整数のリスト')
-
-# オプション引数 (必須にするには required=True をつける)
-parser.add_argument('--str', '-s', help='文字列')
-
-# フラグ
-parser.add_argument('--verbose', '-v', action='store_true', help='increase output verbosity')
-
-args = parser.parse_args()
-</code></pre>
-<h3>サブコマンドの処理</h3>
-<p><code>set_defaults</code> でサブコマンドごとの処理を指定する。</p>
-<pre><code class="language-py">import argparse
-
-def foo(args):
-    print('foo', args.num)
-
-def bar(args):
-    print('bar', args.str)
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Example Program')
-    subparsers = parser.add_subparsers()
-
-    foo_parser = subparsers.add_parser('foo')
-    foo_parser.set_defaults(func=foo)
-    foo_parser.add_argument('num', type=int)
-
-    bar_parser = subparsers.add_parser('bar')
-    bar_parser.set_defaults(func=bar)
-    bar_parser.add_argument('str')
-
-    args = parser.parse_args()
-    args.func(args)
-</code></pre>
+<hr />
+<p>ネタ元 :</p>
+<ul>
+<li><a href="https://qiita.com/Juice/items/63279e93f818ba74312d">【即解決】LinuxとWindowsをデュアルブートさせたら時刻がずれる現象の解決方法</a></li>
+</ul>
 
       </div>
     </main>
