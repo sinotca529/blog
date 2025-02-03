@@ -47,7 +47,7 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-05-03 ~ 2025-01-14
+        2024-05-03 ~ 2025-02-03
       </div>
       <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a></div>
       <div id="main-content">
@@ -167,6 +167,44 @@ import java.util.ArrayList;
     private void privateMethod() { System.out.println("private"); }
 }
 </code></pre>
+<h2>String</h2>
+<p><code>null</code> は文字列に足し込める。</p>
+<pre><code class="language-java">String s = null;
+s += "a"; // "nulla"
+</code></pre>
+<p><code>StrinbBuffer</code> の <code>capacity</code> は 16 + 文字列長。</p>
+<pre><code class="language-java">var sb = new StringBuffer("123");
+assert sb.capacity() == 16 + 3;
+</code></pre>
+<p><code>substring(a, b)</code> の範囲は <code>[a, b)</code></p>
+<pre><code class="language-java">var s = "0123456789";
+s.substring(3, 7); // "3456"
+</code></pre>
+<h2>型推論 (Java10 以降)</h2>
+<pre><code class="language-java">// int
+var a = 1;
+
+// double
+var b = 1.0 ;
+
+// ERROR
+var c = {1, 2, 3}
+
+// ArrayList&lt;Object&gt;
+var d = new ArrayList&lt;&gt;();
+</code></pre>
+<h2>switch</h2>
+<p><code>switch</code> できる型は以下のいずれか :</p>
+<ul>
+<li><code>int</code> 以下の整数型とそのラッパ</li>
+<li><code>String</code>, <code>char</code></li>
+<li><code>enum</code></li>
+</ul>
+<p><code>case</code> におけるのは以下のいずれか :</p>
+<ul>
+<li>定数 (<code>final</code> またはリテラル)</li>
+<li>コンパイル時に値が決まる</li>
+</ul>
 <h2>MISC</h2>
 <ul>
 <li><code>System.out.println(null)</code> は合法</li>
