@@ -47,20 +47,55 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-05-03 ~ 2025-02-03
+        2024-05-03 ~ 2025-02-11
       </div>
       <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a></div>
       <div id="main-content">
         <h1>Java 簡易リファレンス</h1>
+<h2>整数・小数</h2>
+<table><thead><tr><th style="text-align: left">型</th><th style="text-align: left">対応するRustの型</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>byte</code></td><td style="text-align: left"><code>i8</code></td></tr>
+<tr><td style="text-align: left"><code>char</code></td><td style="text-align: left"><code>u16</code></td></tr>
+<tr><td style="text-align: left"><code>short</code></td><td style="text-align: left"><code>i16</code></td></tr>
+<tr><td style="text-align: left"><code>int</code></td><td style="text-align: left"><code>i32</code></td></tr>
+<tr><td style="text-align: left"><code>long</code></td><td style="text-align: left"><code>u64</code></td></tr>
+<tr><td style="text-align: left"><code>float</code></td><td style="text-align: left"><code>f32</code></td></tr>
+<tr><td style="text-align: left"><code>double</code></td><td style="text-align: left"><code>f64</code></td></tr>
+</tbody></table>
+<h3>暗黙キャスト</h3>
+<p>拡大方向には暗黙キャストできますが、縮小方向にはできません。</p>
+<pre><code class="language-txt">byte --+--&gt; char  --+--&gt; int --&gt; long --&gt; float --&gt; double
+       |            |
+       +--&gt; short --+
+</code></pre>
+<p>ただし、代入の右辺が <code>int</code> 型の数値リテラルや定数式の場合、
+値が左辺の型の範囲に収まれば暗黙の縮小変換が起こります。</p>
+<pre><code class="language-java">final int x = 16;
+char a = (1 &lt;&lt; x) - 1; // 65535
+</code></pre>
+<h3>汎整数拡張</h3>
+<p>Java にも汎整数拡張があります。
+<code>int</code> より小さな整数型は式中では <code>int</code> に拡張されます。</p>
+<pre><code class="language-java">char max = 65535;
+char a = 0, b = 0;
+
+a -= 1;
+System.out.println(a == max); // true
+System.out.println(b - 1 == max); // false
+</code></pre>
+<p><code>int</code> 以上には拡張されません。</p>
+<pre><code class="language-java">int x = (1 &lt;&lt; 32) - 1;         // 0
+int y = (int)((1L &lt;&lt; 32) - 1); // -1
+</code></pre>
 <h2>配列</h2>
-<p>Java の配列は固定長だが、参照型。
-型は長さの情報を持たない。</p>
+<p>Java の配列は固定長ですが、参照型で動的に作成できます。
+型は長さの情報を持ちません。</p>
 <pre><code class="language-java">// 宣言時の初期化
 int[] a = new int[10];
 int[] b = new int[]{4, 5};
 int[] c = {0, 1, 2};
 
-// あとから初期化
+// 代入
 a = new int[10];
 b = new int[]{4, 5};
 
@@ -153,7 +188,7 @@ import java.util.ArrayList;
 // import java.util
 </code></pre>
 <h2>アクセス修飾子</h2>
-<table><thead><tr><th>修飾子</th><th style="text-align: center">クラス内</th><th style="text-align: center">同じパッケージ</th><th style="text-align: center">別のパッケージ サブクラス</th><th style="text-align: center">別のパッケージ 非サブクラス</th></tr></thead><tbody>
+<table><thead><tr><th>修飾子</th><th style="text-align: center">クラス内</th><th style="text-align: center">同PKG</th><th style="text-align: center">別PKG 子クラス</th><th style="text-align: center">別PKG 非子クラス</th></tr></thead><tbody>
 <tr><td><code>public</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td></tr>
 <tr><td><code>protected</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
 <tr><td>-</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
@@ -229,6 +264,39 @@ var d = new ArrayList&lt;&gt;();
 <li>定数 (<code>final</code> またはリテラル)</li>
 <li>コンパイル時に値が決まる</li>
 </ul>
+<h2>初期化子</h2>
+<pre><code class="language-java">public class Sample {
+    // 初期化子
+    {
+        System.out.println("コンストラクタの処理前に呼ばれる")
+    }
+
+    Sample() {
+        System.out.println("初期化子のあとに呼ばれる")
+    }
+}
+</code></pre>
+<h2>可変長引数</h2>
+<pre><code class="language-java">public class Main {
+    static void varargsMethod(int... a) {
+        // class [I
+        System.out.println(a.getClass());
+    }
+
+    static void arrayMethod(int[] a) {
+        // class [I
+        System.out.println(a.getClass());
+    }
+
+    public static void main(String[] args) {
+        varargsMethod(new int[]{1, 2, 3}); // OK
+        varargsMethod(1, 2, 3);            // OK
+
+        arrayMethod(new int[]{1, 2, 3});   // OK
+        // arrayMethod(1, 2, 3);           // NG
+    }
+}
+</code></pre>
 <h2>MISC</h2>
 <ul>
 <li><code>System.out.println(null)</code> は合法</li>
@@ -242,6 +310,8 @@ var d = new ArrayList&lt;&gt;();
 <li>C++ のコピーコンストラクタに相当するものはない。</li>
 <li>Cのカンマ演算子はない。</li>
 <li>Rustのように変数を shadowing することはできない。</li>
+<li>引数に <code>void</code> は書けない。<code>void method(void)</code> はコンパイルエラー。</li>
+<li>到達不能なコードがあるとコンパイルエラー。</li>
 </ul>
 
       </div>
