@@ -47,7 +47,7 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-05-03 ~ 2025-02-11
+        2024-05-03 ~ 2025-02-12
       </div>
       <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a></div>
       <div id="main-content">
@@ -226,6 +226,77 @@ import java.util.ArrayList;
     private void privateMethod() { System.out.println("private"); }
 }
 </code></pre>
+<h2>実現 (implements) の条件</h2>
+<p>実現すべきメソッドを自分で定義する必要はありません。
+親クラスから継いだものでも構いません。</p>
+<pre><code class="language-java">interface I {
+  int method();
+}
+
+class B {
+  public int method() { return 1; }
+}
+
+class E extends B implements I {
+}
+
+void main(String[] args) {
+  E e = new E();
+  System.out.println(e.method()); // 1
+}
+</code></pre>
+<h2>多重継承・多重実現と名前衝突</h2>
+<p>クラスには複数のインタフェースを実装できます。
+Java8 以降はインタフェースにデフォルトメソッドが実装できるので、
+多重継承における名前衝突への対処が必要です。</p>
+<h3>1. クラス vs インタフェース</h3>
+<pre><code class="language-java">interface I {
+  default char method() { return 'I'; }
+}
+
+class C {
+  public char method() { return 'C'; }
+}
+
+class E extends C implements I {}
+
+void main(String[] args) {
+  I i = new E();
+  System.out.println(i.method()); // C
+}
+</code></pre>
+<h3>2. インタフェース vs インタフェース</h3>
+<pre><code class="language-java">interface I1 {
+  default int method() { return 1; }
+}
+
+interface I2 {
+  default int method() { return 2; }
+}
+
+// ERROR :
+// Main.java:9: error: types I1 and I2 are incompatible;
+// class E implements I1, I2 {}
+// ^
+//   class Main.E inherits unrelated defaults for method() from types I1 and I2
+// 1 error
+// error: compilation failed
+class E implements I1, I2 {}
+</code></pre>
+<p>明示的に解決するには <code>I1.super.method()</code> のように呼ぶ対象を明示します。</p>
+<pre><code class="language-java">class E implements I1, I2 {
+  @Override
+  public int method() {
+    return I1.super.method() + I2.super.method();
+  }
+}
+
+void main(String[] args) {
+  E e = new E();
+  System.out.println(e.method()); // 3
+}
+</code></pre>
+<p>ただし、この記法が使えるのはインタフェースを直接実装しているクラスの中だけです。</p>
 <h2>String</h2>
 <p><code>null</code> は文字列に足し込める。</p>
 <pre><code class="language-java">String s = null;
