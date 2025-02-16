@@ -51,21 +51,21 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=misc">misc</a></div>
       <div id="main-content">
-        <h1>変性</h1>
-<h2>分類</h2>
+        <h1 id="">変性</h1>
+<h2 id="1">分類</h2>
 <ul>
 <li>共変 (covariant) : 広い型から狭い型へ変換する(できる)こと</li>
 <li>反変 (contravariant) : 狭い型から拾い型へ変換する(できる)こと</li>
 <li>不変 (invariant) : 型を変換できないこと</li>
 <li>双変 (bivariant) : 共変 + 反変</li>
 </ul>
-<h2>広い型、狭い型とは？</h2>
+<h2 id="2">広い型、狭い型とは？</h2>
 <ul>
 <li>正確に言うと「定義域」が広い型、狭い型ということ。</li>
 <li>例えば<code>u8 &lt; u32</code></li>
 <li>型同士には比較不能なものもあるので、latticeのような感じになる(と思われる)</li>
 </ul>
-<h3>「継承」をどう扱うか</h3>
+<h3 id="2.1">「継承」をどう扱うか</h3>
 <ul>
 <li><code>S</code>が<code>T</code>を継承するなら、<code>T</code>型のインスタンスは全て<code>S</code>型のインスタンスで置き換えできるべき(Liskovの置換原則)</li>
 </ul>

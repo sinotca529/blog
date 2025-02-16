@@ -51,20 +51,20 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=misc">misc</a> <a class="tag" href="../../index.html?tag=editor">editor</a></div>
       <div id="main-content">
-        <h1>Vimmer のための VSCode</h1>
+        <h1 id="">Vimmer のための VSCode</h1>
 <p>Vimmer であっても VSCode を使わざるを得ない状況というものがあります。<br>
 そういうときのために、 VSCode を Vim 風にカスタマイズしておきましょう。</p>
 <p>LSP の設定が楽だったりと、 VSCode の利点もそれなりにあります。</p>
-<h2>このページで紹介する解決策の問題点</h2>
-<h3>日本語入力の挙動が怪しい</h3>
+<h2 id="1">このページで紹介する解決策の問題点</h2>
+<h3 id="1.1">日本語入力の挙動が怪しい</h3>
 <p>どうも入力時や変換時に文字がちらついて見えます。</p>
-<h3><code>virtualedit</code> が使えない (<a href="https://github.com/VSCodeVim/Vim/issues/1632">当該 Issue</a>)</h3>
+<h3 id="1.2"><code>virtualedit</code> が使えない (<a href="https://github.com/VSCodeVim/Vim/issues/1632">当該 Issue</a>)</h3>
 <p>そもそも VSCode では文字のない場所にカーソルを移動できない</p>
-<h2>使用するプラグイン</h2>
+<h2 id="2">使用するプラグイン</h2>
 <p><a href="https://marketplace.visualstudio.com/items?itemName=vscodevim.vim">VSCodeVim</a> を使います。</p>
-<h2>設定</h2>
+<h2 id="3">設定</h2>
 <p><code>settings.json</code> と <code>keybindings.json</code> を編集します。</p>
-<h3><code>settings.json</code></h3>
+<h3 id="3.1"><code>settings.json</code></h3>
 <p>まずはプラグインに関係のない部分の設定です。<br>
 私は行番号をあまり見ていないので消してしまっています。</p>
 <pre><code class="language-json">{

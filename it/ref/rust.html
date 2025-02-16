@@ -51,13 +51,13 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=rust">rust</a></div>
       <div id="main-content">
-        <h1>Rust 簡易リファレンス</h1>
-<h2>便利クレート集</h2>
+        <h1 id="">Rust 簡易リファレンス</h1>
+<h2 id="1">便利クレート集</h2>
 <ul>
 <li>indoc : 文字列リテラルを gobble する。</li>
 <li>criterion : ベンチマーク用クレート。</li>
 </ul>
-<h2><code>static</code> 定数</h2>
+<h2 id="2"><code>static</code> 定数</h2>
 <p>一度しか初期化しないが、コンパイル時に初期値が定まらない値を使いたいとき。</p>
 <pre><code class="language-rs">fn dst_dir() -&gt; &amp;'static PathBuf {
     static BUILD_DIR: OnceLock&lt;PathBuf&gt; = OnceLock::new();
@@ -68,13 +68,13 @@
     })
 }
 </code></pre>
-<h2>Re-export</h2>
+<h2 id="3">Re-export</h2>
 <pre><code class="language-rs">pub use crate::sub_module1::Foo;
 </code></pre>
-<h2>ローカルのプロジェクトをインストール</h2>
+<h2 id="4">ローカルのプロジェクトをインストール</h2>
 <pre><code class="language-sh">cargo install --path . --locked
 </code></pre>
-<h2>プロンプトを出す</h2>
+<h2 id="5">プロンプトを出す</h2>
 <p><code>dialoguer</code> クレートを使う。</p>
 <pre><code class="language-rust">println!("ほんとうによろしいですか？");
 
@@ -84,7 +84,7 @@ let choice: usize = Select::new()
     .default(0)
     .interact()?;
 </code></pre>
-<h2>オプショナル引数的なことをする</h2>
+<h2 id="6">オプショナル引数的なことをする</h2>
 <pre><code class="language-rs">fn main() {
     range(1, 10);
     range(1, None);
@@ -96,14 +96,14 @@ fn range(min: impl Into&lt;Option&lt;usize&gt;&gt;, max: Into&lt;Option&lt;usize
     dbg!(min, max);
 }
 </code></pre>
-<h2>参照を束縛する</h2>
+<h2 id="7">参照を束縛する</h2>
 <pre><code class="language-rs">let a = (String::from("Hello"), 123);
 let b = &amp;a;
 
 let &amp;(ref c, d) = b;
 println!("{:?}, {:?}, {}, {}", a, b, c, d);
 </code></pre>
-<h2><code>&amp;str</code> と <code>&amp;[u8]</code> の変換</h2>
+<h2 id="8"><code>&amp;str</code> と <code>&amp;[u8]</code> の変換</h2>
 <pre><code class="language-rs">let str = "Hello World";
 let slice = s.as_bytes();
 let str = std::str::from_utf8(slice).unwrap();

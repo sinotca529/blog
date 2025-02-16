@@ -51,7 +51,7 @@
       </div>
       <div> <a class="tag" href="../index.html?tag=misc">misc</a></div>
       <div id="main-content">
-        <h1>メールの件名が文字化けする件</h1>
+        <h1 id="">メールの件名が文字化けする件</h1>
 <p>メールの件名が文字化けする。</p>
 <pre><code>----------------------------------
 件名 : Zoomのフォーカスモードの��用について／Using Zoom's Focus Mode
@@ -62,13 +62,13 @@ To : yyy@example.com
 ...
 </code></pre>
 <p>これは RFC2047 に関連する問題と思われる。</p>
-<h2>日本語の件名はエンコードして送れ (RFC2047)</h2>
+<h2 id="1">日本語の件名はエンコードして送れ (RFC2047)</h2>
 <blockquote>
 <p>This memo describes similar techniques to allow the encoding of non-ASCII text in various portions of a RFC 822 [2] message header, …</p>
 <p><a href="https://www.rfc-editor.org/rfc/rfc2047">RFC2047</a></p>
 </blockquote>
 <p>日本語は non-ASCII Text なので、エンコードが必要。</p>
-<h2>エンコード手順と罠</h2>
+<h2 id="2">エンコード手順と罠</h2>
 <p>エンコード手順は次の通り :</p>
 <ol>
 <li>件名を Base64 等でエンコード</li>

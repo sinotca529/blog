@@ -47,12 +47,12 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-05-03 ~ 2025-02-12
+        2024-05-03 ~ 2025-02-16
       </div>
       <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a></div>
       <div id="main-content">
-        <h1>Java 簡易リファレンス</h1>
-<h2>整数・小数</h2>
+        <h1 id="">Java 簡易リファレンス</h1>
+<h2 id="1">整数・小数</h2>
 <table><thead><tr><th style="text-align: left">型</th><th style="text-align: left">対応するRustの型</th></tr></thead><tbody>
 <tr><td style="text-align: left"><code>byte</code></td><td style="text-align: left"><code>i8</code></td></tr>
 <tr><td style="text-align: left"><code>char</code></td><td style="text-align: left"><code>u16</code></td></tr>
@@ -62,20 +62,36 @@
 <tr><td style="text-align: left"><code>float</code></td><td style="text-align: left"><code>f32</code></td></tr>
 <tr><td style="text-align: left"><code>double</code></td><td style="text-align: left"><code>f64</code></td></tr>
 </tbody></table>
-<h3>暗黙キャスト</h3>
+<h3 id="1.1">暗黙キャスト</h3>
 <p>拡大方向には暗黙キャストできますが、縮小方向にはできません。</p>
 <pre><code class="language-txt">byte --+--&gt; char  --+--&gt; int --&gt; long --&gt; float --&gt; double
        |            |
        +--&gt; short --+
 </code></pre>
-<p>ただし、代入の右辺が <code>int</code> 型の数値リテラルや定数式の場合、
-値が左辺の型の範囲に収まれば暗黙の縮小変換が起こります。</p>
+<p>ただし、代入の右辺が <code>int</code> 型の数値リテラルや定数式の場合は例外です。
+値が左辺の型の範囲に収まれば、暗黙的に縮小変換されます。
+収まらなければコンパイルエラーになります。</p>
 <pre><code class="language-java">final int x = 16;
 char a = (1 &lt;&lt; x) - 1; // 65535
+
+// コンパイルエラー
+// char b = 1 &lt;&lt; x;
 </code></pre>
-<h3>汎整数拡張</h3>
-<p>Java にも汎整数拡張があります。
-<code>int</code> より小さな整数型は式中では <code>int</code> に拡張されます。</p>
+<h3 id="1.2">Autoboxing, Autounboxing</h3>
+<p>整数型と対応する参照型とは、相互に暗黙変換されます。</p>
+<pre><code class="language-java">final var l = new ArrayList&lt;Object&gt;();
+
+// Boxing
+l.add(10);
+
+// class java.lang.Integer
+System.out.println(l.get(0).getClass());
+
+// Unboxing
+final int i = (Integer)l.get(0);
+</code></pre>
+<h3 id="1.3">汎整数拡張</h3>
+<p><code>int</code> より小さな整数型は式中では <code>int</code> に拡張されます。</p>
 <pre><code class="language-java">char max = 65535;
 char a = 0, b = 0;
 
@@ -87,51 +103,85 @@ System.out.println(b - 1 == max); // false
 <pre><code class="language-java">int x = (1 &lt;&lt; 32) - 1;         // 0
 int y = (int)((1L &lt;&lt; 32) - 1); // -1
 </code></pre>
-<h2>配列</h2>
+<h2 id="2">配列</h2>
 <p>Java の配列は固定長ですが、参照型で動的に作成できます。
 型は長さの情報を持ちません。</p>
-<pre><code class="language-java">// 宣言時の初期化
-int[] a = new int[10];
-int[] b = new int[]{4, 5};
-int[] c = {0, 1, 2};
+<pre><code class="language-java">int[] a = { 0, 1, 2 };
 
-// 代入
-a = new int[10];
+// class [I
+System.out.println(a.getClass());
+
+// 長さは違うが代入できる
+a = new int[]{0, 1};
+</code></pre>
+<p>宣言における <code>[]</code> の位置は柔軟です。
+<sub>C言語ユーザーに媚びているのでしょうか。</sub></p>
+<pre><code class="language-java">// どちらでも良い
+int[] d;
+int e[];
+
+// 全て同じ型 (intの2次元配列)
+int[][] a;
+int[] b[];
+int c[][];
+</code></pre>
+<p>宣言時の初期化は3通りの方法があります。</p>
+<pre><code class="language-java">int[] a = new int[10];
+int[] b = new int[]{4, 5};
+int[] c = {0, 1};
+</code></pre>
+<p>宣言と分けられた代入では <code>{0, 1}</code> のような書き方ができません。</p>
+<pre><code class="language-java">a = new int[10];
 b = new int[]{4, 5};
 
 // エラー
 // c = {0, 1, 2};
-
-// 宣言の方法は色々
-int[] d;
-int e[];
-
-// 全部同じ型 (intの2次元配列)
-int[][] f;
-int[] g[];
-int h[][];
-
-// 一番外側だけ確保すれば良い
-f = new int[2][];
-
-// これはダメ
-// g = new int[][];
-
-// 長さは違うが合法
-a = b;
-
-// 配列長は動的に決めても良い
-int n = 3;
-int[] c = new int[n];
-
-// memcpy 相当の配列コピー
-System.arraycopy(b, 0, c, 0, b.length);
 </code></pre>
-<h2>範囲 for</h2>
+<p>長さは動的に決めることができます。</p>
+<pre><code class="language-java">int n = 3;
+int[] c = new int[n];
+</code></pre>
+<p>初期化時には最も外側の要素数が決まっている必要があります。</p>
+<pre><code class="language-java">// 一番外側だけ確定していれば良い
+a = new int[2][];
+
+// エラー
+// b = new int[][];
+</code></pre>
+<p><code>arraycopy</code> で C の <code>memcpy</code> 相当の操作ができます。</p>
+<pre><code class="language-java">System.arraycopy(b, 0, c, 0, b.length);
+</code></pre>
+<h2 id="3">拡張 for</h2>
+<p>配列に対して拡張 for を書けます。</p>
 <pre><code class="language-java">int[] arr = {1, 2, 3};
 for (int e: arr) System.out.println(e);
 </code></pre>
-<h2>多重ループ脱出</h2>
+<p>イテレータに対しても拡張 for を書けます。</p>
+<pre><code class="language-java">for (int e: list) {
+   ...
+}
+</code></pre>
+<p>このコードは次のコードに厳密に対応します。</p>
+<pre><code class="language-java">for (var i = list.iterator(); i.hasNext();) {
+  int e = (int) i.next();
+  ...
+}
+</code></pre>
+<h2 id="4">型推論 (Java10 以降)</h2>
+<pre><code class="language-java">// int
+var a = 1;
+
+// double
+var b = 1.0 ;
+
+// ERROR
+var c = {1, 2, 3};
+
+// ArrayList&lt;Object&gt;
+var d = new ArrayList&lt;&gt;();
+</code></pre>
+<h2 id="5">ラベル</h2>
+<p>多重ループを抜けるにはラベルが便利です。</p>
 <pre><code class="language-java">outer: for (int i = 0; i &lt; 5; i++) {
     inner: for (int j = 0; j &lt; 5; i++) {
         System.out.println("i = " + i + ", j = " + j);
@@ -141,9 +191,219 @@ for (int e: arr) System.out.println(e);
     }
 }
 </code></pre>
-<h2>コンスタントプール</h2>
+<p>ラベルはブロックにも使えます。<br>
+<code>if (a == 1)</code> は、<code>break</code> より後ろが到達不能判定されないようにするための分岐です。
+これがないとコンパイルエラーになります。</p>
+<pre><code class="language-java">int a = 0;
+block: {
+    a = 1;
+    if (a == 1) break block;
+    a = 2;
+}
+
+System.out.println(a); // 1
+</code></pre>
+<p>その他、 <code>if</code>, <code>do while</code> にもラベルをつけられます。
+ただし、変数宣言にはラベルをつけられません。</p>
+<p>ラベルは式にもつけられますが、実用上の意味はありません。
+<code>goto</code> が予約語であること踏まえると、言語仕様制定時の名残かもしれません。</p>
+<h2 id="6">コンスタントプール</h2>
 <p>TODO</p>
-<h2>エディション</h2>
+<h2 id="7">パッケージ</h2>
+<p><code>package xxx.yyy;</code> のように宣言する。
+パッケージ名はディレクトリ構造と同じでなくてはならない。</p>
+<p>複数のファイルが同じパッケージに属すこともある。
+例えば <code>foo/bar/A.java</code> と <code>foo/bar/B.java</code> は同じパッケージ (<code>foo.bar</code>) に属す。</p>
+<p>Java のクラスは必ずパッケージに属する必要がある。
+パッケージ宣言がないファイルに書かれたクラスは、デフォルトパッケージに属することになる。</p>
+<h2 id="8">インポート</h2>
+<p>Java で <code>import</code> できるのは定数とクラスのみ。
+Rust の <code>use</code> のようにパスを読み込むことはできず、必ずクラス名まで書かなければならない。</p>
+<pre><code class="language-java">import static java.lang.Math.PI;
+import java.util.ArrayList;
+
+// クラス名まで書かれていないので NG
+// import java.util
+</code></pre>
+<h2 id="9">アクセス修飾子</h2>
+<table><thead><tr><th>修飾子</th><th style="text-align: center">クラス内</th><th style="text-align: center">同PKG</th><th style="text-align: center">別PKG 子クラス</th><th style="text-align: center">別PKG 非子クラス</th></tr></thead><tbody>
+<tr><td><code>public</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td></tr>
+<tr><td><code>protected</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
+<tr><td>-</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
+<tr><td><code>private</code></td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
+</tbody></table>
+<h2 id="10">コンストラクタ</h2>
+<ul>
+<li>ユーザ定義コンストラクタがある場合、デフォルトコンストラクタは定義されない。</li>
+<li><code>super()</code> や <code>this()</code> はコンストラクタの先頭で合計1回しか呼べない。</li>
+</ul>
+<h2 id="11">シグネチャ (sigature)</h2>
+<p>Java において、シグネチャは (メソッド名, 引数) を指す。アクセス修飾子や戻り型は含まれない。 (JLS 8.4.2 Method Signature)
+メソッド名が同じだがシグネチャが異なる場合にオーバーロードが許される。</p>
+<h2 id="12">インタフェース</h2>
+<ul>
+<li>メソッドは暗黙的に <code>abstract public</code> になる。明示的に書いても良い。</li>
+<li>メンバは暗黙的に <code>static final</code> になる。明示的に書いても良い。</li>
+</ul>
+<pre><code class="language-java">public interface TestInterface {
+    // 暗黙的に public static final
+    int VALUE=100;
+
+    // 暗黙的に public abstract
+    void method();
+
+    // デフォルトメソッド (Java8 以降)
+    // 暗黙的に public
+    default void defaultMethod() { System.out.println("default"); }
+
+    // 静的メソッド (Java8 以降)
+    static void staticMethod() { System.out.println("static"); }
+
+    // プライベートメソッド (Java9 以降)
+    // 静的メソッドやデフォルトメソッドから呼ぶのに使える
+    private void privateMethod() { System.out.println("private"); }
+}
+</code></pre>
+<h2 id="13">実現 (implements) の条件</h2>
+<p>実現すべきメソッドを自分で定義する必要はありません。
+親クラスから継いだものでも構いません。</p>
+<pre><code class="language-java">interface I {
+  int method();
+}
+
+class B {
+  public int method() { return 1; }
+}
+
+class E extends B implements I {
+}
+
+void main(String[] args) {
+  E e = new E();
+  System.out.println(e.method()); // 1
+}
+</code></pre>
+<h2 id="14">多重継承・多重実現と名前衝突</h2>
+<p>クラスには複数のインタフェースを実装できます。
+Java8 以降はインタフェースにデフォルトメソッドが実装できるので、
+多重継承における名前衝突への対処が必要です。</p>
+<p>名前解決には次のルールがあります :</p>
+<ol>
+<li>親クラスに実装があれば、インタフェースの状況によらずそれを採用する。</li>
+<li>オーバーライド関係の半順序集合 (親 &lt; 子) に最大元があれば、それを採用する。</li>
+<li>それ以外の場合、コンパイルエラーとする。</li>
+</ol>
+<p>次の例では、ルール1によって <code>C1.m</code> が選択されます。</p>
+<pre><code class="language-java">interface I1 { default String m() { return "I1";} }
+class C1 { public String m() { return "C1"; } }
+class C2 extends C1 {}
+
+class E extends C2 implements I1 {}
+
+void main(String[] args) {
+  // C1
+  System.out.println((new E()).m());
+}
+</code></pre>
+<p>次の例では、ルール2によって <code>I2.m</code> が選択されます。</p>
+<pre><code class="language-java">interface I1 { default String m() { return "I1";} }
+interface I2 extends I1 { default String m() { return "I2";} }
+interface I3 extends I1 {}
+
+class E implements I1, I2, I3 {}
+
+void main(String[] args) {
+  // I2
+  System.out.println((new E()).m());
+}
+</code></pre>
+<p>次の例では、ルール3によってコンパイルエラーになります。</p>
+<pre><code class="language-java">interface I1 { default String m() { return "I1";} }
+interface I2 { default String m() { return "I2";} }
+
+// コンパイルエラー
+class E implements I1, I2 {}
+
+void main(String[] args) {
+  System.out.println((new E()).m());
+}
+</code></pre>
+<p>明示的に実装を与えればエラーは解消します。</p>
+<pre><code class="language-java">interface I1 { default String m() { return "I1";} }
+interface I2 { default String m() { return "I2";} }
+
+class E implements I1, I2 {
+  public String m() {
+    return I1.super.m() + " + " + I2.super.m();
+  }
+}
+
+void main(String[] args) {
+  // I1 + I2
+  System.out.println((new E()).m());
+}
+</code></pre>
+<p>なお、 <code>I1.super.m()</code> を書けるのは <code>I1</code> を直接実現している場合だけです。</p>
+<h2 id="15">String</h2>
+<p>数値も <code>null</code> も文字列に足し込めます。
+Java に演算子オーバーロードの機能はありませんが、この <code>+</code> はコンパイラに特別扱いされています。</p>
+<pre><code class="language-java">// "nulla1"
+String s = null + "a" + 1;
+</code></pre>
+<p><code>StrinbBuffer</code> の <code>capacity</code> は 16 + 文字列長です。</p>
+<pre><code class="language-java">var sb = new StringBuffer("123");
+assert sb.capacity() == 16 + 3;
+</code></pre>
+<p><code>substring(a, b)</code> の範囲は <code>[a, b)</code> です。</p>
+<pre><code class="language-java">var s = "0123456789";
+s.substring(3, 7); // "3456"
+</code></pre>
+<h2 id="16">switch</h2>
+<p><code>switch</code> できる型は以下のいずれか :</p>
+<ul>
+<li><code>int</code> 以下の整数型とそのラッパ</li>
+<li><code>String</code>, <code>char</code></li>
+<li><code>enum</code></li>
+</ul>
+<p><code>case</code> におけるのは以下のいずれか :</p>
+<ul>
+<li>定数 (<code>final</code> またはリテラル)</li>
+<li>コンパイル時に値が決まる</li>
+</ul>
+<h2 id="17">初期化子</h2>
+<pre><code class="language-java">public class Sample {
+    // 初期化子
+    {
+        System.out.println("コンストラクタの処理前に呼ばれる")
+    }
+
+    Sample() {
+        System.out.println("初期化子のあとに呼ばれる")
+    }
+}
+</code></pre>
+<h2 id="18">可変長引数</h2>
+<pre><code class="language-java">public class Main {
+    static void varargsMethod(int... a) {
+        // class [I
+        System.out.println(a.getClass());
+    }
+
+    static void arrayMethod(int[] a) {
+        // class [I
+        System.out.println(a.getClass());
+    }
+
+    public static void main(String[] args) {
+        varargsMethod(new int[]{1, 2, 3}); // OK
+        varargsMethod(1, 2, 3);            // OK
+
+        arrayMethod(new int[]{1, 2, 3});   // OK
+        // arrayMethod(1, 2, 3);           // NG
+    }
+}
+</code></pre>
+<h2 id="19">エディション</h2>
 <ul>
 <li>Java SE (Standard Edition)
 <ul>
@@ -171,218 +431,29 @@ for (int e: arr) System.out.println(e);
 C/C++, Rust などはプロジェクトごとに必要なライブラリを取ってくるわけで、
 わざわざエディションを分ける動機がいまいちわからない。
 Rust でいう<code>no_std</code> に近いのだろうか。</p>
-<h2>パッケージ</h2>
-<p><code>package xxx.yyy;</code> のように宣言する。
-パッケージ名はディレクトリ構造と同じでなくてはならない。</p>
-<p>複数のファイルが同じパッケージに属すこともある。
-例えば <code>foo/bar/A.java</code> と <code>foo/bar/B.java</code> は同じパッケージ (<code>foo.bar</code>) に属す。</p>
-<p>Java のクラスは必ずパッケージに属する必要がある。
-パッケージ宣言がないファイルに書かれたクラスは、デフォルトパッケージに属することになる。</p>
-<h2>インポート</h2>
-<p>Java で <code>import</code> できるのは定数とクラスのみ。
-Rust の <code>use</code> のようにパスを読み込むことはできず、必ずクラス名まで書かなければならない。</p>
-<pre><code class="language-java">import static java.lang.Math.PI;
-import java.util.ArrayList;
-
-// クラス名まで書かれていないので NG
-// import java.util
-</code></pre>
-<h2>アクセス修飾子</h2>
-<table><thead><tr><th>修飾子</th><th style="text-align: center">クラス内</th><th style="text-align: center">同PKG</th><th style="text-align: center">別PKG 子クラス</th><th style="text-align: center">別PKG 非子クラス</th></tr></thead><tbody>
-<tr><td><code>public</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td></tr>
-<tr><td><code>protected</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
-<tr><td>-</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
-<tr><td><code>private</code></td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
-</tbody></table>
-<h2>コンストラクタ</h2>
+<h2 id="20">用語</h2>
+<dl>
+<dt>カプセル化</dt>
+<dd>関係するデータと処理をまとめること (いい感じなクラスを作ること)</dd>
+<dt>データ隠蔽</dt>
+<dd>メンバを直接触れなくすること (<code>private</code> にして適宜 setter/getter をつけること)</dd>
+<dt>情報隠蔽</dt>
+<dd>実装を隠すこと (インタフェースや抽象クラスを使うこと)</dd>
+</dl>
+<h2 id="21">他言語との違い</h2>
 <ul>
-<li>ユーザ定義コンストラクタがある場合、デフォルトコンストラクタは定義されない。</li>
-<li><code>super()</code> や <code>this()</code> はコンストラクタの先頭で合計1回しか呼べない。</li>
+<li>C++ のコピーコンストラクタに相当するものはない。</li>
+<li>Cのカンマ演算子はない。</li>
+<li>引数に <code>void</code> は書けない。<code>void method(void)</code> はコンパイルエラー。</li>
+<li>Rustのように変数を shadowing することはできない。</li>
+<li>不変参照はない。</li>
+<li>到達不能なコードがあるとコンパイルエラー。</li>
 </ul>
-<h2>シグネチャ (sigature)</h2>
-<p>Java において、シグネチャは (メソッド名, 引数) を指す。アクセス修飾子や戻り型は含まれない。 (JLS 8.4.2 Method Signature)
-メソッド名が同じだがシグネチャが異なる場合にオーバーロードが許される。</p>
-<h2>インタフェース</h2>
-<ul>
-<li>メソッドは暗黙的に <code>abstract public</code> になる。明示的に書いても良い。</li>
-<li>メンバは暗黙的に <code>static final</code> になる。明示的に書いても良い。</li>
-</ul>
-<pre><code class="language-java">public interface TestInterface {
-    // 暗黙的に public static final
-    int VALUE=100;
-
-    // 暗黙的に public abstract
-    void method();
-
-    // デフォルトメソッド (Java8 以降)
-    // 暗黙的に public
-    default void defaultMethod() { System.out.println("default"); }
-
-    // 静的メソッド (Java8 以降)
-    static void staticMethod() { System.out.println("static"); }
-
-    // プライベートメソッド (Java9 以降)
-    // 静的メソッドやデフォルトメソッドから呼ぶのに使える
-    private void privateMethod() { System.out.println("private"); }
-}
-</code></pre>
-<h2>実現 (implements) の条件</h2>
-<p>実現すべきメソッドを自分で定義する必要はありません。
-親クラスから継いだものでも構いません。</p>
-<pre><code class="language-java">interface I {
-  int method();
-}
-
-class B {
-  public int method() { return 1; }
-}
-
-class E extends B implements I {
-}
-
-void main(String[] args) {
-  E e = new E();
-  System.out.println(e.method()); // 1
-}
-</code></pre>
-<h2>多重継承・多重実現と名前衝突</h2>
-<p>クラスには複数のインタフェースを実装できます。
-Java8 以降はインタフェースにデフォルトメソッドが実装できるので、
-多重継承における名前衝突への対処が必要です。</p>
-<h3>1. クラス vs インタフェース</h3>
-<pre><code class="language-java">interface I {
-  default char method() { return 'I'; }
-}
-
-class C {
-  public char method() { return 'C'; }
-}
-
-class E extends C implements I {}
-
-void main(String[] args) {
-  I i = new E();
-  System.out.println(i.method()); // C
-}
-</code></pre>
-<h3>2. インタフェース vs インタフェース</h3>
-<pre><code class="language-java">interface I1 {
-  default int method() { return 1; }
-}
-
-interface I2 {
-  default int method() { return 2; }
-}
-
-// ERROR :
-// Main.java:9: error: types I1 and I2 are incompatible;
-// class E implements I1, I2 {}
-// ^
-//   class Main.E inherits unrelated defaults for method() from types I1 and I2
-// 1 error
-// error: compilation failed
-class E implements I1, I2 {}
-</code></pre>
-<p>明示的に解決するには <code>I1.super.method()</code> のように呼ぶ対象を明示します。</p>
-<pre><code class="language-java">class E implements I1, I2 {
-  @Override
-  public int method() {
-    return I1.super.method() + I2.super.method();
-  }
-}
-
-void main(String[] args) {
-  E e = new E();
-  System.out.println(e.method()); // 3
-}
-</code></pre>
-<p>ただし、この記法が使えるのはインタフェースを直接実装しているクラスの中だけです。</p>
-<h2>String</h2>
-<p><code>null</code> は文字列に足し込める。</p>
-<pre><code class="language-java">String s = null;
-s += "a"; // "nulla"
-</code></pre>
-<p><code>StrinbBuffer</code> の <code>capacity</code> は 16 + 文字列長。</p>
-<pre><code class="language-java">var sb = new StringBuffer("123");
-assert sb.capacity() == 16 + 3;
-</code></pre>
-<p><code>substring(a, b)</code> の範囲は <code>[a, b)</code></p>
-<pre><code class="language-java">var s = "0123456789";
-s.substring(3, 7); // "3456"
-</code></pre>
-<h2>型推論 (Java10 以降)</h2>
-<pre><code class="language-java">// int
-var a = 1;
-
-// double
-var b = 1.0 ;
-
-// ERROR
-var c = {1, 2, 3};
-
-// ArrayList&lt;Object&gt;
-var d = new ArrayList&lt;&gt;();
-</code></pre>
-<h2>switch</h2>
-<p><code>switch</code> できる型は以下のいずれか :</p>
-<ul>
-<li><code>int</code> 以下の整数型とそのラッパ</li>
-<li><code>String</code>, <code>char</code></li>
-<li><code>enum</code></li>
-</ul>
-<p><code>case</code> におけるのは以下のいずれか :</p>
-<ul>
-<li>定数 (<code>final</code> またはリテラル)</li>
-<li>コンパイル時に値が決まる</li>
-</ul>
-<h2>初期化子</h2>
-<pre><code class="language-java">public class Sample {
-    // 初期化子
-    {
-        System.out.println("コンストラクタの処理前に呼ばれる")
-    }
-
-    Sample() {
-        System.out.println("初期化子のあとに呼ばれる")
-    }
-}
-</code></pre>
-<h2>可変長引数</h2>
-<pre><code class="language-java">public class Main {
-    static void varargsMethod(int... a) {
-        // class [I
-        System.out.println(a.getClass());
-    }
-
-    static void arrayMethod(int[] a) {
-        // class [I
-        System.out.println(a.getClass());
-    }
-
-    public static void main(String[] args) {
-        varargsMethod(new int[]{1, 2, 3}); // OK
-        varargsMethod(1, 2, 3);            // OK
-
-        arrayMethod(new int[]{1, 2, 3});   // OK
-        // arrayMethod(1, 2, 3);           // NG
-    }
-}
-</code></pre>
-<h2>MISC</h2>
+<h2 id="22">MISC</h2>
 <ul>
 <li><code>System.out.println(null)</code> は合法</li>
 <li><code>static</code> メンバはインスタンスからアクセス可能。</li>
-<li>演算子オーバーロードは無いが、 <code>1 + " a " + 2</code> の <code>+</code> はコンパイラに特別扱いされている。</li>
-<li>不変参照はない。</li>
-<li>カプセル化 : 関係するデータと処理をまとめること (いい感じなクラスを作ること)</li>
-<li>データ隠蔽 : メンバを直接触れなくすること (<code>private</code> にして適宜 setter/getter をつけること)</li>
-<li>情報隠蔽 : 実装を隠すこと (インタフェースや抽象クラスを使うこと)</li>
-<li>代入は式。 <code>a = (b = 10)</code> は合法。</li>
-<li>C++ のコピーコンストラクタに相当するものはない。</li>
-<li>Cのカンマ演算子はない。</li>
-<li>Rustのように変数を shadowing することはできない。</li>
-<li>引数に <code>void</code> は書けない。<code>void method(void)</code> はコンパイルエラー。</li>
-<li>到達不能なコードがあるとコンパイルエラー。</li>
+<li>代入は式。 <code>a = b = 10</code> は合法。</li>
 </ul>
 
       </div>

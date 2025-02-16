@@ -51,16 +51,16 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=sql">sql</a></div>
       <div id="main-content">
-        <h1>SQL</h1>
+        <h1 id="">SQL</h1>
 <p><a href="https://www.iso.org/standard/76584.html">ISO/IEC 9075-2:2023</a> は有償である。
 代わりに <a href="https://kikakurui.com/x3/X3005-1-2014-01.html">JIS X3005-1:2014</a> と <a href="https://kikakurui.com/x3/X3005-2-2015-01.html">JIS 3005-2:2015</a> を参照する。</p>
-<h2>ブール型は <code>unknown</code> 値を取る</h2>
+<h2 id="1">ブール型は <code>unknown</code> 値を取る</h2>
 <blockquote>
 <p>ブール (boolean) データ型の値は，真 (true) 又は偽 (false) のいずれかとする。
 不定 (unknown) の真理値がナル値によって表現されることもある。</p>
 </blockquote>
 <p>ブール型における NULL は unknown を表すらしい。</p>
-<h2>NULL 値と他の値の比較は常に <code>unknown</code></h2>
+<h2 id="2">NULL 値と他の値の比較は常に <code>unknown</code></h2>
 <blockquote>
 <p>ナル値は，幾つかの文脈中で，他のどの値とも等しくもなく，等しくなくもない，
 すなわち，与えられたどの値とも等しいかどうかが不定 (unknown) であるが，
@@ -73,13 +73,13 @@
 <tr><td style="text-align: left"><code>NULL &lt;&gt; NULL</code></td><td style="text-align: left"><code>unknown</code></td></tr>
 <tr><td style="text-align: left"><code>(NULL = NULL) IS NULL</code></td><td style="text-align: left"><code>true</code></td></tr>
 </tbody></table>
-<h2>副問い合わせはトランザクションを開始しうる</h2>
+<h2 id="3">副問い合わせはトランザクションを開始しうる</h2>
 <blockquote>
 <p>現行SQLトランザクションがないならば，
 トランザクション開始文 (transaction-initiating statement) の実行又は
 &lt;副問合せ&gt;の評価がトランザクションを開始する。</p>
 </blockquote>
-<h2>トランザクションは時刻印を持つ</h2>
+<h2 id="4">トランザクションは時刻印を持つ</h2>
 <blockquote>
 <p>(4.36.3)
 SQLトランザクションは，
@@ -88,8 +88,8 @@ SQLトランザクションは，
 それらの行のシステム時刻期間開始列及びシステム時刻期間終了列の値を設定するために用いる。 トランザクション時刻印は，そのトランザクション中でいずれかのSQLデータ変更文が実行される前にSQL処理系によって設定され， 一度設定されると，そのSQLトランザクションの間，変更されないでそのままとする。</p>
 </blockquote>
 <hr />
-<h2>カーソル</h2>
-<h2>データを同時に触るトランザクションを「並行SQLトランザクション」と呼ぶ</h2>
+<h2 id="5">カーソル</h2>
+<h2 id="6">データを同時に触るトランザクションを「並行SQLトランザクション」と呼ぶ</h2>
 <blockquote>
 <p>(4.36.3) 異なるSQLエージェントによって開始され，同じSQLデータ又はスキーマをアクセスし， かつ，時刻で重なり合うSQLトランザクションは，並行SQLトランザクション (concurrent SQL-transaction) とする。</p>
 </blockquote>

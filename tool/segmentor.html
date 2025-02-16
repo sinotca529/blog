@@ -51,7 +51,7 @@
       </div>
       <div> <a class="tag" href="../index.html?tag=tool">tool</a></div>
       <div id="main-content">
-        <h1>Segmenter によるトーカナイズ</h1>
+        <h1 id="">Segmenter によるトーカナイズ</h1>
 <textarea id="inputText" rows="10" style="resize: none; width: 100%;">ここにテキストを入力</textarea>
 <p><button onclick="private.main()">トーカナイズ</button></p>
 <div id="output"></div>
@@ -89,7 +89,7 @@
         }
     }
 </script>
-<h2>コード</h2>
+<h2 id="1">コード</h2>
 <pre><code class="language-js">async function tokenize(text) {
     if (!('Segmenter' in Intl)) {
         alert("このブラウザはSegmenterをサポートしていません。");

@@ -51,8 +51,8 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=ref">ref</a> <a class="tag" href="../../index.html?tag=vim">vim</a></div>
       <div id="main-content">
-        <h1>vim 簡易リファレンス</h1>
-<h2>ファイルの暗号化</h2>
+        <h1 id="">vim 簡易リファレンス</h1>
+<h2 id="1">ファイルの暗号化</h2>
 <pre><code class="language-sh"># 開くときに暗号化
 vim -x file
 
@@ -63,10 +63,10 @@ vim +X file
 <li>編集中に暗号化を有効にするには、 <code>:X</code> を押します。</li>
 <li>暗号化方式を指定するには <code>:set cryptmethod</code> を使用します。</li>
 </ul>
-<h2>エンコードを指定して開きなおす</h2>
+<h2 id="2">エンコードを指定して開きなおす</h2>
 <pre><code class="language-vim">:e ++enc=sjis
 </code></pre>
-<h2>バイナリファイルを開く</h2>
+<h2 id="3">バイナリファイルを開く</h2>
 <p><code>xxd</code> コマンドを利用する。</p>
 <ol>
 <li><code>vim -b file</code> で開く</li>
@@ -74,10 +74,10 @@ vim +X file
 <li>編集する</li>
 <li><code>:%!xxd -r</code> で元に戻す</li>
 </ol>
-<h2>タブ文字を表示する</h2>
+<h2 id="4">タブ文字を表示する</h2>
 <pre><code class="language-vim">:set list listchars=tab:&gt;-
 </code></pre>
-<h2>Netrw (ファイラ)</h2>
+<h2 id="5">Netrw (ファイラ)</h2>
 <p>基本操作</p>
 <table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
 <tr><td style="text-align: left">開く</td><td style="text-align: left"><code>:e .</code></td></tr>
@@ -94,11 +94,11 @@ vim +X file
 <tr><td style="text-align: left"><code>mf</code> したものを <code>mt</code> した場所へコピー</td><td style="text-align: left"><code>mc</code></td></tr>
 <tr><td style="text-align: left"><code>mf</code> したものを <code>mt</code> した場所へ移動</td><td style="text-align: left"><code>mm</code></td></tr>
 </tbody></table>
-<h2>正規表現</h2>
+<h2 id="6">正規表現</h2>
 <p>TODO</p>
-<h2>レジスタ</h2>
+<h2 id="7">レジスタ</h2>
 <p>TODO</p>
-<h2>sudo</h2>
+<h2 id="8">sudo</h2>
 <p><code>sudo vim file</code> は推奨されません。
 起動した vim の中で作成したファイルの権限が root になってしまうからです。
 変わりに <code>vim-suda</code> などのプラグインが利用されます。</p>

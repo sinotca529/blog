@@ -51,9 +51,9 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=python">python</a> <a class="tag" href="../../index.html?tag=tips">tips</a></div>
       <div id="main-content">
-        <h1>(Python, Windows) open したファイルを削除・移動する</h1>
+        <h1 id="">(Python, Windows) open したファイルを削除・移動する</h1>
 <p>本記事は Zenn に投稿したものと同様の内容です。</p>
-<h2>Windows では <code>open</code> 中のファイルを消せない</h2>
+<h2 id="1">Windows では <code>open</code> 中のファイルを消せない</h2>
 <p>次のコードで、 <code>input</code> で処理を止めている間に <code>text.txt</code> を削除してみましょう。</p>
 <pre><code class="language-py">with open("./test.txt", "w") as f:
     # ここで test.txt を消す
@@ -62,7 +62,7 @@
 <p>Linux ではファイルを削除できますが、 Windows ではエラーになります。</p>
 <p>ファイルの移動も同様です。
 この問題をなんとかしましょう。</p>
-<h2>Windows は使用中ファイルの削除を禁止していない</h2>
+<h2 id="2">Windows は使用中ファイルの削除を禁止していない</h2>
 <p>実は、 Windows でも使用中のファイルを消せる場合があります。</p>
 <p>Windows でファイルを開く際に使う <a href="https://learn.microsoft.com/ja-jp/windows/win32/api/fileapi/nf-fileapi-createfilew"><code>CreateFileW</code></a> のドキュメントを見てみましょう。引数 <code>dwShareMode</code> について、次のように書かれています。</p>
 <blockquote>
@@ -70,7 +70,7 @@
 <p>ファイルまたはデバイスの要求された共有モード。読み取り、書き込み、両方、<strong>削除</strong>、これらすべて、またはなしを指定できます (次の表を参照)。 属性または拡張属性へのアクセス要求は、このフラグの影響を受けません。</p>
 </blockquote>
 <p><code>dwShareMode</code> に適切なフラグを渡せば、使用中のファイルを削除・移動できるのです。</p>
-<h1>Python の <code>open</code> は削除許可フラグをセットしない</h1>
+<h1 id="">Python の <code>open</code> は削除許可フラグをセットしない</h1>
 <p>なぜ Python で <code>open</code> 中のファイルは消せないのでしょうか。
 CPython における <code>open</code> の実装を見てみましょう (<a href="https://github.com/python/cpython/blob/9d6366b60d01305fc5e45100e0cd13e358aa397d/Modules/_io/fileio.c#L406">該当コード</a>)。</p>
 <pre><code class="language-c:fileio.c">#ifdef MS_WINDOWS
@@ -102,7 +102,7 @@ CPython における <code>open</code> の実装を見てみましょう (<a hre
 <p>このことはドキュメントには明記されていませんが、 <a href="https://devblogs.microsoft.com/oldnewthing/20211022-00/?p=105822">Micorosoft のブログ</a> で言及されています。</p>
 </div>
 <p>つまり、 CPython の提供する <code>open</code> では、削除を許可するフラグがセットされないのです。</p>
-<h2>ではどうすればよいのか</h2>
+<h2 id="1">ではどうすればよいのか</h2>
 <p><code>CreateFileW</code> 関数に適切なフラグを渡せば削除を許可できます。ならば、 <code>open</code> の実装をそのように上書きしてしまえばよいのです<sup class="footnote-reference"><a href="#4">3</a></sup>。</p>
 <p>ありがたいことに、 <code>open</code> 関数には <code>opener</code> という引数があります。 <code>opener</code> に、「<code>path</code> と <code>flags</code> を受け取ってファイルディスクリプタを返す処理」を渡すと、 <code>open</code> がそれを使ってファイルを開いてくれます。これを使いましょう。</p>
 <div class="footnote-definition" id="4"><sup class="footnote-definition-label">3</sup>
@@ -221,7 +221,7 @@ if __name__ == "__main__":
         input()
 </code></pre>
 <p>これで、 <code>open</code> 中のファイルを削除・移動できるようになりました。</p>
-<h2>まとめ</h2>
+<h2 id="2">まとめ</h2>
 <p>Windows 環境において、 Python で <code>open</code> 中のファイルを削除・移動できない問題と、その対処法を紹介しました。
 移植等で挙動の違いに悩んでいる人の助けになればと思います。</p>
 

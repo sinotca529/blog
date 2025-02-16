@@ -51,9 +51,9 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=vim">vim</a> <a class="tag" href="../../index.html?tag=tmux">tmux</a> <a class="tag" href="../../index.html?tag=tips">tips</a></div>
       <div id="main-content">
-        <h1>tmux がなければ vim を使えばいいじゃない</h1>
+        <h1 id="">tmux がなければ vim を使えばいいじゃない</h1>
 <p>この記事は Zenn にも投稿した記事と同じものです。</p>
-<h2><code>tmux</code> がない環境で暮らすには</h2>
+<h2 id="1"><code>tmux</code> がない環境で暮らすには</h2>
 <p>ターミナルでの快適な暮らしに <code>tmux</code> は欠かせません。
 しかしながら世の中には <code>tmux</code> が使えない環境というものがあります。
 そんな環境で暮らしていくには、どうすればよいでしょうか。</p>
@@ -61,10 +61,10 @@
 <code>vim</code> はターミナルを開けます。
 画面の分割もできます。
 タブだってあります。</p>
-<h2>目標はシェルをたくさん開くこと</h2>
+<h2 id="2">目標はシェルをたくさん開くこと</h2>
 <p>目標は端末上でシェルをたくさん開くことです。
 セッションのことは考えません。</p>
-<h2>作ったもの</h2>
+<h2 id="3">作ったもの</h2>
 <p>いきなりですが、こちらが作ったものです。
 細かな解説は省略します。</p>
 <details>
@@ -220,9 +220,9 @@ autocmd TextYankPost * if &amp;buftype ==# 'terminal' &amp;&amp; mode() ==# 'n' 
 <p>このコードを <code>.vimrc-tmux</code> として保存して、 <code>vim -Nu .vimrc-tmux</code> で読み込んで起動します。 <code>.bashrc</code> などにエイリアスを作っておくと便利です。</p>
 <pre><code class="language-bash">alias vmux='vim -Nu ~/.vimrc-tmux'
 </code></pre>
-<h2>課題</h2>
+<h2 id="4">課題</h2>
 <p>この設定にはまだまだ課題もあります。</p>
-<h3>プレフィックスの挙動が怪しい</h3>
+<h3 id="4.1">プレフィックスの挙動が怪しい</h3>
 <p>プレフィックス (<code>&lt;Leader&gt;</code>) を <code>&lt;C-q&gt;</code> に設定していますが、一部の環境<sup class="footnote-reference"><a href="#1">1</a></sup>ではこれが正しく動きません。</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>Windows 上の <code>mintty</code> で動く Git Bash で問題が起きました。
@@ -231,11 +231,11 @@ autocmd TextYankPost * if &amp;buftype ==# 'terminal' &amp;&amp; mode() ==# 'n' 
 原因は分かっていませんが、 <code>mintty</code> の代わりに <code>conhost.exe</code> を使うことで回避できます。
 また、 winpty を使うことでも問題を回避できることを確認しました。</p>
 </div>
-<h3>Meta キーの挙動が怪しい</h3>
+<h3 id="4.2">Meta キーの挙動が怪しい</h3>
 <p><code>&lt;M-xx&gt;</code> の形をしたキーバインドがいくつかあります。
 こちらも環境によって動いたり動かなかったりするので注意が必要です。
 本当は <code>&lt;M-H/J/K/L&gt;</code> なども活用したかったのですが、手元の環境ではうまく動かせませんでした。</p>
-<h2>おわりに</h2>
+<h2 id="5">おわりに</h2>
 <p>ライトなユースケースには十分耐えうるかと思います。
 ただ機能不足感は否めないので、改善案等ありましたらコメントいただけると嬉しいです。</p>
 

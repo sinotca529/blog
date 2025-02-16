@@ -51,10 +51,10 @@
       </div>
       <div> <a class="tag" href="../../../index.html?tag=cloud">cloud</a></div>
       <div id="main-content">
-        <h1>Azure 簡易リファレンス</h1>
+        <h1 id="">Azure 簡易リファレンス</h1>
 <p>筆者は Azure エアプです。
 このページの内容は至極乱雑で、他人がこのページから知識を得ることを想定していません。</p>
-<h2>クラウドの性質</h2>
+<h2 id="1">クラウドの性質</h2>
 <dl>
 <dt>拡張性, Scalability</dt>
 <dd>スケールできること。</dd>
@@ -64,7 +64,7 @@
 <dd>変化に素早く対応できる能力。
 環境の作成・破壊が容易だということ。</dd>
 </dl>
-<h2>マシンの配置</h2>
+<h2 id="2">マシンの配置</h2>
 <dl>
 <dt>ゾーン</dt>
 <dd>
@@ -88,15 +88,15 @@
 最大で20個のドメインに分散できる。</dd>
 </dl>
 </dd>
-</dl>
-<dl>
 <dt>リージョンペア</dt>
-<dd>災害復旧やデータ冗長性確保のためにペアになっているリージョン。
+<dd>
+<p>災害復旧やデータ冗長性確保のためにペアになっているリージョン。
 例えば、東日本と西日本はリージョンペアの関係にある。
 片方で大規模な障害が発生しても、もう片方が処理を引き継いでサービスを継続する。
-ペアは300マイル以上離れている。</dd>
+ペアは300マイル以上離れている。</p>
+</dd>
 </dl>
-<h2>リソースの管理</h2>
+<h2 id="3">リソースの管理</h2>
 <dl>
 <dt>サブスクリプション</dt>
 <dd>契約の単位。</dd>
@@ -122,7 +122,7 @@
 <dt>Azure Marketplace</dt>
 <dd>サードパーティ製のサービスを検索・購入・デプロイできる。</dd>
 </dl>
-<h3>デプロイ</h3>
+<h3 id="3.1">デプロイ</h3>
 <dl>
 <dt>ARM テンプレート</dt>
 <dd>単一リソースの設定を書き連ねた json ファイル。</dd>
@@ -130,7 +130,7 @@
 <dd>複数の ARM テンプレートを纏めて、より高度な使い回しをできるようにするサービス。
 ロールの割当、ポリシーの割当、リソースグループの設定までテンプレ化できる。</dd>
 </dl>
-<h2>ストレージ</h2>
+<h2 id="4">ストレージ</h2>
 <dl>
 <dt>Azure Storage (分類 : IaaS)</dt>
 <dd>耐久性・拡張性・安全性に優れる。
@@ -139,7 +139,7 @@
 <dt>マネージドディスク</dt>
 <dd>Disk</dd>
 </dl>
-<h3>ストレージアカウント</h3>
+<h3 id="4.1">ストレージアカウント</h3>
 <p>これを作成しないと以下の物を作れない。</p>
 <p>作成時にはアカウント名や地域・性能・冗長性などを指定する。
 <strong>アカウント名は接続時の URL として使われる</strong>ので、全世界でユニークな名前を指定する。</p>
@@ -165,14 +165,14 @@ BLOB の3倍ほどの価格。</dd>
 <dt>Queue</dt>
 <dd>コンポーネント間の非同期通信に使うメッセージングサービス。</dd>
 </dl>
-<h3>ストレージの冗長オプション</h3>
+<h3 id="4.2">ストレージの冗長オプション</h3>
 <ul>
 <li>ローカル冗長ストレージ (LRS)</li>
 <li>ゾーン冗長ストレージ (ZRS)</li>
 <li>ジオ冗長ストレージ (GRS)</li>
 <li>ジオゾーン冗長ストレージ (GZRS)</li>
 </ul>
-<h3>ファイルの移動</h3>
+<h3 id="4.3">ファイルの移動</h3>
 <dl>
 <dt>Azure Storage Explorer</dt>
 <dd>Azure Storage 用の explorer.exe 的なもの。
@@ -190,14 +190,14 @@ OneDrive などに似ている。
 <dd>オンプレミスのデータを Azure に移行したり、その逆をしたりするサービス。
 専用の記憶メディアで物理的に輸送する。</dd>
 </dl>
-<h2>移行</h2>
+<h2 id="5">移行</h2>
 <dl>
 <dt>Azure Migrate</dt>
 <dd>オンプレミスや他社クラウドから Azure への移行を支援。
 一元的な管理画面を提供。</dd>
 </dl>
-<h2>ネットワーク</h2>
-<h3>Azure 内部</h3>
+<h2 id="6">ネットワーク</h2>
+<h3 id="6.1">Azure 内部</h3>
 <dl>
 <dt>仮想ネットワーク (VNet)</dt>
 <dd>Azure 上にプライベートネットワークを構築する。</dd>
@@ -212,7 +212,7 @@ OneDrive などに似ている。
 <dd>異なるリージョン間の仮想ネットワークを接続。
 インターネットではなく、 Microsoft のバックボーンインフラが利用される。</dd>
 </dl>
-<h3>Azure 外部</h3>
+<h3 id="6.2">Azure 外部</h3>
 <dl>
 <dt>ExpressRoute</dt>
 <dd>オンプレミスなどと Azure を専用回線で接続する。
@@ -230,7 +230,7 @@ OneDrive などに似ている。
 <dt>ローカルネットワークゲートウェイ</dt>
 <dd>TODO</dd>
 </dl>
-<h3>PaaS</h3>
+<h3 id="6.3">PaaS</h3>
 <dl>
 <dt>エンドポイント</dt>
 <dd>
@@ -255,7 +255,7 @@ OneDrive などに似ている。
 <p>サービスエンドポイントは、ルーティングテーブルに細工をして PaaS への通信を Microsoft のバックボーンに通す。
 NAT/NAPT を経由しないので送信元 IP アドレスはプライベートになる。
 PaaS 側はファイアウォールで送信元の VNet 以外からのパケットを通さないようにしている。</p>
-<h3>負荷分散</h3>
+<h3 id="6.4">負荷分散</h3>
 <dl>
 <dt>Azure Load Balancer</dt>
 <dd>L4 のロードバランサ。</dd>
@@ -263,7 +263,7 @@ PaaS 側はファイアウォールで送信元の VNet 以外からのパケッ
 <dd>ウェブアプリに対するトラフィックを管理できる L7 ロードバランサ。
 URL やヘッダーなど、 HTTP リクエストの属性に基づいてルーティングを決定できる。</dd>
 </dl>
-<h3>セキュリティ</h3>
+<h3 id="6.5">セキュリティ</h3>
 <dl>
 <dt>NSG</dt>
 <dd>IPパケットレベルでの保護を提供する。
@@ -284,7 +284,7 @@ NICのグループを作り、そこにNSGを適用できる。
 <dd>ネットワーク保護プランと IP 保護プランがある。
 ネットワーク保護は VNet レベルでの保護をする。</dd>
 </dl>
-<h3>ルーティング</h3>
+<h3 id="6.6">ルーティング</h3>
 <dl>
 <dt>ユーザー定義ルート</dt>
 <dd>ルータのルーティングテーブルの静的エントリのこと。
@@ -292,7 +292,7 @@ Azureでカスタムルート定義を実施するには仮想アプライアン
 <dt>Azure DNS</dt>
 <dd>Pass</dd>
 </dl>
-<h3>その他</h3>
+<h3 id="6.7">その他</h3>
 <dl>
 <dt>仮想アプライアンス</dt>
 <dd>ハードではなくソフトとしてのアプライアンス。
@@ -312,7 +312,7 @@ Azureでカスタムルート定義を実施するには仮想アプライアン
 <dt>Microsoft Defender for Cloud</dt>
 <dd>レポートをダウンロードできる。</dd>
 </dl>
-<h3>VM</h3>
+<h3 id="6.8">VM</h3>
 <dl>
 <dt>Azure Dedicated Host</dt>
 <dd>物理マシンを占有する。
@@ -327,7 +327,7 @@ Microsoft Defender for Cloud の機能。</dd>
 <dd>インスタンスを予約購入して価格を割り引く。
 最大3年。</dd>
 </dl>
-<h2>ID 管理</h2>
+<h2 id="7">ID 管理</h2>
 <table><thead><tr><th style="text-align: left"></th><th style="text-align: left">Entra ID (旧 Azure AD)</th><th style="text-align: left">Active Directory Domain Service (ADDS)</th><th style="text-align: left">Active Directory (AD)</th></tr></thead><tbody>
 <tr><td style="text-align: left">環境</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">Windows Server</td></tr>
 <tr><td style="text-align: left">プロトコル</td><td style="text-align: left">SAML, OpenID, OAuth</td><td style="text-align: left">Kerberos</td><td style="text-align: left">Kerberos, LDAP</td></tr>
@@ -369,7 +369,7 @@ Entra ID とは互換性がない。</dd>
 <dt>セキュリティプリンシパル</dt>
 <dd>Azure リソースへのアクセスを要求するモノを表すオブジェクト。</dd>
 </dl>
-<h2>コンプラ系統</h2>
+<h2 id="8">コンプラ系統</h2>
 <dl>
 <dt>Service Trust Portal</dt>
 <dd>Microsoft のセキュリティ・プライバシー・コンプライアンスの情報がある。
@@ -380,7 +380,7 @@ Entra ID とは互換性がない。</dd>
 <dt>コンプライアンスマネージャー</dt>
 <dd>Microsoft 関連企業のコンプライアンスに関する情報を追える。</dd>
 </dl>
-<h2>監視・分析</h2>
+<h2 id="9">監視・分析</h2>
 <dl>
 <dt>Azure Adovisor</dt>
 <dd>
@@ -406,19 +406,23 @@ Azure の状態・サービス正常性・リソース正常性からなる。</
 履歴を見たりアラート設定をしたりできる。</dd>
 </dl>
 </dd>
-</dl>
-<dl>
 <dt>Azure Monitor</dt>
-<dd>オンプレミス・他社クラウドをまたいだ利用上の収集・分析・監視。
+<dd>
+<p>オンプレミス・他社クラウドをまたいだ利用上の収集・分析・監視。
 アクティビティログ, アラート, メトリック (CPU利用率など),
-ログ (分析), Application Insights などがある。</dd>
+ログ (分析), Application Insights などがある。</p>
+</dd>
 <dt>Log Analytics Workspace</dt>
-<dd>Azure Monitor, Micorosoft Sentinel, Microsoft Defender for Cloud などで発生したログを保存する専用ストレージ環境。</dd>
+<dd>
+<p>Azure Monitor, Micorosoft Sentinel, Microsoft Defender for Cloud などで発生したログを保存する専用ストレージ環境。</p>
+</dd>
 <dt>Microsoft Purview</dt>
-<dd>組織のデータを管理・保護する。
-オンプレミス・他社クラウドを含め、データの分類などを横断的に行える。</dd>
+<dd>
+<p>組織のデータを管理・保護する。
+オンプレミス・他社クラウドを含め、データの分類などを横断的に行える。</p>
+</dd>
 </dl>
-<h2>操作の制限</h2>
+<h2 id="10">操作の制限</h2>
 <dl>
 <dt>Azure Policy</dt>
 <dd>
@@ -448,7 +452,7 @@ Azure の状態・サービス正常性・リソース正常性からなる。</
 <tr><td style="text-align: left">リソースグループ</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td></tr>
 <tr><td style="text-align: left">リソース</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td></tr>
 </tbody></table>
-<h2>その他のセキュリティ</h2>
+<h2 id="11">その他のセキュリティ</h2>
 <dl>
 <dt>Azure Information Protection</dt>
 <dd>MIP の機能の一部。
@@ -462,7 +466,7 @@ MS Office 関連のもの、 PDF などに対応している。</dd>
 具体的には、ファイルに対する編集・印刷・転送などの操作権限や有効期限を設定し、
 情報漏洩を防ぐ仕組みです。</dd>
 </dl>
-<h2>データベース系</h2>
+<h2 id="12">データベース系</h2>
 <dl>
 <dt>Azure SQL Database</dt>
 <dd>TODO</dd>
@@ -472,7 +476,7 @@ MS Office 関連のもの、 PDF などに対応している。</dd>
 <dt>Azure Cache for Redis</dt>
 <dd>Redis をもとにしたインメモリデータストア。</dd>
 </dl>
-<h2>AI, ビッグデータ</h2>
+<h2 id="13">AI, ビッグデータ</h2>
 <dl>
 <dt>Azure Machine Learning</dt>
 <dd>モデルの作成や使用、監視、再トレーニングができる。</dd>
@@ -494,14 +498,14 @@ MS Office 関連のもの、 PDF などに対応している。</dd>
 <dd>OSSを使った分析サービス。 Hadoop, Apache Spark, Apache Hive, LLAP, Apache Kafka などが使える。
 HD は Hadoop Distributed の略と思われるが、詳細不明。</dd>
 </dl>
-<h2>IoT 系</h2>
+<h2 id="14">IoT 系</h2>
 <dl>
 <dt>IoT Central</dt>
 <dd>IoTデバイスの中央管理。</dd>
 <dt>IoT Hub</dt>
 <dd>デバイスの通信管理に特化。</dd>
 </dl>
-<h2>その他リソース</h2>
+<h2 id="15">その他リソース</h2>
 <dl>
 <dt>Azure App Service</dt>
 <dd>.NET, Java, Node.js, Python などから好きな言語を選んで開発し、それをデプロイする。
@@ -517,7 +521,7 @@ Docker コンテナや Function, Logic Apps をホストできる。</dd>
 <dt>Azure Logic Apps</dt>
 <dd>ワークフローの作成。</dd>
 </dl>
-<h2>サポート</h2>
+<h2 id="16">サポート</h2>
 <dl>
 <dt>Azure サポートリクエスト (サポートチケット)</dt>
 <dd>ポータル上で作成と管理ができる。
@@ -530,7 +534,7 @@ Azure サポートチケット REST API や Azure CLI からも作成できる�
 <dt>コストの管理と請求 (Azure Cost Management)</dt>
 <dd>過去の利用料を参照する。</dd>
 </dl>
-<h2>サポートプラン</h2>
+<h2 id="17">サポートプラン</h2>
 <p>安い方から順に :</p>
 <ul>
 <li>Basic</li>
@@ -539,7 +543,7 @@ Azure サポートチケット REST API や Azure CLI からも作成できる�
 <li>Professional Direct</li>
 <li>Premier</li>
 </ul>
-<h2>お金</h2>
+<h2 id="18">お金</h2>
 <ul>
 <li>SLA 未達成時はクレジットがもらえる。</li>
 <li>可用性ゾーン間のデータ転送は有料。</li>

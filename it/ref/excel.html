@@ -51,8 +51,8 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=ref">ref</a> <a class="tag" href="../../index.html?tag=excel">excel</a></div>
       <div id="main-content">
-        <h1>Excel 簡易リファレンス</h1>
-<h2>ショートカット (Alt 体系)</h2>
+        <h1 id="">Excel 簡易リファレンス</h1>
+<h2 id="1">ショートカット (Alt 体系)</h2>
 <p>追加 (<code>&lt;Meta&gt;hi</code> home insert)</p>
 <table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
 <tr><td style="text-align: left">行の挿入</td><td style="text-align: left"><code>&lt;Meta&gt;hir</code></td></tr>
@@ -65,7 +65,7 @@
 <tr><td style="text-align: left">列の削除</td><td style="text-align: left"><code>&lt;Meta&gt;hdc</code></td></tr>
 <tr><td style="text-align: left">シートの削除</td><td style="text-align: left"><code>&lt;Meta&gt;hds</code></td></tr>
 </tbody></table>
-<h2>ショートカット (その他)</h2>
+<h2 id="2">ショートカット (その他)</h2>
 <p>行・列の操作</p>
 <table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
 <tr><td style="text-align: left">行の削除 (行の選択 → 削除)</td><td style="text-align: left"><code>&lt;S-Space&gt;&lt;C--&gt;</code></td></tr>
@@ -81,14 +81,14 @@
 <tr><td style="text-align: left">名前変更</td><td style="text-align: left"><code>&lt;Meta&gt;hor</code></td><td style="text-align: left"></td></tr>
 <tr><td style="text-align: left">シート選択モードへ</td><td style="text-align: left"><code>&lt;F6&gt;</code></td><td style="text-align: left">矢印でシート選択できるモードへ</td></tr>
 </tbody></table>
-<h2>条件付き書式</h2>
-<h3>1列目の値が変わる度に背景色を変える</h3>
+<h2 id="3">条件付き書式</h2>
+<h3 id="3.1">1列目の値が変わる度に背景色を変える</h3>
 <pre><code class="language-excel">=ISODD(SUMPRODUCT(--($A$2:$A2&lt;&gt;$A$1:$A1)))
 </code></pre>
-<h3>A列の値が一致する行について、値にバリエーションがある列をハイライト</h3>
+<h3 id="3.2">A列の値が一致する行について、値にバリエーションがある列をハイライト</h3>
 <pre><code class="language-excel">=COUNTIF($A:$A, $A2)&lt;&gt;COUNTIFS($A:$A, $A2, A:A, A2)
 </code></pre>
-<h2><code>Range.find</code> は非表示セルを検索しない</h2>
+<h2 id="4"><code>Range.find</code> は非表示セルを検索しない</h2>
 <p><a href="https://learn.microsoft.com/ja-jp/office/vba/api/excel.range.find">公式ドキュメント</a>には記述がないですが、
 <code>Range.find</code> メソッドは非表示のセルを検索しないようです。</p>
 <p>VBA で非表示のセルを検索するには下のようにします。</p>

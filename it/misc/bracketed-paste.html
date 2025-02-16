@@ -51,8 +51,8 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=shell">shell</a></div>
       <div id="main-content">
-        <h1>Bracketed Paste を使ってターミナルに複数行のテキストを貼り付ける</h1>
-<h2>貼り付け大暴走</h2>
+        <h1 id="">Bracketed Paste を使ってターミナルに複数行のテキストを貼り付ける</h1>
+<h2 id="1">貼り付け大暴走</h2>
 <p>改行の含まれた文字列をターミナルに貼り付けると、コマンドが実行されてしまうことがあります。
 例えば次のような感じになったりします。</p>
 <pre><code class="language-txt">user@pc1:~
@@ -67,7 +67,7 @@ dquote&gt;     return 0;
 dquote&gt; }
 </code></pre>
 <p>うっかり変なコマンドを実行しちゃいそうで怖いですね。</p>
-<h2>Bracketed Paste</h2>
+<h2 id="2">Bracketed Paste</h2>
 <p>これを防ぐ仕組みが <a href="https://en.wikipedia.org/wiki/Bracketed-paste">bracketed paste</a> です。
 Bracketed Paste が有効になっていると、複数行の貼り付けをしてもコマンドの実行が起こりません。</p>
 <pre><code class="language-txt">user@pc1:~
@@ -77,7 +77,7 @@ int main(void) {
     return 0;
 }
 </code></pre>
-<h2>Bracketed Paste のしくみ</h2>
+<h2 id="3">Bracketed Paste のしくみ</h2>
 <p>仕組みは単純です。
 貼り付け内容の前後に特殊な文字をつけることで、
 単純なキー入力とクリップボードからの貼り付けを区別しています。</p>

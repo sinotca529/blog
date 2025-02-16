@@ -51,7 +51,7 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a></div>
       <div id="main-content">
-        <h1>Java の型消去 (Type Erasure)</h1>
+        <h1 id="">Java の型消去 (Type Erasure)</h1>
 <p>Java の型パラメタはコンパイル時に消去されます。<br>
 次のコードはその一例です。</p>
 <pre><code class="language-java">class G&lt;T&gt; {
@@ -72,9 +72,9 @@ public class Main {
 }
 </code></pre>
 <p><code>G&lt;Integer&gt;</code> 型の変数と <code>G&lt;String&gt;</code> 型の変数が実行時に同じ型であることがわかります。</p>
-<h2>型消去による制約</h2>
+<h2 id="1">型消去による制約</h2>
 <p>実行時に型パラメタが不明なことによる制約がいくつかあります。</p>
-<h3>クラス変数が共有される</h3>
+<h3 id="1.1">クラス変数が共有される</h3>
 <pre><code class="language-java">class G&lt;T&gt; {
   static String value;
   String getValue() { return this.value; }
@@ -105,8 +105,8 @@ int main() {
 }
 </code></pre>
 </details>
-<h2><code>Throwable</code> の子孫が型パラメタを持てない。</h2>
-<h2>Java はなぜ型消去を選んだのか？</h2>
+<h2 id="2"><code>Throwable</code> の子孫が型パラメタを持てない。</h2>
+<h2 id="3">Java はなぜ型消去を選んだのか？</h2>
 <p>設計の理由として、</p>
 <ul>
 <li><a href="https://ja.wikipedia.org/wiki/%E5%9E%8B%E6%B6%88%E5%8E%BB">静的ディスパッチによるコード量の増加を嫌った</a></li>

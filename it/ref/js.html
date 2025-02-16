@@ -51,8 +51,8 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=js">js</a></div>
       <div id="main-content">
-        <h1>JavaScript 簡易リファレンス</h1>
-<h2>ビット演算の挙動</h2>
+        <h1 id="">JavaScript 簡易リファレンス</h1>
+<h2 id="1">ビット演算の挙動</h2>
 <p>ビット演算のオペランドは暗黙的に 32-bit 値に変換されます。
 この性質を用いると、数値を 32-bit 整数に変換できます。</p>
 <p>小数から整数への変換はもちろん、
@@ -67,7 +67,7 @@ console.log(asU32(-1))         // 4294967295
 console.log(asU32(4294967297)) // 1
 console.log(asI32(4294967295)) // -1
 </code></pre>
-<h2>ブロックの脱出</h2>
+<h2 id="2">ブロックの脱出</h2>
 <pre><code class="language-js">a: {
   console.log('これは表示されます');
   break a;
@@ -75,7 +75,7 @@ console.log(asI32(4294967295)) // -1
 };
 console.log('これも表示されます');
 </code></pre>
-<h2><code>export</code> / <code>import</code></h2>
+<h2 id="3"><code>export</code> / <code>import</code></h2>
 <p>変数や関数などの宣言に <code>export</code> キーワードをつけることで、それらを外部に公開することができます。</p>
 <pre><code class="language-js">export const hello = "hello";
 export function hoge() { ... }

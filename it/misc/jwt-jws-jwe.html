@@ -51,11 +51,11 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=it">it</a></div>
       <div id="main-content">
-        <h1>JWT/JWS/JWE (アクセストークン)</h1>
+        <h1 id="">JWT/JWS/JWE (アクセストークン)</h1>
 <p>JWT は、ステートレスな Web アプリでアクセストークンのやり取りに使うフォーマットです。
 JWS は JWT に署名を付けたもので、 JWE は JWT を暗号化したものです。</p>
 <p>Cookie を使いたくないときや、ステートレスなサーバを作りたいときなどに重宝します。</p>
-<h2>JWT (JSON Web Token)</h2>
+<h2 id="1">JWT (JSON Web Token)</h2>
 <pre><code>   Header                    Claim
   ┌────────────────┐        ┌─────────────────────┐
   │ {              │        │ {                   │
@@ -70,7 +70,7 @@ JWS は JWT に署名を付けたもので、 JWE は JWT を暗号化したも�
 </code></pre>
 <p>ヘッダとクレームをそれぞれ Base64 に変換して、 <code>.</code> で繋げます。
 作った文字列は HTTP の <code>Authorization</code> ヘッダにもたせます。</p>
-<h2>JWS (JSON Web Signiture)</h2>
+<h2 id="2">JWS (JSON Web Signiture)</h2>
 <p>JWS の場合は、ここに署名が加わります。</p>
 <pre><code>   Header                                   Claim
   ┌──────────────────┐                     ┌─────────────────────┐
@@ -91,7 +91,7 @@ JWS は JWT に署名を付けたもので、 JWE は JWT を暗号化したも�
            v                                                                                        v
    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9  .  eyJzdWIiOiJ1c2VyMDEiLCJleHAiOjE3MzUzNTk3ODN9  .  xhlm34-rBtgLBGdM9edJrwZ-mk2sXi39rmtNS8cj1eY
 </code></pre>
-<h2>JWE (JSON Web Encryption)</h2>
+<h2 id="3">JWE (JSON Web Encryption)</h2>
 <p>TODO</p>
 
       </div>

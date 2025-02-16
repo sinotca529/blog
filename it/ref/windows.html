@@ -51,20 +51,20 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=ref">ref</a> <a class="tag" href="../../index.html?tag=windows">windows</a></div>
       <div id="main-content">
-        <h1>Windows 簡易リファレンス</h1>
-<h2>ユーザー環境変数を設定する</h2>
+        <h1 id="">Windows 簡易リファレンス</h1>
+<h2 id="1">ユーザー環境変数を設定する</h2>
 <p>ユーザー環境変数の設定に管理者権限は不要です。
 コントロールパネルから「ユーザーアカウント &gt; ユーザーアカウント &gt; 環境変数の変更」と進むことで設定画面を開けます。
 あるいは、 <code>Win + R</code> のダイアログに次を入力することでも設定画面を開けます。</p>
 <pre><code class="language-txt">rundll32 sysdm.cpl,EditEnvironmentVariables
 </code></pre>
-<h2>ウィンドウの角丸をやめる</h2>
+<h2 id="2">ウィンドウの角丸をやめる</h2>
 <pre><code class="language-reg">Windows Registry Editor Version 5.00
 
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM]
 "ForceEffectMode"=dword:00000002
 </code></pre>
-<h2>Git Bash で対話的ソフトを使う</h2>
+<h2 id="3">Git Bash で対話的ソフトを使う</h2>
 <p>Python インタプリタなどを Git Bash でそのまま動かそうとするとハングする。
 これは、 pythone.exe と Git Bash に互換性がないから。
 <code>winpty</code> を嚙ませると、このあたりの問題が解消する。</p>

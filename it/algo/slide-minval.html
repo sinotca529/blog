@@ -51,13 +51,13 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=algo">algo</a></div>
       <div id="main-content">
-        <h1>スライド最小値</h1>
+        <h1 id="">スライド最小値</h1>
 <dl>
 <dt>問題</dt>
 <dd>サイズ <code>N</code> の配列 <code>x</code> とウィンドウ幅 <code>w</code> が与えられる。<br>
 <code>y[i] == x[i..(i+w)].min()</code> となる配列 <code>y</code> を求めよ。</dd>
 </dl>
-<h2><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span> の解法</h2>
+<h2 id="1"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span> の解法</h2>
 <p>両端キューをうまく使う。</p>
 <pre><code class="language-rust">use std::collections::VecDeque;
 

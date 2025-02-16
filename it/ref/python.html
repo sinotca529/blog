@@ -51,9 +51,9 @@
       </div>
       <div> <a class="tag" href="../../index.html?tag=it">it</a> <a class="tag" href="../../index.html?tag=ref">ref</a></div>
       <div id="main-content">
-        <h1>Python 簡易リファレンス</h1>
+        <h1 id="">Python 簡易リファレンス</h1>
 <p>たまに使うけど忘れてしまうテクなどを書いていきます。</p>
-<h2><code>stdout</code>, <code>stderr</code> を  <code>/dev/null</code> に捨てる</h2>
+<h2 id="1"><code>stdout</code>, <code>stderr</code> を  <code>/dev/null</code> に捨てる</h2>
 <pre><code class="language-py">from contextlib import redirect_stdout, redirect_stderr
 
 with open('/dev/null') as devnull:
@@ -61,7 +61,7 @@ with open('/dev/null') as devnull:
         # この中で print しても表示されずに捨てられる
         some_function()
 </code></pre>
-<h2>一時ファイル・ディレクトリを作成する</h2>
+<h2 id="2">一時ファイル・ディレクトリを作成する</h2>
 <pre><code class="language-py">import tempfile
 
 # 一時ファイル
@@ -72,7 +72,7 @@ with tempfile.NamedTemporaryFile() as f:
 with tempfile.TemporaryDirectory() as d:
     print(d)
 </code></pre>
-<h2>コマンドライン引数の処理</h2>
+<h2 id="3">コマンドライン引数の処理</h2>
 <pre><code class="language-py">import argparse
 
 parser = argparse.ArgumentParser(description='Example Program')
@@ -89,7 +89,7 @@ parser.add_argument('--verbose', '-v', action='store_true', help='increase outpu
 
 args = parser.parse_args()
 </code></pre>
-<h3>サブコマンドの処理</h3>
+<h3 id="3.1">サブコマンドの処理</h3>
 <p><code>set_defaults</code> でサブコマンドごとの処理を指定する。</p>
 <pre><code class="language-py">import argparse
 
