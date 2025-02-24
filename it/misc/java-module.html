@@ -76,19 +76,20 @@
 <pre><code class="language-java">// 名付けにパッケージのような制約はないが、一意であるべき。
 module mod.foo {
 
-    // 外部に公開するパッケージを指定する。
-    exports com.example.foo.hoge;
+  // 外部に公開するパッケージを指定する。
+  exports com.example.foo.hoge;
 
-    // 公開先を限定するには to を使う。
-    exports com.example.foo.piyo to com.example.bar, com.example.baz;
+  // 公開先を限定するには to を使う。
+  exports com.example.foo.piyo to com.example.bar, com.example.baz;
 
-    // 使用する外部パッケージを指定する
-    requires mod.bar;
+  // 使用する外部パッケージを指定する
+  requires mod.bar;
 
-    // requires によるアクセス権はデフォルトで推移しない。
-    // mod.foo に依存するモジュールに mod.baz へのアクセス権を
-    // 推移的に (暗黙的に)与えるには transitive をつける
-    requires transitive mod.baz;
+  // requires によるアクセス権はデフォルトで推移しない。
+  // mod.foo に依存するモジュールに mod.baz へのアクセス権を
+  // 推移的に (暗黙的に)与えるには transitive をつける
+  requires transitive mod.baz;
+
 }
 </code></pre>
 <h2 id="2">モジュールのコンパイル</h2>
