@@ -62,6 +62,7 @@
 <tr><td style="text-align: left"><code>float</code></td><td style="text-align: left"><code>f32</code></td></tr>
 <tr><td style="text-align: left"><code>double</code></td><td style="text-align: left"><code>f64</code></td></tr>
 </tbody></table>
+<p>整数のリテラルは <code>int</code> 型、小数のリテラルは <code>double</code> 型とみなされます。</p>
 <h3 id="1.1">暗黙キャスト</h3>
 <p>拡大方向には暗黙キャストできますが、縮小方向にはできません。</p>
 <pre><code class="language-txt">byte --+--&gt; char  --+--&gt; int --&gt; long --&gt; float --&gt; double
@@ -253,6 +254,7 @@ import java.util.ArrayList;
 <ul>
 <li>メソッドは暗黙的に <code>abstract public</code> になる。明示的に書いても良い。</li>
 <li>メンバは暗黙的に <code>static final</code> になる。明示的に書いても良い。</li>
+<li>特に意味はないが <code>abstract interface I {...}</code> は合法。</li>
 </ul>
 <pre><code class="language-java">public interface TestInterface {
     // 暗黙的に public static final
@@ -424,7 +426,31 @@ void main(String[] args) {
     ...
     &lt;ユーザ定義例外&gt;
 </code></pre>
-<h2 id="19">用語</h2>
+<ul>
+<li><code>catche</code> はより具体的な型に対するものから並べる必要があります。</li>
+</ul>
+<h2 id="19">関数型インタフェースとラムダ式 (Java8)</h2>
+<p>関数型インタフェースは抽象メソッドを1つだけ持つインタフェースを指し、 <code>@FunctionalInterface</code> アノテーションをつけて明示します。
+アノテーションは省略可能ですが、つけておくと関数型インタフェースの条件を満たしていない場合にコンパイルエラーとすることができます。</p>
+<pre><code class="language-java">@FunctionalInterface
+interface Adder&lt;T&gt; { T add(T a, T b); }
+</code></pre>
+<p>Java のラムダ式は、関数型インタフェースを実装した無名クラスのインスタンスを生成する式です。</p>
+<pre><code class="language-java">// Adder を実装した無名クラスのインスタンスを生成
+Adder&lt;Integer&gt; r = (a, b) -&gt; a + b;
+System.out.println(r.getClass()); // class Main$$Lambda/0x00007f828b154408
+System.out.println(r.add(2, 3));  // 5
+</code></pre>
+<p>引数名として、スコープにある変数と同じ名前は使えません (shadowing はできません)。</p>
+<pre><code class="language-java">var a = 10;
+Adder&lt;Integer&gt; r = (a, b) -&gt; a + b;
+</code></pre>
+<p>ラムダ式は、式の外にある変数のうち、宣言に <code>final</code> がついている (または付けてもコンパイルが通る) ものを参照できます。</p>
+<pre><code class="language-java">var offset = 10;
+Adder&lt;Integer&gt; r = (a, b) -&gt; a + b + offset;
+System.out.println(r.add(2, 3)); // 15
+</code></pre>
+<h2 id="20">用語</h2>
 <dl>
 <dt>カプセル化</dt>
 <dd>関係するデータと処理をまとめること (いい感じなクラスを作ること)</dd>
@@ -433,7 +459,7 @@ void main(String[] args) {
 <dt>情報隠蔽</dt>
 <dd>実装を隠すこと (インタフェースや抽象クラスを使うこと)</dd>
 </dl>
-<h2 id="20">他言語との違い</h2>
+<h2 id="21">他言語との違い</h2>
 <ul>
 <li>C++ のコピーコンストラクタに相当するものはない。</li>
 <li>Cのカンマ演算子はない。</li>
@@ -442,7 +468,7 @@ void main(String[] args) {
 <li>不変参照はない。</li>
 <li>到達不能なコードがあるとコンパイルエラー。</li>
 </ul>
-<h2 id="21">MISC</h2>
+<h2 id="22">MISC</h2>
 <ul>
 <li><code>System.out.println(null)</code> は合法</li>
 <li><code>static</code> メンバはインスタンスからアクセス可能。</li>

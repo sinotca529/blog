@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../..">
+  <link rel="stylesheet" href="../../style.css" />
+  <script defer type="text/javascript" src="../../metadata.js"></script><script defer type="text/javascript" src="../../script.js"></script><script defer type="text/javascript" src="../../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../../gtag.js"></script>
+  <title>Vue</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-02-25 ~ 2025-02-25
+      </div>
+      <div> <a class="tag" href="../../index.html?tag=it">it</a> <a class="tag" href="../../index.html?tag=ref">ref</a> <a class="tag" href="../../index.html?tag=web">web</a></div>
+      <div id="main-content">
+        <h1 id="">Vue</h1>
+<h2 id="1">vue コマンドのインストール</h2>
+<p><code>vue</code> コマンドをインストールします。</p>
+<pre><code class="language-sh">npm install -g @vue/cli
+</code></pre>
+<h2 id="2">プロジェクトの作成</h2>
+<p><code>vue</code> コマンドを使ってプロジェクトを作ります。
+Vue 2 と Vue 3 のどちらにするか聞かれたら 3 を選びます。</p>
+<pre><code class="language-sh">vue create vue-test
+cd vue-test
+</code></pre>
+<p>作成されたプロジェクトは次のようになっています。</p>
+<pre><code>.
+├── babel.config.js
+├── jsconfig.json
+├── node_modules
+│  ├── @achrinza
+│  ├── ...
+│  └── yorkie
+├── package-lock.json
+├── package.json
+├── public                // 静的ファイルを格納
+│  ├── favicon.ico
+│  └── index.html
+├── README.md
+├── src                   // ソースコードを格納
+│  ├── App.vue            //   アプリのルートコンポーネント
+│  ├── assets             //
+│  │  └── logo.png        //
+│  ├── components         //   再利用可能なコンポーネントを格納
+│  │  └── HelloWorld.vue  //
+│  └── main.js            //   エントリポイント
+└── vue.config.js         // ビルド設定などを書く
+</code></pre>
+<p>実行は次のようにします。</p>
+<pre><code class="language-sh">npm run serve
+</code></pre>
+<h2 id="3">コンポーネントの基本</h2>
+<p>ここでは、 <code>App.vue</code> を書き換えて、テンプレート構文, データバインディング, イベントについて学びます。</p>
+<h3 id="3.1">template</h3>
+<p><code>App.vue</code> の内容を削除して、はじめに <code>&lt;template&gt;</code> を書きます。
+ここには HTML のテンプレートを書きます。</p>
+<pre><code class="language-vue">&lt;template&gt;
+  &lt;div id="app"&gt;
+    &lt;h1&gt;{{ title }}&lt;/h1&gt;
+    &lt;p&gt;{{ message }}&lt;/p&gt;
+    &lt;input v-model="inputText" placeholder="テキストを入力"&gt;
+    &lt;button v-bind:disabled="inputText.length === 0" @click="greet"&gt;挨拶する&lt;/button&gt;
+    &lt;p&gt;クリック回数: {{ clickCount }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+</code></pre>
+<p>静的サイトジェネレータでおなじみの Mustache に似ています。</p>
+<p><code>v-model</code>, <code>v-bind</code> や <code>@click</code> はディレクティブといいます。
+上の例におけるそれぞれの意味は次のとおりです。</p>
+<ul>
+<li><code>v-model="inputText"</code> : 入力フィールドとデータプロパティ <code>inputText</code> を双方向にバインドする</li>
+<li><code>v-bind:disabled="inputText.length === 0</code> : 条件が満たされるときだけ <code>disabled</code> をつける</li>
+<li><code>@click="greet"</code> : クリック時に <code>greet</code> メソッドを呼び出す</li>
+</ul>
+<h3 id="3.2">script</h3>
+<p>続けて <code>&lt;script&gt;</code> を書きます。
+ここにはテンプレートに与えるパラメタを記述します。</p>
+<pre><code class="language-vue">&lt;script&gt;
+export default {
+  name: 'App',
+  data() {
+    return {
+      title: 'Vue.js チュートリアル',
+      message: 'テキストを入力してボタンをクリック！',
+      inputText: '',
+      clickCount: 0
+    }
+  },
+  methods: {
+    greet() {
+      this.message = `こんにちは、${this.inputText}さん！`;
+      this.clickCount++;
+    }
+  }
+}
+&lt;/script&gt;
+</code></pre>
+<p><code>name</code> は Vue コンポーネントの識別子です。</p>
+<h3 id="3.3">style</h3>
+<p>最後に <code>&lt;style&gt;</code> を書きます。</p>
+<pre><code class="language-vue">&lt;style&gt;
+#app {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin-top: 60px;
+}
+&lt;/style&gt;
+</code></pre>
+<h2 id="4">複数のコンポーネントを使う</h2>
+<p><code>&lt;p&gt;{{ message }}&lt;/p&gt;</code> の部分をコンポーネントとして切り出しましょう。</p>
+<h3 id="4.1">新規コンポーネントの作成</h3>
+<p><code>MsgPara.vue</code> を作成します。</p>
+<pre><code class="language-vue">&lt;template&gt;
+  &lt;p&gt;{{ message }}&lt;/p&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default { props: ['message'] }
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+p { color: blue; }
+&lt;/style&gt;
+</code></pre>
+<p><code>&lt;style scoped&gt;</code> と書くと、そのスタイルはコンポーネント内にしか適用されなくなります。</p>
+<p><code>props</code> は親コンポーネントから子コンポーネントに値を渡すためのものです。
+子コンポーネントは値の読み取りはできますが、書き込みはできません。</p>
+<h3 id="4.2">コンポーネントの利用</h3>
+<p><code>App.vue</code> を次のように書き換えます。</p>
+<pre><code class="language-vue">&lt;template&gt;
+  &lt;div id="app"&gt;
+    &lt;h1&gt;{{ title }}&lt;/h1&gt;
+    &lt;MsgPara :message="message" /&gt;
+    ...
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import MsgPara from './components/MsgPara.vue'
+
+export default {
+  name: 'App',
+  components: {
+    MsgPara
+  },
+  ...
+}
+&lt;/script&gt;
+...
+</code></pre>
+<h2 id="5">Vue Router による画面遷移</h2>
+<p>TODO</p>
+<h2 id="6">状態管理と API 連携</h2>
+<p>TODO</p>
+<hr />
+<p>参考 :</p>
+<ul>
+<li>perplexity</li>
+</ul>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>
