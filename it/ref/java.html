@@ -53,7 +53,7 @@
       <div id="main-content">
         <h1 id="">Java 文法まとめ</h1>
 <h2 id="1">整数・小数</h2>
-<table><thead><tr><th style="text-align: left">型</th><th style="text-align: left">対応するRustの型</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">型</th><th style="text-align: left">対応するRustの型</th></tr></thead><tbody>
 <tr><td style="text-align: left"><code>byte</code></td><td style="text-align: left"><code>i8</code></td></tr>
 <tr><td style="text-align: left"><code>char</code></td><td style="text-align: left"><code>u16</code></td></tr>
 <tr><td style="text-align: left"><code>short</code></td><td style="text-align: left"><code>i16</code></td></tr>
@@ -62,6 +62,7 @@
 <tr><td style="text-align: left"><code>float</code></td><td style="text-align: left"><code>f32</code></td></tr>
 <tr><td style="text-align: left"><code>double</code></td><td style="text-align: left"><code>f64</code></td></tr>
 </tbody></table>
+</div>
 <p>整数のリテラルは <code>int</code> 型、小数のリテラルは <code>double</code> 型とみなされます。</p>
 <h3 id="1.1">暗黙キャスト</h3>
 <p>拡大方向には暗黙キャストできますが、縮小方向にはできません。</p>
@@ -236,12 +237,13 @@ import java.util.ArrayList;
 // import java.util
 </code></pre>
 <h2 id="9">アクセス修飾子</h2>
-<table><thead><tr><th>修飾子</th><th style="text-align: center">クラス内</th><th style="text-align: center">同PKG</th><th style="text-align: center">別PKG 子クラス</th><th style="text-align: center">別PKG 非子クラス</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>修飾子</th><th style="text-align: center">クラス内</th><th style="text-align: center">同PKG</th><th style="text-align: center">別PKG 子クラス</th><th style="text-align: center">別PKG 非子クラス</th></tr></thead><tbody>
 <tr><td><code>public</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td></tr>
 <tr><td><code>protected</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
 <tr><td>-</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
 <tr><td><code>private</code></td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
 </tbody></table>
+</div>
 <h2 id="10">コンストラクタ</h2>
 <ul>
 <li>ユーザ定義コンストラクタがある場合、デフォルトコンストラクタは定義されない。</li>

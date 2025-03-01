@@ -205,7 +205,7 @@ autocmd TextYankPost * if &amp;buftype ==# 'terminal' &amp;&amp; mode() ==# 'n' 
 </details>
 <p>この設定では次のことができます。
 (<code>&lt;Leader&gt;</code> は <code>&lt;C-q&gt;</code> です。)</p>
-<table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">動作</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">動作</th></tr></thead><tbody>
 <tr><td style="text-align: left"><code>&lt;Leader&gt;c</code> または <code>&lt;M-m&gt;</code></td><td style="text-align: left">タブを新規作成</td></tr>
 <tr><td style="text-align: left"><code>&lt;Leader&gt;n</code></td><td style="text-align: left">次のタブへ</td></tr>
 <tr><td style="text-align: left"><code>&lt;Leader&gt;p</code></td><td style="text-align: left">前のタブへ</td></tr>
@@ -217,6 +217,7 @@ autocmd TextYankPost * if &amp;buftype ==# 'terminal' &amp;&amp; mode() ==# 'n' 
 <tr><td style="text-align: left"><code>&lt;M-h/j/k/l&gt;</code></td><td style="text-align: left">指定方向のウィンドウに移動</td></tr>
 <tr><td style="text-align: left"><code>&lt;M-w/a/s/d&gt;</code></td><td style="text-align: left">アクティブウィンドウのサイズを変更</td></tr>
 </tbody></table>
+</div>
 <p>このコードを <code>.vimrc-tmux</code> として保存して、 <code>vim -Nu .vimrc-tmux</code> で読み込んで起動します。 <code>.bashrc</code> などにエイリアスを作っておくと便利です。</p>
 <pre><code class="language-bash">alias vmux='vim -Nu ~/.vimrc-tmux'
 </code></pre>

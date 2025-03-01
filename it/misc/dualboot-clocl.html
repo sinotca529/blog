@@ -54,10 +54,11 @@
         <h1 id="">Linux と Windows を並用すると時計がずれる</h1>
 <p>Linux を起動したあとのマシンで Windows を起動すると、時計がずれていることがある。
 この問題は、 Linux と Windows でハードウェアクロックの使い方が違うことに起因する。</p>
-<table><thead><tr><th>OS</th><th>ハードウェアクロックの使い方</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>OS</th><th>ハードウェアクロックの使い方</th></tr></thead><tbody>
 <tr><td>Linux</td><td>世界標準時をセット</td></tr>
 <tr><td>Windows</td><td>ローカルの時刻をセット</td></tr>
 </tbody></table>
+</div>
 <p>例えば日本だと9時間のズレが生じることになる。</p>
 <p>この問題を解消するには、 Linux か Windows の設定を変えてやれば良い。
 簡単なのは Linux で、次のコマンドを実行すれば良い。</p>

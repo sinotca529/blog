@@ -54,7 +54,7 @@
         <h1 id="">Zsh 簡易リファレンス</h1>
 <h2 id="1">キーバインディング</h2>
 <p>カーソル移動系</p>
-<table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">カーソルの移動先</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">カーソルの移動先</th></tr></thead><tbody>
 <tr><td style="text-align: left"><code>C-f</code></td><td style="text-align: left">右</td></tr>
 <tr><td style="text-align: left"><code>C-b</code></td><td style="text-align: left">左</td></tr>
 <tr><td style="text-align: left"><code>C-n</code></td><td style="text-align: left">下</td></tr>
@@ -64,8 +64,9 @@
 <tr><td style="text-align: left"><code>C-e</code></td><td style="text-align: left">行末</td></tr>
 <tr><td style="text-align: left"><code>C-a</code></td><td style="text-align: left">行頭</td></tr>
 </tbody></table>
+</div>
 <p>文字操作系列</p>
-<table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">効果</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">効果</th></tr></thead><tbody>
 <tr><td style="text-align: left"><code>C-h</code></td><td style="text-align: left">BS</td></tr>
 <tr><td style="text-align: left"><code>C-d</code></td><td style="text-align: left">DEL</td></tr>
 <tr><td style="text-align: left"><code>C-w</code></td><td style="text-align: left">単語を切り取り</td></tr>
@@ -75,10 +76,12 @@
 <tr><td style="text-align: left"><code>C-y</code></td><td style="text-align: left">貼り付け</td></tr>
 <tr><td style="text-align: left"><code>C-/</code></td><td style="text-align: left">undo</td></tr>
 </tbody></table>
+</div>
 <p>履歴</p>
-<table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">効果</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">キー</th><th style="text-align: left">効果</th></tr></thead><tbody>
 <tr><td style="text-align: left"><code>C-r</code></td><td style="text-align: left">コマンド履歴を検索</td></tr>
 </tbody></table>
+</div>
 <h2 id="2">コマンド履歴を残さない</h2>
 <p>コマンドの頭にスペースを入れると履歴が残らないようにする設定があります。</p>
 <pre><code class="language-.zshrc">setopt hist_ignore_space

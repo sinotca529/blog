@@ -95,7 +95,7 @@ System.out.println(m.keySet());  // [null, 0]
 <h2 id="5">日時処理</h2>
 <p>Java8 以降なら <code>java.time</code> 配下のクラスを使いましょう。
 以下の表で <code>java.time</code> 配下のものは不変でスレッドセーフです。</p>
-<table><thead><tr><th>クラス</th><th>パッケージ</th><th>表すもの</th><th>月のオリジン</th></tr></thead><tbody>
+<div class="table-wrapper"><table><thead><tr><th>クラス</th><th>パッケージ</th><th>表すもの</th><th>月のオリジン</th></tr></thead><tbody>
 <tr><td><del><code>Date</code></del></td><td><code>java.util</code></td><td>日時</td><td></td></tr>
 <tr><td><del><code>Calendar</code></del></td><td><code>java.util</code></td><td>日時</td><td>0</td></tr>
 <tr><td><code>LocalDate</code></td><td><code>java.time</code></td><td>日付</td><td>1</td></tr>
@@ -107,6 +107,7 @@ System.out.println(m.keySet());  // [null, 0]
 <tr><td><code>ZonedDateTime</code></td><td><code>java.time</code></td><td>日時 (タイムゾーン情報付き)</td><td></td></tr>
 <tr><td><code>Duration</code></td><td><code>java.time</code></td><td>時間</td><td>-</td></tr>
 </tbody></table>
+</div>
 <h3 id="5.1">OffsetDateTime vs ZonedDateTime</h3>
 <p>タイムゾーンは特定の時刻系 (標準時) を使う地域のことであって、その時差は変化し得ます。
 例えばサマータイムのあるゾーンでは、その期間だけ時差が変化します。</p>
