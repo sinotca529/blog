@@ -47,7 +47,7 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-05-03 ~ 2025-02-16
+        2024-05-03 ~ 2025-03-17
       </div>
       <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a> <a class="tag" href="../../index.html?tag=ref">ref</a></div>
       <div id="main-content">
@@ -117,8 +117,7 @@ System.out.println(a.getClass());
 // 長さは違うが代入できる
 a = new int[]{0, 1};
 </code></pre>
-<p>宣言における <code>[]</code> の位置は柔軟です。
-<del>C言語ユーザーに媚びているのでしょうか。</del></p>
+<p>宣言における <code>[]</code> の位置は柔軟です。</p>
 <pre><code class="language-java">// どちらでも良い
 int[] d;
 int e[];
@@ -250,34 +249,72 @@ import java.util.ArrayList;
 <li><code>super()</code> や <code>this()</code> はコンストラクタの先頭で合計1回しか呼べない。</li>
 </ul>
 <h2 id="11">シグネチャ (sigature)</h2>
-<p>Java において、シグネチャは (メソッド名, 引数) を指す。アクセス修飾子や戻り型は含まれない。 (JLS 8.4.2 Method Signature)
-メソッド名が同じだがシグネチャが異なる場合にオーバーロードが許される。</p>
-<h2 id="12">インタフェース</h2>
+<p>Java においてシグネチャは、 (メソッド名, 型パラメタ, 引数の型) を指します。(<a href="https://docs.oracle.com/javase/specs/jls/se23/html/jls-8.html#jls-8.4.2">JLS 8.4.2 Method Signature</a>)
+ここで「型パラメタ」は、ジェネリックメソッドのパラメタを指しています。
+アクセス修飾子や戻り型は含まれません。</p>
+<p>シグネチャ <code>s</code>, <code>t</code> について、それらが同じであるか、 <code>t</code> の型パラメタを取り除くと <code>s</code> に一致する場合、 <code>s</code> は <code>t</code> のサブシグネチャであるといいます。
+例えば、 <code>s(List a)</code> は <code>t(List&lt;String&gt; a)</code> のサブシグネチャです。</p>
+<p><code>s</code> が <code>t</code> のサブシグネチャか、 <code>t</code> が <code>s</code> のサブシグネチャである場合、 <code>s</code>, <code>t</code> はオーバーライド等価の関係にあるといいます。</p>
+<h2 id="12">オーバーライド (override)</h2>
+<p>メソッドをオーバーライドできる必要条件は、子クラスのメソッドのシグネチャ <code>c</code> が、親クラスのメソッドのシグネチャ <code>p</code> のサブシグネチャであることです。
+(<a href="https://docs.oracle.com/javase/specs/jls/se23/html/jls-8.html#jls-8.4.8.1">JLS 8.4.8.1. Overriding (by Instance Methods)</a>)</p>
+<p>そのため、次は違法です。</p>
+<pre><code class="language-java">class A {
+  void m(ArrayList&lt;String&gt; a) {}
+}
+
+class B extends A {
+  // A.m のサブシグネチャではないのでコンパイルエラー
+  @Override
+  void m(List&lt;String&gt; a) {}
+}
+</code></pre>
+<h2 id="13">オーバーロード (overload)</h2>
+<pre><code class="language-java">class A {}
+class B extends A {}
+
+class Err {
+  // OK
+  void normal(A a) {}
+  void normal(B b) {}
+
+  // OK
+  void outer(List&lt;A&gt; a) {}
+  void outer(ArrayList&lt;A&gt; a) {}
+
+  // NG (型消去されるので)
+  void param(List&lt;String&gt; s) {}
+  void param(List&lt;Integer&gt; i) {}
+}
+</code></pre>
+<h2 id="14">ジェネリクス</h2>
+<p>Java のジェネリクスは非変です。</p>
+<h2 id="15">インタフェース</h2>
 <ul>
-<li>メソッドは暗黙的に <code>abstract public</code> になる。明示的に書いても良い。</li>
+<li>メソッドは暗黙的に <code>abstract public</code> になる。明示的に書いても良い。その他は書けない。</li>
 <li>メンバは暗黙的に <code>static final</code> になる。明示的に書いても良い。</li>
 <li>特に意味はないが <code>abstract interface I {...}</code> は合法。</li>
 </ul>
 <pre><code class="language-java">public interface TestInterface {
-    // 暗黙的に public static final
-    int VALUE=100;
+  // 暗黙的に public static final
+  int VALUE=100;
 
-    // 暗黙的に public abstract
-    void method();
+  // 暗黙的に public abstract
+  void method();
 
-    // デフォルトメソッド (Java8 以降)
-    // 暗黙的に public
-    default void defaultMethod() { System.out.println("default"); }
+  // デフォルトメソッド (Java8 以降)
+  // 暗黙的に public
+  default void defaultMethod() { System.out.println("default"); }
 
-    // 静的メソッド (Java8 以降)
-    static void staticMethod() { System.out.println("static"); }
+  // 静的メソッド (Java8 以降)
+  static void staticMethod() { System.out.println("static"); }
 
-    // プライベートメソッド (Java9 以降)
-    // 静的メソッドやデフォルトメソッドから呼ぶのに使える
-    private void privateMethod() { System.out.println("private"); }
+  // プライベートメソッド (Java9 以降)
+  // 静的メソッドやデフォルトメソッドから呼ぶのに使える
+  private void privateMethod() { System.out.println("private"); }
 }
 </code></pre>
-<h2 id="13">実現 (implements) の条件</h2>
+<h2 id="16">実現 (implements) の条件</h2>
 <p>実現すべきメソッドを自分で定義する必要はありません。
 親クラスから継いだものでも構いません。</p>
 <pre><code class="language-java">interface I {
@@ -296,7 +333,7 @@ void main(String[] args) {
   System.out.println(e.method()); // 1
 }
 </code></pre>
-<h2 id="14">多重継承・多重実現と名前衝突</h2>
+<h2 id="17">多重継承・多重実現と名前衝突</h2>
 <p>クラスには複数のインタフェースを実装できます。
 Java8 以降はインタフェースにデフォルトメソッドが実装できるので、
 多重継承における名前衝突への対処が必要です。</p>
@@ -357,7 +394,7 @@ void main(String[] args) {
 }
 </code></pre>
 <p>なお、 <code>I1.super.m()</code> を書けるのは <code>I1</code> を直接実現している場合だけです。</p>
-<h2 id="15">switch 文</h2>
+<h2 id="18">switch 文</h2>
 <p><code>switch</code> できる型は以下のいずれか :</p>
 <ul>
 <li><code>int</code> 以下の整数型とそのラッパ</li>
@@ -371,7 +408,7 @@ void main(String[] args) {
 </ul>
 <p><code>case</code> が exhaustive である必要はありません。
 <code>default</code> は最後でない場所に書いても構いません。</p>
-<h2 id="16">初期化子</h2>
+<h2 id="19">初期化子</h2>
 <pre><code class="language-java">public class Sample {
     // 初期化子
     {
@@ -383,7 +420,7 @@ void main(String[] args) {
     }
 }
 </code></pre>
-<h2 id="17">可変長引数</h2>
+<h2 id="20">可変長引数</h2>
 <pre><code class="language-java">public class Main {
     static void varargsMethod(int... a) {
         // class [I
@@ -404,7 +441,7 @@ void main(String[] args) {
     }
 }
 </code></pre>
-<h2 id="18">例外処理</h2>
+<h2 id="21">例外処理</h2>
 <dl>
 <dt>Error (エラー)</dt>
 <dd>回復が困難なエラー。 OOM や assert 失敗など。</dd>
@@ -431,7 +468,7 @@ void main(String[] args) {
 <ul>
 <li><code>catche</code> はより具体的な型に対するものから並べる必要があります。</li>
 </ul>
-<h2 id="19">関数型インタフェースとラムダ式 (Java8)</h2>
+<h2 id="22">関数型インタフェースとラムダ式 (Java8)</h2>
 <p>関数型インタフェースは抽象メソッドを1つだけ持つインタフェースを指し、 <code>@FunctionalInterface</code> アノテーションをつけて明示します。
 アノテーションは省略可能ですが、つけておくと関数型インタフェースの条件を満たしていない場合にコンパイルエラーとすることができます。</p>
 <pre><code class="language-java">@FunctionalInterface
@@ -452,7 +489,7 @@ Adder&lt;Integer&gt; r = (a, b) -&gt; a + b;
 Adder&lt;Integer&gt; r = (a, b) -&gt; a + b + offset;
 System.out.println(r.add(2, 3)); // 15
 </code></pre>
-<h2 id="20">用語</h2>
+<h2 id="23">用語</h2>
 <dl>
 <dt>カプセル化</dt>
 <dd>関係するデータと処理をまとめること (いい感じなクラスを作ること)</dd>
@@ -461,7 +498,7 @@ System.out.println(r.add(2, 3)); // 15
 <dt>情報隠蔽</dt>
 <dd>実装を隠すこと (インタフェースや抽象クラスを使うこと)</dd>
 </dl>
-<h2 id="21">他言語との違い</h2>
+<h2 id="24">他言語との違い</h2>
 <ul>
 <li>C++ のコピーコンストラクタに相当するものはない。</li>
 <li>Cのカンマ演算子はない。</li>
@@ -470,11 +507,16 @@ System.out.println(r.add(2, 3)); // 15
 <li>不変参照はない。</li>
 <li>到達不能なコードがあるとコンパイルエラー。</li>
 </ul>
-<h2 id="22">MISC</h2>
+<h2 id="25">MISC</h2>
 <ul>
 <li><code>System.out.println(null)</code> は合法</li>
 <li><code>static</code> メンバはインスタンスからアクセス可能。</li>
 <li>代入は式。 <code>a = b = 10</code> は合法。</li>
+</ul>
+<hr />
+<h2 id="26">参考</h2>
+<ul>
+<li>https://tech.kurojica.com/archives/17792/</li>
 </ul>
 
       </div>
