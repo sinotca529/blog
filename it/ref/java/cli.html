@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../../..">
+  <link rel="stylesheet" href="../../../style.css" />
+  <script defer type="text/javascript" src="../../../metadata.js"></script><script defer type="text/javascript" src="../../../script.js"></script><script defer type="text/javascript" src="../../../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../../../gtag.js"></script>
+  <title>Java コマンドまとめ</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../../../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-02-23 ~ 2025-02-23
+      </div>
+      <div> <a class="tag" href="../../../index.html?tag=lang">lang</a> <a class="tag" href="../../../index.html?tag=java">java</a> <a class="tag" href="../../../index.html?tag=ref">ref</a></div>
+      <div id="main-content">
+        <h1 id="">Java コマンドまとめ</h1>
+<div class="table-wrapper"><table><thead><tr><th>コマンド</th><th>用途</th></tr></thead><tbody>
+<tr><td><code>javac</code></td><td>コンパイル</td></tr>
+<tr><td><code>java</code></td><td>実行</td></tr>
+<tr><td><code>jar</code></td><td>jar ファイルの作成・管理</td></tr>
+<tr><td><code>jmod</code></td><td>jmod ファイルの作成・管理</td></tr>
+<tr><td><code>jdeps</code></td><td>クラスや JAR の依存解析</td></tr>
+<tr><td><code>jlink</code></td><td>必要なモジュールのみを含むカスタム JRE を作成</td></tr>
+<tr><td><code>jpackage</code></td><td>ネイティブインストーラを作成</td></tr>
+<tr><td><code>javadoc</code></td><td>ドキュメント生成</td></tr>
+<tr><td><code>jdb</code></td><td>デバッガ</td></tr>
+<tr><td><code>javap</code></td><td>逆アセンブル</td></tr>
+<tr><td><code>jfr</code></td><td>プロファイリング (Java Flight Recorder)</td></tr>
+<tr><td><code>jcmd</code></td><td>JVM の診断・管理</td></tr>
+<tr><td><code>jstat</code></td><td>JVM の統計情報を表示</td></tr>
+<tr><td><code>jps</code></td><td>実行中の Java プロセス一覧を表示</td></tr>
+<tr><td><code>jconsole</code></td><td>GUI ベースの JVM モニタ</td></tr>
+<tr><td><code>jimage</code></td><td>JDK 内のイメージファイルを操作</td></tr>
+<tr><td><code>serialver</code></td><td>シリアルバージョン UID を取得</td></tr>
+</tbody></table>
+</div>
+<h2 id="1">エディション</h2>
+<ul>
+<li>Java SE
+<ul>
+<li>最低限の API</li>
+</ul>
+</li>
+<li>Java EE (Enterprise Edition)
+<ul>
+<li>SE + 大規模システムに必要なライブラリ</li>
+</ul>
+</li>
+<li>Java ME (Micro Edition)
+<ul>
+<li>組み込み・モバイル用途</li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li>JRE : JVM + 標準クラスライブラリ</li>
+<li>JDK : JRE + 開発ツール (コンパイラ、デバッガなど)</li>
+<li>標準クラスライブラリ : 基本ライブラリ + 統合ライブラリ + UIライブラリ</li>
+</ul>
+<p>Java EE (ないしエディション) の必要性がよくわからない。
+C/C++, Rust などはプロジェクトごとに必要なライブラリを取ってくるわけで、
+わざわざエディションを分ける動機がいまいちわからない。
+Rust でいう<code>no_std</code> に近いのだろうか。</p>
+<h2 id="2">用語</h2>
+<dl>
+<dt>クラスパス</dt>
+<dd><code>.java</code> ファイル同様、 <code>.class</code> ファイルもパッケージ階層に沿ったパスに配置します。
+この起点をクラスパスといいます。</dd>
+<dt>モジュールパス</dt>
+<dd>モジュールの起点となるパスです。</dd>
+<dt>jar ファイル</dt>
+<dd><code>.class</code> のあるディレクトリを固めたものです。</dd>
+</dl>
+<h2 id="3">javac コマンド</h2>
+<h3 id="3.1">アプリのコンパイル</h3>
+<pre><code>javac \
+  --source-path &lt;依存先 java ファイルの探索先&gt; \
+  -d &lt;生成した class ファイルの配置先&gt; \
+  -cp &lt;依存先 jar/class ファイルの探索先&gt;
+  &lt;コンパイル対象&gt;
+</code></pre>
+<p><code>--source-path</code> で指定した場所にある <code>.java</code> ファイルのうち、コンパイル対象が依存するもの<strong>だけ</strong>がコンパイルされます。
+そのため、アプリを作る場合は <code>--source-path</code> にコードの場所を指定し、コンパイル対象に <code>main</code> 関数を書いた <code>.java</code> ファイルを指定すればよいのです。</p>
+<h3 id="3.2">ライブラリのコンパイル</h3>
+<p>コンパイル対象に <code>$(find src -name "*.java")</code> を指定すれば全件コンパイルできるでしょうが、
+通常は何かしらのビルド管理ツールを使用するでしょう。</p>
+<h3 id="3.3">モジュールのコンパイル (Java 9)</h3>
+<p>コンパイル対象に <code>module-info.java</code> が含まれている場合、モジュールが作成されます。</p>
+<pre><code class="language-sh">javac \
+  -d &lt;生成したモジュールの配置先&gt; \
+  &lt;module-info.java の場所&gt; \
+  &lt;コンパイル対象&gt;
+</code></pre>
+<h2 id="4">java コマンド</h2>
+<h3 id="4.1">ソースファイルモード (Java11)</h3>
+<p>ソースコードをその場でコンパイルして実行するモードです。
+中間コードはメモリ上に保持され、実行後に <code>.class</code> ファイルは残りません。</p>
+<pre><code>java Main.java 1 2 3
+</code></pre>
+<p>これは次のようなイメージです。</p>
+<pre><code>javac -d &lt;memory&gt; Main.java
+java -cp &lt;memory&gt; Main 1 2 3
+</code></pre>
+<h2 id="5">javac コマンド</h2>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

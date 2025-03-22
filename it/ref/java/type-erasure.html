@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../../..">
+  <link rel="stylesheet" href="../../../style.css" />
+  <script defer type="text/javascript" src="../../../metadata.js"></script><script defer type="text/javascript" src="../../../script.js"></script><script defer type="text/javascript" src="../../../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../../../gtag.js"></script>
+  <title>Java の型消去 (Type Erasure)</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../../../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-07-07 ~ 2024-07-07
+      </div>
+      <div> <a class="tag" href="../../../index.html?tag=lang">lang</a> <a class="tag" href="../../../index.html?tag=java">java</a></div>
+      <div id="main-content">
+        <h1 id="">Java の型消去 (Type Erasure)</h1>
+<p>Java の型パラメタはコンパイル時に消去されます。<br>
+次のコードはその一例です。</p>
+<pre><code class="language-java">class G&lt;T&gt; {
+  G(T v) {}
+}
+
+public class Main {
+  public static void main(String[] args) {
+    // 静的な型検査はある。
+    // error: incompatible types: int cannot be converted to String
+    // var a = new G&lt;String&gt;(0);
+
+    // 実行時には型情報が落ちている。
+    var b = new G&lt;Integer&gt;(0);
+    var c = new G&lt;String&gt;("A");
+    System.out.println(b.getClass() == c.getClass()); // true
+  }
+}
+</code></pre>
+<p><code>G&lt;Integer&gt;</code> 型の変数と <code>G&lt;String&gt;</code> 型の変数が実行時に同じ型であることがわかります。</p>
+<h2 id="1">型消去による制約</h2>
+<p>実行時に型パラメタが不明なことによる制約がいくつかあります。</p>
+<h3 id="1.1">クラス変数が共有される</h3>
+<pre><code class="language-java">class G&lt;T&gt; {
+  static String value;
+  String getValue() { return this.value; }
+}
+
+public class Main {
+  public static void main(String[] args) {
+    var a = new G&lt;Integer&gt;();
+    var b = new G&lt;String&gt;();
+
+    // true
+    System.out.println(a.getValue() == b.getValue());
+  }
+}
+</code></pre>
+<details>
+<summary>C++ では共有されません。</summary>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+template &lt;typename T&gt; struct G { static int value; };
+template &lt;typename T&gt; int G&lt;T&gt;::value;
+
+int main() {
+  auto c = &amp;G&lt;int&gt;::value == &amp;G&lt;char&gt;::value ? "true" : "false";
+  // false
+  std::cout &lt;&lt; c &lt;&lt; std::endl;
+  return 0;
+}
+</code></pre>
+</details>
+<h2 id="2"><code>Throwable</code> の子孫が型パラメタを持てない。</h2>
+<h2 id="3">Java はなぜ型消去を選んだのか？</h2>
+<p>設計の理由として、</p>
+<ul>
+<li><a href="https://ja.wikipedia.org/wiki/%E5%9E%8B%E6%B6%88%E5%8E%BB">静的ディスパッチによるコード量の増加を嫌った</a></li>
+<li><a href="https://sinsengumi.hatenablog.com/entry/2011/12/generics%25ef%25bc%2588java%25ef%25bc%2589%25e3%2581%25ae%25e5%259e%258b%25e6%25b6%2588%25e5%258e%25bb%25e3%2581%25ab%25e3%2581%25a4%25e3%2581%2584%25e3%2581%25a6/">後方互換性が必要だった</a></li>
+</ul>
+<p>などの意見がある。</p>
+<hr />
+<p>参考 :</p>
+<ul>
+<li><a href="https://www.oracle.com/webfolder/technetwork/jp/javamagazine/Java-JA16-Generics.pdf">ジェネリクス：難解な部分を克服する</a></li>
+</ul>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

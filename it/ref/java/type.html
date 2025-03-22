@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../../..">
+  <link rel="stylesheet" href="../../../style.css" />
+  <script defer type="text/javascript" src="../../../metadata.js"></script><script defer type="text/javascript" src="../../../script.js"></script><script defer type="text/javascript" src="../../../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../../../gtag.js"></script>
+  <title>Java の型</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../../../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-05-03 ~ 2025-03-17
+      </div>
+      <div> <a class="tag" href="../../../index.html?tag=lang">lang</a> <a class="tag" href="../../../index.html?tag=java">java</a> <a class="tag" href="../../../index.html?tag=ref">ref</a></div>
+      <div id="main-content">
+        <h1 id="">Java の型</h1>
+<h2 id="1">整数・小数</h2>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">型</th><th style="text-align: left">対応するRustの型</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>byte</code></td><td style="text-align: left"><code>i8</code></td></tr>
+<tr><td style="text-align: left"><code>char</code></td><td style="text-align: left"><code>u16</code></td></tr>
+<tr><td style="text-align: left"><code>short</code></td><td style="text-align: left"><code>i16</code></td></tr>
+<tr><td style="text-align: left"><code>int</code></td><td style="text-align: left"><code>i32</code></td></tr>
+<tr><td style="text-align: left"><code>long</code></td><td style="text-align: left"><code>u64</code></td></tr>
+<tr><td style="text-align: left"><code>float</code></td><td style="text-align: left"><code>f32</code></td></tr>
+<tr><td style="text-align: left"><code>double</code></td><td style="text-align: left"><code>f64</code></td></tr>
+</tbody></table>
+</div>
+<p>整数のリテラルは <code>int</code> 型、小数のリテラルは <code>double</code> 型とみなされます。</p>
+<h3 id="1.1">暗黙キャスト</h3>
+<p>拡大方向には暗黙キャストできますが、縮小方向にはできません。</p>
+<pre><code class="language-txt">byte ─┬─▶ char ──┬─▶ int ───▶ long ───▶ float ───▶ double
+      │          │
+      └─▶ short ─┘
+</code></pre>
+<p>ただし、代入の右辺が <code>int</code> 型の定数式の場合は例外です。
+値が左辺の型の範囲に収まれば、暗黙的に縮小変換されます。</p>
+<pre><code class="language-java">final int x = 16;
+char a = (1 &lt;&lt; x) - 1; // 65535
+</code></pre>
+<p>収まらなければコンパイルエラーになります。</p>
+<pre><code class="language-java">final int x = 16;
+// エラー
+// char b = 1 &lt;&lt; x;
+</code></pre>
+<h3 id="1.2">Autoboxing, Autounboxing</h3>
+<p>整数型と対応する参照型とは、相互に暗黙変換されます。</p>
+<pre><code class="language-java">final var l = new ArrayList&lt;Object&gt;();
+
+// Boxing
+l.add(10);
+
+// class java.lang.Integer
+System.out.println(l.get(0).getClass());
+
+// Unboxing
+final int i = (Integer)l.get(0);
+</code></pre>
+<h3 id="1.3">汎整数拡張</h3>
+<p><code>int</code> より小さな整数型は、式中で <code>int</code> に拡張されます。</p>
+<pre><code class="language-java">char max = 65535;
+char a = 0, b = 0;
+
+a -= 1;
+System.out.println(a == max); // true
+System.out.println(b - 1 == max); // false
+</code></pre>
+<p><code>int</code> より大きな型には拡張されません。</p>
+<pre><code class="language-java">int x = (1 &lt;&lt; 32) - 1;         // 0
+int y = (int)((1L &lt;&lt; 32) - 1); // -1
+</code></pre>
+<h2 id="2">配列</h2>
+<p>Java の配列は固定長ですが、参照型です。
+また、型は長さ情報を持ちません。</p>
+<pre><code class="language-java">int[] a = { 0, 1, 2 };
+
+// class [I
+System.out.println(a.getClass());
+
+// 長さは違うが代入できる
+a = new int[]{0, 1};
+</code></pre>
+<p>宣言における <code>[]</code> の位置は柔軟です。</p>
+<pre><code class="language-java">// どちらでも良い
+int[] d;
+int e[];
+
+// 全て同じ型 (intの2次元配列)
+int[][] a;
+int[] b[];
+int c[][];
+</code></pre>
+<p>宣言時の初期化は3通りの方法があります。</p>
+<pre><code class="language-java">int[] a = new int[10];
+int[] b = new int[]{4, 5};
+int[] c = {0, 1};
+</code></pre>
+<p>サイズと初期値を同時に指定することはできません。</p>
+<pre><code class="language-java">// エラー
+var b = new int[2]{4, 5};
+</code></pre>
+<p>代入では <code>{0, 1}</code> のような書き方ができません。</p>
+<pre><code class="language-java">a = new int[10];
+b = new int[]{4, 5};
+
+// エラー
+// c = {0, 1, 2};
+</code></pre>
+<p>長さは動的に決められます。</p>
+<pre><code class="language-java">int n = 3;
+int[] c = new int[n];
+</code></pre>
+<p>多次元配列において、より左側に書かれる括弧が外側です。</p>
+<pre><code class="language-java">var a = new int[2][3];
+System.out.println(a.length); // 2
+</code></pre>
+<p>初期化時には、最も外側の要素数を確定させなくてはいけません。</p>
+<pre><code class="language-java">// 一番外側だけ確定していれば良い
+a = new int[2][];
+
+// エラー
+// b = new int[][];
+</code></pre>
+<p><code>arraycopy</code> で C の <code>memcpy</code> 相当の操作ができます。</p>
+<pre><code class="language-java">System.arraycopy(b, 0, c, 0, b.length);
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>
