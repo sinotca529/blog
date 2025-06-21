@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>(Python, Windows) open したファイルを削除・移動する</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-11-17 ~ 2024-12-07
+      </div>
+      <div> <a class="tag" href="../index.html?tag=python">python</a> <a class="tag" href="../index.html?tag=tips">tips</a></div>
+      <div id="toc"><ul><li><a href="#1">Windows では </a></li><li><a href="#2">Windows は使用中ファイルの削除を禁止していない</a></li><li><a href="#1">ではどうすればよいのか</a></li><li><a href="#2">まとめ</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">(Python, Windows) open したファイルを削除・移動する</h1>
+<p>本記事は Zenn に投稿したものと同様の内容です。</p>
+<h2 id="1">Windows では <code>open</code> 中のファイルを消せない</h2>
+<p>次のコードで、 <code>input</code> で処理を止めている間に <code>text.txt</code> を削除してみましょう。</p>
+<pre><code class="language-py">with open("./test.txt", "w") as f:
+    # ここで test.txt を消す
+    input()
+</code></pre>
+<p>Linux ではファイルを削除できますが、 Windows ではエラーになります。</p>
+<p>ファイルの移動も同様です。
+この問題をなんとかしましょう。</p>
+<h2 id="2">Windows は使用中ファイルの削除を禁止していない</h2>
+<p>実は、 Windows でも使用中のファイルを消せる場合があります。</p>
+<p>Windows でファイルを開く際に使う <a href="https://learn.microsoft.com/ja-jp/windows/win32/api/fileapi/nf-fileapi-createfilew"><code>CreateFileW</code></a> のドキュメントを見てみましょう。引数 <code>dwShareMode</code> について、次のように書かれています。</p>
+<blockquote>
+<p>[in] dwShareMode</p>
+<p>ファイルまたはデバイスの要求された共有モード。読み取り、書き込み、両方、<strong>削除</strong>、これらすべて、またはなしを指定できます (次の表を参照)。 属性または拡張属性へのアクセス要求は、このフラグの影響を受けません。</p>
+</blockquote>
+<p><code>dwShareMode</code> に適切なフラグを渡せば、使用中のファイルを削除・移動できるのです。</p>
+<h1 id="">Python の <code>open</code> は削除許可フラグをセットしない</h1>
+<p>なぜ Python で <code>open</code> 中のファイルは消せないのでしょうか。
+CPython における <code>open</code> の実装を見てみましょう (<a href="https://github.com/python/cpython/blob/9d6366b60d01305fc5e45100e0cd13e358aa397d/Modules/_io/fileio.c#L406">該当コード</a>)。</p>
+<pre><code class="language-c:fileio.c">#ifdef MS_WINDOWS
+    self-&gt;fd = _wopen(widename, flags, 0666);
+#else
+    self-&gt;fd = open(name, flags, 0666);
+#endif
+</code></pre>
+<p><code>_wopen</code> が呼ばれています。
+では、 <code>_wopen</code> の定義<sup class="footnote-reference"><a href="#1">1</a></sup>を見てみましょう。</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Visual Studio の定義ジャンプを使うと見ることができます。</p>
+</div>
+<pre><code class="language-cpp:corecrt_wio.h">inline int __CRTDECL _wopen(
+    _In_z_ wchar_t const* _FileName,
+    _In_   int            _OFlag,
+    _In_   int            _PMode = 0
+    )
+{
+    int _FileHandle;
+    // Last parameter passed as 0 because we don't want to validate pmode from _open
+    errno_t const _Result = _wsopen_dispatch(_FileName, _OFlag, _SH_DENYNO, _PMode, &amp;_FileHandle, 0);
+    return _Result ? -1 : _FileHandle;
+}
+</code></pre>
+<p><code>_SH_DENYNO</code> が目につきます。これは<a href="https://learn.microsoft.com/ja-jp/cpp/c-runtime-library/sharing-constants?view=msvc-170">共有モード変数</a>と呼ばれています。<code>CreateFileW</code> の <code>dwShareMode</code> では、読み・書き・削除を設定できましたが、こちらはどうでしょうか。</p>
+<p>残念なことに、共有モード変数では、読み・書きの設定しかできません。 <code>_SH_DENYNO</code> の場合、読み・書きは許可されますが、削除は許可されません<sup class="footnote-reference"><a href="#3">2</a></sup>。</p>
+<div class="footnote-definition" id="3"><sup class="footnote-definition-label">2</sup>
+<p>このことはドキュメントには明記されていませんが、 <a href="https://devblogs.microsoft.com/oldnewthing/20211022-00/?p=105822">Micorosoft のブログ</a> で言及されています。</p>
+</div>
+<p>つまり、 CPython の提供する <code>open</code> では、削除を許可するフラグがセットされないのです。</p>
+<h2 id="1">ではどうすればよいのか</h2>
+<p><code>CreateFileW</code> 関数に適切なフラグを渡せば削除を許可できます。ならば、 <code>open</code> の実装をそのように上書きしてしまえばよいのです<sup class="footnote-reference"><a href="#4">3</a></sup>。</p>
+<p>ありがたいことに、 <code>open</code> 関数には <code>opener</code> という引数があります。 <code>opener</code> に、「<code>path</code> と <code>flags</code> を受け取ってファイルディスクリプタを返す処理」を渡すと、 <code>open</code> がそれを使ってファイルを開いてくれます。これを使いましょう。</p>
+<div class="footnote-definition" id="4"><sup class="footnote-definition-label">3</sup>
+<p>モンキーパッチと呼ばれる手法です。</p>
+</div>
+<p>具体的には次のようにします。
+(フラグの設定やエラー処理等に問題がありましたら、コメントいただけると幸いです。)</p>
+<pre><code class="language-python">import sys
+
+if sys.platform == "win32":
+    import os
+    import ctypes
+    import builtins
+
+    #----------------------------------
+    # Win32API の関数を使う準備
+    #----------------------------------
+
+    from ctypes.wintypes import HANDLE, LPCWSTR, DWORD
+    from ctypes import c_void_p, c_bool, POINTER
+    import msvcrt
+
+    GENERIC_READ = 0x80000000
+    GENERIC_WRITE = 0x40000000
+
+    FILE_SHARE_READ = 0x00000001
+    FILE_SHARE_WRITE = 0x00000002
+    FILE_SHARE_DELETE = 0x00000004
+
+    CREATE_NEW = 1
+    CREATE_ALWAYS = 2
+    OPEN_EXISTING = 3
+    OPEN_ALWAYS = 4
+
+    FILE_ATTRIBUTE_NORMAL = 0x00000080
+
+    CreateFileW = ctypes.windll.kernel32.CreateFileW
+    CreateFileW.argtypes = [LPCWSTR, DWORD, DWORD, c_void_p, DWORD, DWORD, HANDLE]
+    CreateFileW.restype = HANDLE
+    INVALID_HANDLE_VALUE = HANDLE(-1).value
+
+    CloseHandle = ctypes.windll.kernel32.CloseHandle
+    CloseHandle.argtypes = [HANDLE]
+    CloseHandle.restype = c_bool
+
+    #----------------------------------
+    # CreateFileW でファイルを開く関数
+    #----------------------------------
+
+    def custom_opener(path, flags):
+        match flags &amp; 0b11:
+            case os.O_RDONLY: # 0
+                access = GENERIC_READ
+            case os.O_WRONLY: # 1
+                access = GENERIC_WRITE
+            case os.O_RDWR: # 2
+                access = GENERIC_READ | GENERIC_WRITE
+            case _:
+                raise OSError(f'Unexpected flags: {flags}')
+
+        if flags &amp; os.O_CREAT:
+            if flags &amp; os.O_TRUNC: # w
+                create = CREATE_ALWAYS
+            elif flags &amp; os.O_APPEND: # a
+                create = OPEN_ALWAYS
+            elif flags &amp; os.O_EXCL: # x
+                create = CREATE_NEW
+            else:
+                raise OSError(f'Unexpected flags: {flags}')
+        else: # r
+            create = OPEN_EXISTING
+
+        handle = CreateFileW(
+            path,
+            access,
+            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+            None,
+            create,
+            FILE_ATTRIBUTE_NORMAL,
+            None,
+        )
+        if handle == INVALID_HANDLE_VALUE:
+            raise ctypes.WinError()
+
+        # この fd は _close で閉じなくてはならない。
+        # handle に対して CloseHandle を呼んではならない。
+        # CPython の builtin.close は _close (のエイリアスである close) で閉じてくれる。
+        # - https://learn.microsoft.com/ja-jp/cpp/c-runtime-library/reference/posix-close?view=msvc-170
+        # - https://github.com/python/cpython/blob/31c9f3ced293492b38e784c17c4befe425da5dab/Modules/_io/fileio.c#L128
+        fd = msvcrt.open_osfhandle(handle, flags)
+        if fd == -1:
+            if CloseHandle(handle) != 0:
+                raise ctypes.WinError()
+            raise OSError('Failed to convert handle to fd.')
+
+        # Append の場合はファイル末尾にシークする
+        if flags &amp; os.O_APPEND:
+            os.lseek(fd, 0, os.SEEK_END)
+
+        return fd
+
+    #----------------------------------
+    # open の実装を上書き
+    #----------------------------------
+
+    original_open = builtins.open
+
+    def patched_open(file, mode="r", buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=custom_opener):
+        return original_open(file, mode, buffering, encoding, errors, newline, closefd, opener)
+
+    builtins.open = patched_open
+
+if __name__ == "__main__":
+    with open("test.txt", "w") as f:
+        # test.txt を削除・移動できる
+        input()
+</code></pre>
+<p>これで、 <code>open</code> 中のファイルを削除・移動できるようになりました。</p>
+<h2 id="2">まとめ</h2>
+<p>Windows 環境において、 Python で <code>open</code> 中のファイルを削除・移動できない問題と、その対処法を紹介しました。
+移植等で挙動の違いに悩んでいる人の助けになればと思います。</p>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

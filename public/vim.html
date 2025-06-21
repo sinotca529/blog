@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>vim 簡易リファレンス</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-09-29 ~ 2025-01-21
+      </div>
+      <div> <a class="tag" href="../index.html?tag=ref">ref</a> <a class="tag" href="../index.html?tag=vim">vim</a></div>
+      <div id="toc"><ul><li><a href="#1">ファイルの暗号化</a></li><li><a href="#2">エンコードを指定して開きなおす</a></li><li><a href="#3">バイナリファイルを開く</a></li><li><a href="#4">タブ文字を表示する</a></li><li><a href="#5">Netrw (ファイラ)</a></li><li><a href="#6">正規表現</a></li><li><a href="#7">レジスタ</a></li><li><a href="#8">sudo</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">vim 簡易リファレンス</h1>
+<h2 id="1">ファイルの暗号化</h2>
+<pre><code class="language-sh"># 開くときに暗号化
+vim -x file
+
+# パスワード変更 (新パスワードを未入力にすると暗号化解除)
+vim +X file
+</code></pre>
+<ul>
+<li>編集中に暗号化を有効にするには、 <code>:X</code> を押します。</li>
+<li>暗号化方式を指定するには <code>:set cryptmethod</code> を使用します。</li>
+</ul>
+<h2 id="2">エンコードを指定して開きなおす</h2>
+<pre><code class="language-vim">:e ++enc=sjis
+</code></pre>
+<h2 id="3">バイナリファイルを開く</h2>
+<p><code>xxd</code> コマンドを利用する。</p>
+<ol>
+<li><code>vim -b file</code> で開く</li>
+<li><code>:%!xxd</code> でバイナリ表示</li>
+<li>編集する</li>
+<li><code>:%!xxd -r</code> で元に戻す</li>
+</ol>
+<h2 id="4">タブ文字を表示する</h2>
+<pre><code class="language-vim">:set list listchars=tab:&gt;-
+</code></pre>
+<h2 id="5">Netrw (ファイラ)</h2>
+<p>基本操作</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
+<tr><td style="text-align: left">開く</td><td style="text-align: left"><code>:e .</code></td></tr>
+<tr><td style="text-align: left">ディレクトリ作成</td><td style="text-align: left"><code>d</code></td></tr>
+<tr><td style="text-align: left">ファイル作成</td><td style="text-align: left"><code>%</code></td></tr>
+<tr><td style="text-align: left">削除</td><td style="text-align: left"><code>D</code></td></tr>
+<tr><td style="text-align: left">mv</td><td style="text-align: left"><code>R</code></td></tr>
+</tbody></table>
+</div>
+<p>高度な操作</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
+<tr><td style="text-align: left">親ディレクトリへ</td><td style="text-align: left"><code>-</code></td></tr>
+<tr><td style="text-align: left">ファイルのマーク</td><td style="text-align: left"><code>mf</code></td></tr>
+<tr><td style="text-align: left">移動先ディレクトリのマーク</td><td style="text-align: left"><code>mt</code></td></tr>
+<tr><td style="text-align: left"><code>mf</code> したものを <code>mt</code> した場所へコピー</td><td style="text-align: left"><code>mc</code></td></tr>
+<tr><td style="text-align: left"><code>mf</code> したものを <code>mt</code> した場所へ移動</td><td style="text-align: left"><code>mm</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="6">正規表現</h2>
+<p>TODO</p>
+<h2 id="7">レジスタ</h2>
+<p>TODO</p>
+<h2 id="8">sudo</h2>
+<p><code>sudo vim file</code> は推奨されません。
+起動した vim の中で作成したファイルの権限が root になってしまうからです。
+変わりに <code>vim-suda</code> などのプラグインが利用されます。</p>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

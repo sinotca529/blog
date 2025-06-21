@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>ROT</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-05-03 ~ 2024-05-03
+      </div>
+      <div> <a class="tag" href="../index.html?tag=tool">tool</a></div>
+      <div id="toc"><ul><li><a href="#1">アルファベット</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">ROT</h1>
+<h2 id="1">アルファベット</h2>
+<p><span id="prompt">ROT00: </span><input type="text" id="plaintext" oninput="encrypt()" value="Input Here..." /><br>
+<span id="ciphertext"></span></p>
+<script>
+let A = 'A'.charCodeAt(0);
+let Z = 'Z'.charCodeAt(0);
+let a = 'a'.charCodeAt(0);
+let z = 'z'.charCodeAt(0);
+
+window.onload = encrypt;
+
+function encrypt() {
+  const plaintext = document.getElementById('plaintext').value;
+  let result = '';
+
+  for (let rot = 1; rot <= 25; rot++) {
+    let ciphertext = '';
+    for (let i = 0; i < plaintext.length; i++) {
+      let charCode = plaintext.charCodeAt(i);
+      let isUppercase = charCode >= A && charCode <= Z;
+      let isLowercase = charCode >= a && charCode <= z;
+
+      if      (isUppercase) ciphertext += shiftCharCode(charCode, rot, A);
+      else if (isLowercase) ciphertext += shiftCharCode(charCode, rot, a);
+      else                  ciphertext += plaintext.charAt(i);
+    }
+    result += `ROT${String(rot).padStart(2, '0')}: ${ciphertext}<br>`;
+  }
+  document.getElementById('ciphertext').innerHTML = result;
+}
+
+function shiftCharCode(charCode, rot, baseCharCode) {
+  return String.fromCharCode(((charCode - baseCharCode + rot) % 26) + baseCharCode);
+}
+</script>
+<style>
+#ciphertext, #plaintext, #prompt {
+  font-family: "Courier New", Courier, monospace;
+  font-size: initial;
+}
+
+#plaintext {
+  padding-block: 0;
+  padding-inline: 0;
+  padding: 0;
+  border-width: 0;
+  background-color: lightgray;
+  font-size: initial;
+}
+</style>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

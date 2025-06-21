@@ -1,0 +1,95 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.5.1 Safari/537.36" version="27.0.9">
+  <diagram name="Page-1" id="GlMDydXvoTbEjri6rbZK">
+    <mxGraphModel dx="933" dy="950" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="0R5918TEVM5o_PrHlFFG-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="490" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-3" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="400" width="160" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="0R5918TEVM5o_PrHlFFG-5" target="0R5918TEVM5o_PrHlFFG-34">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="330" y="460" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="325" y="415" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-5" value="CONTROL_FILES" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="60" y="400" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-7" value="データファイルの場所" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="280" y="490" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-8" value="REDOログファイルの場所" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="280" y="520" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-12" value="MEMORY_MAX_TARGET" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="60" y="430" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-13" value="SGA_MAX_SIZE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="60" y="460" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-19" value="..." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="60" y="490" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-20" value="..." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="280" y="550" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-21" value="" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="380" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-24" value="" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="390" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-25" value="" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-26" value="" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="550" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-28" value="" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="560" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-29" value="" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="570" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="0R5918TEVM5o_PrHlFFG-7" target="0R5918TEVM5o_PrHlFFG-35">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="415" as="sourcePoint" />
+            <mxPoint x="550" y="460" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="470" y="505" />
+              <mxPoint x="470" y="365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;dashed=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="0R5918TEVM5o_PrHlFFG-8" target="0R5918TEVM5o_PrHlFFG-36">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="471.65" y="580" as="sourcePoint" />
+            <mxPoint x="549.65" y="438" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="470" y="535" />
+              <mxPoint x="470" y="535" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-33" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;初期化パラメタファイル&lt;/span&gt;&lt;div style=&quot;text-wrap-mode: nowrap;&quot;&gt;$ORACLE_HOME/dbs/spfile&amp;lt;SID&amp;gt;.ora&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=default;strokeColor=none;align=left;" vertex="1" parent="1">
+          <mxGeometry x="60" y="355" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-34" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;制御ファイル&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=default;strokeColor=none;align=left;" vertex="1" parent="1">
+          <mxGeometry x="280" y="460" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-35" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;データファイル&lt;/span&gt;&lt;div&gt;$ORACLE_BASE/oradata/&amp;lt;SID&amp;gt;/&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=default;strokeColor=none;align=left;" vertex="1" parent="1">
+          <mxGeometry x="530" y="350" width="210" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="0R5918TEVM5o_PrHlFFG-36" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;REDOログファイル&lt;/span&gt;&lt;div&gt;$ORACLE_BASE/oradata/&amp;lt;SID&amp;gt;/&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=default;strokeColor=none;align=left;" vertex="1" parent="1">
+          <mxGeometry x="530" y="520" width="190" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

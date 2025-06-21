@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>VBA 簡易リファレンス</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-09-29 ~ 2024-09-29
+      </div>
+      <div> <a class="tag" href="../index.html?tag=ref">ref</a> <a class="tag" href="../index.html?tag=vba">vba</a> <a class="tag" href="../index.html?tag=lang">lang</a></div>
+      <div id="toc"><ul><li><a href="#1">型</a></li><li><a href="#2">ユーザー定義型</a></li><li><a href="#3">キャスト</a></li><li><a href="#4">配列</a></li><li><a href="#5">辞書型</a></li><li><a href="#6">制御構文</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">VBA 簡易リファレンス</h1>
+<h2 id="1">型</h2>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">型</th><th style="text-align: left">備考</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>Boolean</code></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><code>Byte</code></td><td style="text-align: left">8-bit 整数</td></tr>
+<tr><td style="text-align: left"><code>Integer</code></td><td style="text-align: left">16-bit 整数</td></tr>
+<tr><td style="text-align: left"><code>Long</code></td><td style="text-align: left">32-bit 整数</td></tr>
+<tr><td style="text-align: left"><code>LongLong</code></td><td style="text-align: left">64-bit 整数</td></tr>
+<tr><td style="text-align: left"><code>Single</code></td><td style="text-align: left">32-bit 浮動小数点数</td></tr>
+<tr><td style="text-align: left"><code>Double</code></td><td style="text-align: left">64-bit 浮動小数点数</td></tr>
+<tr><td style="text-align: left"><code>Decimal</code></td><td style="text-align: left">10進変数。宣言できない。</td></tr>
+<tr><td style="text-align: left"><code>Collection</code></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><code>Currency</code></td><td style="text-align: left">通貨。</td></tr>
+<tr><td style="text-align: left"><code>Date</code></td><td style="text-align: left">100/01/01 から 9999/12/31</td></tr>
+<tr><td style="text-align: left"><code>Dictionary</code></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><code>Object</code></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><code>String</code></td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<h2 id="2">ユーザー定義型</h2>
+<pre><code class="language-vba">' 型宣言
+Type UserType
+    Name As String
+    Age As Integer
+End Type
+
+' 利用
+Dim User As UserType
+User.Name = "太郎"
+User.Age = 22
+</code></pre>
+<h2 id="3">キャスト</h2>
+<h2 id="4">配列</h2>
+<pre><code class="language-vba">' 宣言
+Dim Array(10) As Integer
+
+' 初期化
+Dim I As Integer
+For I = 0 to 10
+    Array(I) = I
+Next I
+</code></pre>
+<p>宣言時にインデックスの範囲を明示することもできます。</p>
+<pre><code class="language-vba">Dim Array(3 To 8) As Integer
+</code></pre>
+<p>2次元配列を宣言するには次のようにします。</p>
+<pre><code class="language-vba">Dim Matrix(10, 20) As Integer
+</code></pre>
+<h2 id="5">辞書型</h2>
+<pre><code class="language-vba">' 宣言・初期化
+Dim d
+Set d = CreateObject("Scripting.Dictionary")
+
+' 追加
+d.Add "a", "Athens"
+d.Add "b", "Belgrade"
+d.Add "c", "Cairo"
+</code></pre>
+<h2 id="6">制御構文</h2>
+<p>While ループ</p>
+<pre><code class="language-vba">Do While &lt;COND&gt;
+    ...
+    Exit Do
+LOOP
+</code></pre>
+<p>Do While ループ</p>
+<pre><code class="language-vba">Do Until &lt;COND&gt;
+    ...
+    Exit Do
+LOOP
+</code></pre>
+<p>For ループ</p>
+<pre><code class="language-vba">For I = 1 To 10
+    ...
+    Exit For
+Next I
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

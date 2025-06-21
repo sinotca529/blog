@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>Java 文法まとめ</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-05-03 ~ 2025-03-17
+      </div>
+      <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">拡張 for</a></li><li><a href="#2">型推論 (Java10 以降)</a></li><li><a href="#3">ラベル</a></li><li><a href="#4">コンスタントプール</a></li><li><a href="#5">アクセス修飾子</a></li><li><a href="#6">コンストラクタ</a></li><li><a href="#7">シグネチャ (sigature)</a></li><li><a href="#8">オーバーライド (override)</a></li><li><a href="#9">オーバーロード (overload)</a></li><li><a href="#10">ジェネリクス</a></li><li><a href="#11">インタフェース</a></li><li><a href="#12">実現 (implements) の条件</a></li><li><a href="#13">多重継承・多重実現と名前衝突</a></li><li><a href="#14">switch 文</a></li><li><a href="#15">初期化子</a></li><li><a href="#16">可変長引数</a></li><li><a href="#17">例外処理</a></li><li><a href="#18">関数型インタフェースとラムダ式 (Java8)</a></li><li><a href="#19">用語</a></li><li><a href="#20">他言語との違い</a></li><li><a href="#21">MISC</a></li><li><a href="#22">参考</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">Java 文法まとめ</h1>
+<h2 id="1">拡張 for</h2>
+<p>配列に対して拡張 for を書けます。</p>
+<pre><code class="language-java">int[] arr = {1, 2, 3};
+for (int e: arr) System.out.println(e);
+</code></pre>
+<p>イテレータに対しても拡張 for を書けます。</p>
+<pre><code class="language-java">for (int e: list) System.out.println(e);
+</code></pre>
+<p>このコードは次のコードに厳密に対応します。</p>
+<pre><code class="language-java">for (var i = list.iterator(); i.hasNext();) {
+  int e = (int) i.next();
+  System.out.println(e);
+}
+</code></pre>
+<h2 id="2">型推論 (Java10 以降)</h2>
+<pre><code class="language-java">// int
+var a = 1;
+
+// double
+var b = 1.0 ;
+
+// エラー
+var c = {1, 2, 3};
+
+// ArrayList&lt;Object&gt;
+var d = new ArrayList&lt;&gt;();
+</code></pre>
+<h2 id="3">ラベル</h2>
+<p>多重ループを抜けるにはラベルが便利です。</p>
+<pre><code class="language-java">outer: for (int i = 0; i &lt; 5; i++) {
+  inner: for (int j = 0; j &lt; 5; i++) {
+    if (i == 2 &amp;&amp; j == 2) break outer;
+  }
+}
+</code></pre>
+<p>ラベルはブロックにも使えます。<br>
+<code>if (a == 1)</code> は、<code>break</code> より後ろが到達不能判定されないようにするための分岐です。
+これがないとコンパイルエラーになります。</p>
+<pre><code class="language-java">int a = 0;
+block: {
+  a = 1;
+  if (a == 1) break block;
+  a = 2;
+}
+
+System.out.println(a); // 1
+</code></pre>
+<p>その他、 <code>if</code>, <code>do while</code> にもラベルをつけられます。
+ただし、変数宣言にはラベルをつけられません。</p>
+<p>ラベルは式にもつけられますが、実用上の意味はありません。
+<code>goto</code> が予約語であること踏まえると、言語仕様制定時の名残かもしれません。</p>
+<h2 id="4">コンスタントプール</h2>
+<p>TODO</p>
+<h2 id="5">アクセス修飾子</h2>
+<div class="table-wrapper"><table><thead><tr><th>修飾子</th><th style="text-align: center">クラス内</th><th style="text-align: center">同PKG</th><th style="text-align: center">別PKG 子クラス</th><th style="text-align: center">別PKG 非子クラス</th></tr></thead><tbody>
+<tr><td><code>public</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td></tr>
+<tr><td><code>protected</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
+<tr><td>-</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
+<tr><td><code>private</code></td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
+</tbody></table>
+</div>
+<h2 id="6">コンストラクタ</h2>
+<ul>
+<li>ユーザ定義コンストラクタがある場合、デフォルトコンストラクタは定義されない。</li>
+<li><code>super()</code> や <code>this()</code> はコンストラクタの先頭で合計1回しか呼べない。</li>
+</ul>
+<h2 id="7">シグネチャ (sigature)</h2>
+<p>Java においてシグネチャは、 (メソッド名, 型パラメタ, 引数の型) を指します。(<a href="https://docs.oracle.com/javase/specs/jls/se23/html/jls-8.html#jls-8.4.2">JLS 8.4.2 Method Signature</a>)
+ここで「型パラメタ」は、ジェネリックメソッドのパラメタを指しています。
+アクセス修飾子や戻り型は含まれません。</p>
+<p>シグネチャ <code>s</code>, <code>t</code> について、「それらが同じである」か「<code>t</code> に型消去をすると <code>s</code> に一致する」場合、 <code>s</code> は <code>t</code> のサブシグネチャであるといい、 <code>s ▷ t</code> と書きます (この記法はこの記事独自のものです)。
+<code>s ▷ t</code> か <code>t ▷ s</code> であるとき、 <code>s</code>, <code>t</code> はオーバーライド等価であるといいます。</p>
+<h2 id="8">オーバーライド (override)</h2>
+<p>子クラスのメソッドのシグネチャを <code>c</code>、親クラスのメソッドのシグネチャを <code>p</code> とします。
+<code>c</code> が <code>p</code> をオーバーライドできる必要条件は、 <code>c ▷ p</code> であることです (<a href="https://docs.oracle.com/javase/specs/jls/se23/html/jls-8.html#jls-8.4.8.1">JLS 8.4.8.1. Overriding (by Instance Methods)</a>)。</p>
+<p>そのため、次は違法です。</p>
+<pre><code class="language-java">class A {
+  void m(ArrayList&lt;String&gt; a) {}
+}
+
+class B extends A {
+  // A.m のサブシグネチャではないのでコンパイルエラー
+  @Override
+  void m(List&lt;String&gt; a) {}
+}
+</code></pre>
+<h2 id="9">オーバーロード (overload)</h2>
+<p>メソッド <code>a</code> と <code>b</code> について、それぞれのシグネチャを <code>sa</code> と <code>sb</code> とおきます。
+<code>sa</code> と <code>sb</code> の名前が同じで、かつ <code>sa</code> と <code>sb</code> がオーバーライド等価でないとき、オーバーロードが起きます。 (<a href="https://docs.oracle.com/javase/specs/jls/se23/html/jls-8.html#jls-8.4.9">JLS 8.4.9. Overloading</a>)</p>
+<pre><code class="language-java">class A {}
+class B extends A {}
+
+class Err {
+  // OK
+  void normal(A a) {} // シグネチャ : (normal, (), (A))
+  void normal(B b) {} // シグネチャ : (normal, (), (B))
+
+  // OK
+  void outer(List&lt;A&gt; a) {}      // シグネチャ : (outer, (), List&lt;A&gt;)
+  void outer(ArrayList&lt;A&gt; a) {} // シグネチャ : (outer, (), ArrayList&lt;A&gt;)
+
+  // NG
+  void param(List&lt;String&gt; s) {}  // シグネチャ : (param, (), List&lt;String&gt;)
+  void param(List&lt;Integer&gt; i) {} // シグネチャ : (param, (), List&lt;Integer&gt;)
+}
+</code></pre>
+<h2 id="10">ジェネリクス</h2>
+<p>Java のジェネリクスは非変です。</p>
+<h2 id="11">インタフェース</h2>
+<p>メソッドは暗黙的に <code>abstract public</code> になります。
+<code>public</code> 以外のアクセス指定子はつけられません。</p>
+<pre><code class="language-java">public interface I {
+  // 暗黙的に public abstract
+  void a();
+
+  // 明示的に書いても良い
+  public abstract void b();
+
+  // エラー
+  private abstract void c();
+}
+</code></pre>
+<p>メンバは暗黙的に <code>public static final</code> になります。
+<code>public</code> 以外のアクセス指定子はつけられません。</p>
+<pre><code class="language-java">public interface I {
+  // 暗黙的に public static final
+  int A = 10;
+
+  // 明示的に書いても良い
+  static final int B = 10;
+
+  // エラー
+  private int C = 10;
+}
+</code></pre>
+<p>特に意味はありませんが、 <code>abstract interface I {}</code> は合法です。</p>
+<blockquote>
+<p>[!NOTE] &gt; <strong>なぜ default キーワードが必要なのか？</strong></p>
+<p>おそらくコンパイラの都合でしょう。
+もし <code>default</code> キーワードがない場合、コンパイラは <code>{}</code> か <code>;</code> までトークンを読み進めないと、それが抽象メソッドなのか具象メソッドなのかを判定できません。
+<code>default</code> キーワードがあれば、先読みなしに抽象/具象を特定できます。</p>
+<p>他にも、 <code>public static final</code> や <code>public abstract</code> を省略できるのは、定数・メソッドの修飾子は1種類しか許可されないので省略を許してもコンパイラが先読みしなくて済むからだと解釈できます。
+また、抽象クラスでは抽象メソッドに <code>abstract</code> をつける必要があるのも同じように解釈できます。
+<code>default</code> を必須にするか <code>abstract</code> を必須にするかでダブスタ感がありますが、そこは目をつぶりましょう。</p>
+</blockquote>
+<h2 id="12">実現 (implements) の条件</h2>
+<p>実現すべきメソッドを自分で定義する必要はありません。
+親クラスから継いだものでも構いません。</p>
+<pre><code class="language-java">interface I {
+  int method();
+}
+
+class B {
+  public int method() { return 1; }
+}
+
+class E extends B implements I {
+}
+
+void main(String[] args) {
+  E e = new E();
+  System.out.println(e.method()); // 1
+}
+</code></pre>
+<h2 id="13">多重継承・多重実現と名前衝突</h2>
+<p>クラスには複数のインタフェースを実装できます。
+Java8 以降はインタフェースにデフォルトメソッドが実装できるので、多重継承における名前衝突への対処が必要です。</p>
+<p>名前解決には次のルールがあります :</p>
+<ol>
+<li>親クラスに実装があれば、インタフェースの状況によらずそれを採用する。</li>
+<li>オーバーライド関係の半順序集合 (親 &lt; 子) に最大元があれば、それを採用する。</li>
+<li>それ以外の場合、コンパイルエラーとする。</li>
+</ol>
+<p>次の例では、ルール1によって <code>C1.m</code> が選択されます。</p>
+<pre><code class="language-java">interface I1 { default String m() { return "I1";} }
+class C1 { public String m() { return "C1"; } }
+class C2 extends C1 {}
+
+class E extends C2 implements I1 {}
+
+void main(String[] args) {
+  // C1
+  System.out.println((new E()).m());
+}
+</code></pre>
+<p>次の例では、ルール2によって <code>I2.m</code> が選択されます。</p>
+<pre><code class="language-java">interface I1 { default String m() { return "I1";} }
+interface I2 extends I1 { default String m() { return "I2";} }
+interface I3 extends I1 {}
+
+class E implements I1, I2, I3 {}
+
+void main(String[] args) {
+  // I2
+  System.out.println((new E()).m());
+}
+</code></pre>
+<p>次の例では、ルール3によってコンパイルエラーになります。</p>
+<pre><code class="language-java">interface I1 { default String m() { return "I1";} }
+interface I2 { default String m() { return "I2";} }
+
+// コンパイルエラー
+class E implements I1, I2 {}
+
+void main(String[] args) {
+  System.out.println((new E()).m());
+}
+</code></pre>
+<p>明示的に実装を与えればエラーは解消します。</p>
+<pre><code class="language-java">interface I1 { default String m() { return "I1";} }
+interface I2 { default String m() { return "I2";} }
+
+class E implements I1, I2 {
+  public String m() {
+    return I1.super.m() + " + " + I2.super.m();
+  }
+}
+
+void main(String[] args) {
+  // I1 + I2
+  System.out.println((new E()).m());
+}
+</code></pre>
+<p>なお、 <code>I1.super.m()</code> を書けるのは <code>I1</code> を直接実現している場合だけです。</p>
+<h2 id="14">switch 文</h2>
+<p><code>switch</code> できる型は以下のいずれか :</p>
+<ul>
+<li><code>int</code> 以下の整数型とそのラッパ</li>
+<li><code>String</code></li>
+<li><code>enum</code></li>
+</ul>
+<p><code>case</code> におけるのは以下のいずれか :</p>
+<ul>
+<li>定数 (<code>final</code> またはリテラル)</li>
+<li>コンパイル時に値が決まる</li>
+</ul>
+<p><code>case</code> が exhaustive である必要はありません。
+<code>default</code> は最後でない場所に書いても構いません。</p>
+<h2 id="15">初期化子</h2>
+<pre><code class="language-java">public class Sample {
+  // 初期化子
+  {
+    System.out.println("コンストラクタの処理前に呼ばれる")
+  }
+
+  Sample() {
+    System.out.println("初期化子のあとに呼ばれる")
+  }
+}
+</code></pre>
+<h2 id="16">可変長引数</h2>
+<pre><code class="language-java">public class Main {
+  static void varargsMethod(int... a) {
+    // class [I
+    System.out.println(a.getClass());
+  }
+
+  static void arrayMethod(int[] a) {
+    // class [I
+    System.out.println(a.getClass());
+  }
+
+  public static void main(String[] args) {
+    varargsMethod(new int[]{1, 2, 3}); // OK
+    varargsMethod(1, 2, 3);            // OK
+
+    arrayMethod(new int[]{1, 2, 3});   // OK
+    // arrayMethod(1, 2, 3);           // NG
+  }
+}
+</code></pre>
+<h2 id="17">例外処理</h2>
+<dl>
+<dt>Error (エラー)</dt>
+<dd>回復が困難なエラー。 OOM や assert 失敗など。</dd>
+<dt>Exception (例外)</dt>
+<dd>まだ回復の余地があるエラー。0除算、ヌルポ、範囲外参照など。</dd>
+<dt>チェック例外 (検査例外)</dt>
+<dd><code>throws</code> や <code>try cache</code> の記述が必須な例外。
+<code>RuntimeException</code> 以外の <code>Exception</code> が該当。</dd>
+<dt>非チェック例外 (非検査例外)</dt>
+<dd><code>throws</code> や <code>try cache</code> の記述が不要な例外。
+<code>Error</code> と <code>RuntimeException</code> が該当。</dd>
+</dl>
+<pre><code class="language-txt">Throwable
+  Error
+    OutOfMemory
+    ...
+    &lt;ユーザー定義エラー&gt;
+  Exception
+    RuntimeException
+    IOException
+    ...
+    &lt;ユーザ定義例外&gt;
+</code></pre>
+<ul>
+<li><code>catche</code> はより具体的な型に対するものから並べる必要があります。</li>
+</ul>
+<h2 id="18">関数型インタフェースとラムダ式 (Java8)</h2>
+<p>関数型インタフェースは抽象メソッドを1つだけ持つインタフェースを指し、 <code>@FunctionalInterface</code> アノテーションをつけて明示します。
+アノテーションは省略可能ですが、つけておくと関数型インタフェースの条件を満たしていない場合にコンパイルエラーとすることができます。</p>
+<pre><code class="language-java">@FunctionalInterface
+interface Adder&lt;T&gt; { T add(T a, T b); }
+</code></pre>
+<p>Java のラムダ式は、関数型インタフェースを実装した無名クラスのインスタンスを生成する式です。</p>
+<pre><code class="language-java">// Adder を実装した無名クラスのインスタンスを生成
+Adder&lt;Integer&gt; r = (a, b) -&gt; a + b;
+System.out.println(r.getClass()); // class Main$$Lambda/0x00007f828b154408
+System.out.println(r.add(2, 3));  // 5
+</code></pre>
+<p>引数名として、スコープにある変数と同じ名前は使えません (shadowing はできません)。</p>
+<pre><code class="language-java">var a = 10;
+Adder&lt;Integer&gt; r = (a, b) -&gt; a + b;
+</code></pre>
+<p>ラムダ式は、式の外にある変数のうち、宣言に <code>final</code> がついている (または付けてもコンパイルが通る) ものを参照できます。</p>
+<pre><code class="language-java">var offset = 10;
+Adder&lt;Integer&gt; r = (a, b) -&gt; a + b + offset;
+System.out.println(r.add(2, 3)); // 15
+</code></pre>
+<h2 id="19">用語</h2>
+<dl>
+<dt>カプセル化</dt>
+<dd>関係するデータと処理をまとめること (いい感じなクラスを作ること)</dd>
+<dt>データ隠蔽</dt>
+<dd>メンバを直接触れなくすること (<code>private</code> にして適宜 setter/getter をつけること)</dd>
+<dt>情報隠蔽</dt>
+<dd>実装を隠すこと (インタフェースや抽象クラスを使うこと)</dd>
+</dl>
+<h2 id="20">他言語との違い</h2>
+<ul>
+<li>C++ のコピーコンストラクタに相当するものはない。</li>
+<li>Cのカンマ演算子はない。</li>
+<li>引数に <code>void</code> は書けない。<code>void method(void)</code> はコンパイルエラー。</li>
+<li>Rustのように変数を shadowing することはできない。</li>
+<li>不変参照はない。</li>
+<li>到達不能なコードがあるとコンパイルエラー。</li>
+</ul>
+<h2 id="21">MISC</h2>
+<ul>
+<li><code>System.out.println(null)</code> は合法</li>
+<li><code>static</code> メンバはインスタンスからアクセス可能。</li>
+<li>代入は式。 <code>a = b = 10</code> は合法。</li>
+</ul>
+<hr />
+<h2 id="22">参考</h2>
+<ul>
+<li>https://tech.kurojica.com/archives/17792/</li>
+</ul>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

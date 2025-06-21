@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>Excel 簡易リファレンス</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-10-16 ~ 2024-10-16
+      </div>
+      <div> <a class="tag" href="../index.html?tag=ref">ref</a> <a class="tag" href="../index.html?tag=excel">excel</a></div>
+      <div id="toc"><ul><li><a href="#1">ショートカット (Alt 体系)</a></li><li><a href="#2">ショートカット (その他)</a></li><li><a href="#3">条件付き書式</a><ul><li><a href="#3.1">1列目の値が変わる度に背景色を変える</a></li><li><a href="#3.2">A列の値が一致する行について、値にバリエーションがある列をハイライト</a></li></ul></li><li><a href="#4"> は非表示セルを検索しない</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">Excel 簡易リファレンス</h1>
+<h2 id="1">ショートカット (Alt 体系)</h2>
+<p>追加 (<code>&lt;Meta&gt;hi</code> home insert)</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
+<tr><td style="text-align: left">行の挿入</td><td style="text-align: left"><code>&lt;Meta&gt;hir</code></td></tr>
+<tr><td style="text-align: left">列の挿入</td><td style="text-align: left"><code>&lt;Meta&gt;hic</code></td></tr>
+<tr><td style="text-align: left">シートの挿入</td><td style="text-align: left"><code>&lt;Meta&gt;his</code></td></tr>
+</tbody></table>
+</div>
+<p>削除 (<code>&lt;Meta&gt;hd</code> home delete)</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
+<tr><td style="text-align: left">行の削除</td><td style="text-align: left"><code>&lt;Meta&gt;hdr</code></td></tr>
+<tr><td style="text-align: left">列の削除</td><td style="text-align: left"><code>&lt;Meta&gt;hdc</code></td></tr>
+<tr><td style="text-align: left">シートの削除</td><td style="text-align: left"><code>&lt;Meta&gt;hds</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="2">ショートカット (その他)</h2>
+<p>行・列の操作</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th></tr></thead><tbody>
+<tr><td style="text-align: left">行の削除 (行の選択 → 削除)</td><td style="text-align: left"><code>&lt;S-Space&gt;&lt;C--&gt;</code></td></tr>
+<tr><td style="text-align: left">列の削除 (列の選択 → 削除)</td><td style="text-align: left"><code>&lt;C-Space&gt;&lt;C--&gt;</code></td></tr>
+<tr><td style="text-align: left">行の追加 (行の選択 → 追加)</td><td style="text-align: left"><code>&lt;S-Space&gt;&lt;C-+&gt;</code></td></tr>
+<tr><td style="text-align: left">列の追加 (列の選択 → 追加)</td><td style="text-align: left"><code>&lt;C-Space&gt;&lt;C-+&gt;</code></td></tr>
+</tbody></table>
+</div>
+<p>シートの操作</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">動作</th><th style="text-align: left">キー</th><th style="text-align: left">説明</th></tr></thead><tbody>
+<tr><td style="text-align: left">前へ</td><td style="text-align: left"><code>&lt;C-PageUp&gt;</code></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">次へ</td><td style="text-align: left"><code>&lt;C-PageDown&gt;</code></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">追加</td><td style="text-align: left"><code>&lt;Meta&gt;iw</code> or <code>&lt;S-F11&gt;</code></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">名前変更</td><td style="text-align: left"><code>&lt;Meta&gt;hor</code></td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">シート選択モードへ</td><td style="text-align: left"><code>&lt;F6&gt;</code></td><td style="text-align: left">矢印でシート選択できるモードへ</td></tr>
+</tbody></table>
+</div>
+<h2 id="3">条件付き書式</h2>
+<h3 id="3.1">1列目の値が変わる度に背景色を変える</h3>
+<pre><code class="language-excel">=ISODD(SUMPRODUCT(--($A$2:$A2&lt;&gt;$A$1:$A1)))
+</code></pre>
+<h3 id="3.2">A列の値が一致する行について、値にバリエーションがある列をハイライト</h3>
+<pre><code class="language-excel">=COUNTIF($A:$A, $A2)&lt;&gt;COUNTIFS($A:$A, $A2, A:A, A2)
+</code></pre>
+<h2 id="4"><code>Range.find</code> は非表示セルを検索しない</h2>
+<p><a href="https://learn.microsoft.com/ja-jp/office/vba/api/excel.range.find">公式ドキュメント</a>には記述がないですが、
+<code>Range.find</code> メソッドは非表示のセルを検索しないようです。</p>
+<p>VBA で非表示のセルを検索するには下のようにします。</p>
+<pre><code class="language-vba">// Me.Rows(1).Find("X", LookIn:=xlValues).Column
+Application.WorksheetFunction.Match("X", Me.Rows(1), 0)
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

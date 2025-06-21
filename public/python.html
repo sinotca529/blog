@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>Python 簡易リファレンス</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-01-09 ~ 2025-01-21
+      </div>
+      <div> <a class="tag" href="../index.html?tag=it">it</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">, </a></li><li><a href="#2">一時ファイル・ディレクトリを作成する</a></li><li><a href="#3">コマンドライン引数の処理</a><ul><li><a href="#3.1">サブコマンドの処理</a></li></ul></li></ul></div>
+      <div id="main-content">
+        <h1 id="">Python 簡易リファレンス</h1>
+<p>たまに使うけど忘れてしまうテクなどを書いていきます。</p>
+<h2 id="1"><code>stdout</code>, <code>stderr</code> を  <code>/dev/null</code> に捨てる</h2>
+<pre><code class="language-py">from contextlib import redirect_stdout, redirect_stderr
+
+with open('/dev/null') as devnull:
+    with redirect_stdout(devnull), redirect_stderr(devnull):
+        # この中で print しても表示されずに捨てられる
+        some_function()
+</code></pre>
+<h2 id="2">一時ファイル・ディレクトリを作成する</h2>
+<pre><code class="language-py">import tempfile
+
+# 一時ファイル
+with tempfile.NamedTemporaryFile() as f:
+    print(f.name)
+
+# 一時ディレクトリ
+with tempfile.TemporaryDirectory() as d:
+    print(d)
+</code></pre>
+<h2 id="3">コマンドライン引数の処理</h2>
+<pre><code class="language-py">import argparse
+
+parser = argparse.ArgumentParser(description='Example Program')
+
+# 位置引数
+# nargs で受け取る引数の数を指定 (+: 1以上, *: 0以上, ?: 0 or 1)
+parser.add_argument('integers', type=int, nargs='+', help='整数のリスト')
+
+# オプション引数 (必須にするには required=True をつける)
+parser.add_argument('--str', '-s', help='文字列')
+
+# フラグ
+parser.add_argument('--verbose', '-v', action='store_true', help='increase output verbosity')
+
+args = parser.parse_args()
+</code></pre>
+<h3 id="3.1">サブコマンドの処理</h3>
+<p><code>set_defaults</code> でサブコマンドごとの処理を指定する。</p>
+<pre><code class="language-py">import argparse
+
+def foo(args):
+    print('foo', args.num)
+
+def bar(args):
+    print('bar', args.str)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Example Program')
+    subparsers = parser.add_subparsers()
+
+    foo_parser = subparsers.add_parser('foo')
+    foo_parser.set_defaults(func=foo)
+    foo_parser.add_argument('num', type=int)
+
+    bar_parser = subparsers.add_parser('bar')
+    bar_parser.set_defaults(func=bar)
+    bar_parser.add_argument('str')
+
+    args = parser.parse_args()
+    args.func(args)
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

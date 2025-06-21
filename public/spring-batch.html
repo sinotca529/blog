@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>Spring Batch</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-02-17 ~ 2025-02-17
+      </div>
+      <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=batch">batch</a></div>
+      <div id="toc"><ul><li><a href="#1">用語</a></li><li><a href="#2">JobRepository のメタデータ</a><ul><li><a href="#2.1">BATCH_JOB_INSTANCE テーブル</a></li><li><a href="#2.2">BATCH_JOB_EXECUTION テーブル</a></li><li><a href="#2.3">BATCH_JOB_EXECUTION_PARAMS テーブル</a></li><li><a href="#2.4">BATCH_JOB_EXECUTION_CONTEXT テーブル</a></li><li><a href="#2.5">BATCH_STEP_EXECUTION テーブル</a></li><li><a href="#2.6">BATCH_STEP_EXECUTION_CONTEXT テーブル</a></li></ul></li><li><a href="#3">ジョブの再起動</a></li><li><a href="#4">ジョブの定義法</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">Spring Batch</h1>
+<h2 id="1">用語</h2>
+<dl>
+<dt>Job</dt>
+<dd>
+<p>ジョブの定義。ステップを束ねたもの。</p>
+</dd>
+<dt>Step</dt>
+<dd>
+<p>ひとまとまりの処理。</p>
+</dd>
+<dt>JobInstance</dt>
+<dd>
+<p>(Job名, 引数) で識別されるジョブの実態です。
+JobInstance の実行結果はデータベースに保存されます。
+その情報は再実行やエラー時点からの再開に使われます。</p>
+</dd>
+<dt>JobExecution</dt>
+<dd>
+<p>JobInstance の実行です。試行と表現しても良いでしょう。</p>
+<!--ExecutionContext を介して、同じ JobInstance に対応する実行の間でデータを引き継げます。-->
+</dd>
+<dt>StepExecution</dt>
+<dd>
+<p>Step の実行です。</p>
+<!--ExecutionContext を介して、同じ JobInstance に対応する同じ Step 間でデータを引き継げます。-->
+</dd>
+<dt>JobRepository</dt>
+<dd>
+<p>JobExecution や StepExecution などを管理する。</p>
+</dd>
+</dl>
+<h2 id="2">JobRepository のメタデータ</h2>
+<h3 id="2.1">BATCH_JOB_INSTANCE テーブル</h3>
+<p>JobInstance に対応する。</p>
+<div class="table-wrapper"><table><thead><tr><th>項目名</th><th>説明</th></tr></thead><tbody>
+<tr><td>JOB_INSTANCE_ID</td><td>ID</td></tr>
+<tr><td>VERSION</td><td>トラン処理で使用する版</td></tr>
+<tr><td>JOB_NAME</td><td>Job の名前</td></tr>
+<tr><td>JOB_KEY</td><td>JobParameters の内容</td></tr>
+</tbody></table>
+</div>
+<h3 id="2.2">BATCH_JOB_EXECUTION テーブル</h3>
+<p>JobExecution に対応する。</p>
+<div class="table-wrapper"><table><thead><tr><th>項目名</th><th>説明</th></tr></thead><tbody>
+<tr><td>JOB_EXECUTION_ID</td><td>ID</td></tr>
+<tr><td>VERSION</td><td>トラン処理で使用する版</td></tr>
+<tr><td>JOB_INSTANCE_ID</td><td>対応する JobInstance</td></tr>
+<tr><td>CREATE_TIME</td><td>JobExecution の作成時刻</td></tr>
+<tr><td>START_TIME</td><td>実行開始時刻</td></tr>
+<tr><td>END_TIME</td><td>実行終了時刻</td></tr>
+<tr><td>STATUS</td><td>終了ステータス (BatchStatus の値)</td></tr>
+<tr><td>EXIT_CODE</td><td>終了コード</td></tr>
+<tr><td>EXIT_MESSAGE</td><td>終了状態のより詳細な説明</td></tr>
+<tr><td>LAST_UPDATE</td><td>このレコードが最後に更新された時刻</td></tr>
+</tbody></table>
+</div>
+<h3 id="2.3">BATCH_JOB_EXECUTION_PARAMS テーブル</h3>
+<div class="table-wrapper"><table><thead><tr><th>項目名</th><th>説明</th></tr></thead><tbody>
+<tr><td>JOB_EXECUTION_ID</td><td>このパラメタが紐づいている JobExecution</td></tr>
+<tr><td>TYPE_CD</td><td>パラメタの型</td></tr>
+<tr><td>KEY_NAME</td><td>パラメタの名前</td></tr>
+<tr><td>STRING_VAL</td><td>パラメタの値 (文字列型の場合)</td></tr>
+<tr><td>DATE_VAL</td><td>パラメタの値 (日時型の場合)</td></tr>
+<tr><td>LONG_VAL</td><td>パラメタの値 (整数型の場合)</td></tr>
+<tr><td>DOUBLE_VAL</td><td>パラメタの値 (実数型の場合)</td></tr>
+<tr><td>IDENTIFYING</td><td>パラメタが JobInstance の一意性判定に寄与するか</td></tr>
+</tbody></table>
+</div>
+<h3 id="2.4">BATCH_JOB_EXECUTION_CONTEXT テーブル</h3>
+<div class="table-wrapper"><table><thead><tr><th>項目名</th><th>説明</th></tr></thead><tbody>
+<tr><td>JOB_EXECUTION_ID</td><td>紐づく JobExecution</td></tr>
+<tr><td>SHORT_CONTEXT</td><td>コンテキストの短縮表現</td></tr>
+<tr><td>SERIALIZED_CONTEXT</td><td>コンテキストの全容</td></tr>
+</tbody></table>
+</div>
+<h3 id="2.5">BATCH_STEP_EXECUTION テーブル</h3>
+<p>BatchStatus と ExitStatus は役割が違います。
+BatchStatus は Step の状態を記録するためにフレームワークが使う enum です。
+ExitStatus は Step の終了ステータスを表すもので、自由にセットできます。</p>
+<blockquote class="markdown-alert-note">
+<p>ExitStatus はフローの制御に使い、 BatchStatus はジョブの再実行などの管理に使うということだろうか。</p>
+</blockquote>
+<div class="table-wrapper"><table><thead><tr><th>項目名</th><th>説明</th></tr></thead><tbody>
+<tr><td>STEP_EXECUTION_ID</td><td>ID</td></tr>
+<tr><td>VERSION</td><td>トラン処理で使用する版</td></tr>
+<tr><td>STEP_NAME</td><td>名前</td></tr>
+<tr><td>JOB_EXECUTION_ID</td><td>対応する JobExecution</td></tr>
+<tr><td>START_TIME</td><td>実行開始時刻</td></tr>
+<tr><td>END_TIME</td><td>実行終了時刻</td></tr>
+<tr><td>STATUS</td><td>実行ステータス (BatchStatus の値)</td></tr>
+<tr><td>COMMIT_COUNT</td><td>トランのコミット回数</td></tr>
+<tr><td>READ_COUNT</td><td>ItemReader が読んだデータ件数</td></tr>
+<tr><td>FILTER_COUNT</td><td>ItemProcessor が捌いた件数</td></tr>
+<tr><td>WRITE_COUNT</td><td>ItemWriter が書いた件数</td></tr>
+<tr><td>READ_SKIP_COUNT</td><td>ItemReader が処理をスキップした件数</td></tr>
+<tr><td>WRITE_SKIP_COUNT</td><td>ItemWriter が処理をスキップした件数</td></tr>
+<tr><td>PROCESS_SKIP_COUNT</td><td>ItemProcessor が処理をスキップした件数</td></tr>
+<tr><td>ROLLBACK_COUNT</td><td>トランのロールバック回数</td></tr>
+<tr><td>EXIT_CODE</td><td>終了コード</td></tr>
+<tr><td>EXIT_MESSAGE</td><td>終了状態のより詳細な説明</td></tr>
+<tr><td>LAST_UPDATE</td><td>このレコードが最後に更新された時刻</td></tr>
+</tbody></table>
+</div>
+<h3 id="2.6">BATCH_STEP_EXECUTION_CONTEXT テーブル</h3>
+<div class="table-wrapper"><table><thead><tr><th>項目名</th><th>説明</th></tr></thead><tbody>
+<tr><td>STEP_EXECUTION_ID</td><td>紐づく StepExecution</td></tr>
+<tr><td>SHORT_CONTEXT</td><td>コンテキストの短縮表現</td></tr>
+<tr><td>SERIALIZED_CONTEXT</td><td>コンテキストの全容</td></tr>
+</tbody></table>
+</div>
+<p>シリアライズされたコンテキスト全体。</p>
+<h2 id="3">ジョブの再起動</h2>
+<h2 id="4">ジョブの定義法</h2>
+<ul>
+<li>タスクレットモデル</li>
+<li>チャンクモデル</li>
+</ul>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>Oracle DBA</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-04-08 ~ 2025-06-08
+      </div>
+      <div> <a class="tag" href="../index.html?tag=oracle">oracle</a> <a class="tag" href="../index.html?tag=db">db</a></div>
+      <div id="toc"><ul><li><a href="#1">Oracle DB との通信の流れ</a></li><li><a href="#2">Oracle DB に接続する</a></li><li><a href="#3">Oracle DB の起動に必要な情報</a></li><li><a href="#4">Oracle DB の起動ステップ</a></li><li><a href="#5">インスタンス</a></li><li><a href="#6">メモリ管理</a></li><li><a href="#7">オブジェクトはいかにしてファイルに格納されるか</a></li><li><a href="#8">ユーザ</a></li><li><a href="#9">権限・ロール</a></li><li><a href="#10">データ移行</a></li><li><a href="#11">監視・分析</a></li><li><a href="#12">バックアップ・リカバリ</a></li><li><a href="#13">可用性</a></li><li><a href="#14">SQL の分類</a></li><li><a href="#15">関連ソフトウェア</a><ul><li><a href="#15.1">EM Express vs EM Cloud Control</a></li><li><a href="#15.2">SQL</a></li></ul></li><li><a href="#16">ユーザ・権限・ロール</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">Oracle DBA</h1>
+<h2 id="1">Oracle DB との通信の流れ</h2>
+<p>Oracle DB はクラサバモデルです。
+クライアント側のプロセスを「ユーザプロセス」、サーバ側のプロセスを「サーバプロセス」と呼びます。
+ユーザプロセスは SQL を発行し、サーバプロセスはそれを実行します。</p>
+<p>クラサバ間の接続はリスナを介して行います。
+リスナは適切なサーバプロセスをユーザプロセスにあてがい、通信を確立します。
+その後はサーバプロセスとユーザプロセスが直接やり取りを行います。
+リスナの待受ポートは 1521 です。</p>
+<p>クラサバ間を結ぶ通信を Oracle Net と呼びます。
+Oracle Net の設定は listener.ora (サーバ側), tnsnames.ora (クライアント側) などに記載します。
+設定の編集には Net Manager (GUI) や NetCA (CLI) を利用します。</p>
+<h2 id="2">Oracle DB に接続する</h2>
+<p>接続先の指定には4通りの方法があります。</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">ネーミングメソッド</th><th style="text-align: left">説明</th></tr></thead><tbody>
+<tr><td style="text-align: left">簡易接続</td><td style="text-align: left"><code>usr/pwd@url:port/service_name</code> の形式で、ファイル設定なしに直接指定する方法。</td></tr>
+<tr><td style="text-align: left">ローカル・ネーミング</td><td style="text-align: left"><code>tnsnames.ora</code> に定義された接続エントリ名を使う方法。</td></tr>
+<tr><td style="text-align: left">ディレクトリ・ネーミング</td><td style="text-align: left">LDAPディレクトリサーバを使って接続情報を管理する方法。</td></tr>
+<tr><td style="text-align: left">外部ネーミング</td><td style="text-align: left">他の仕組み（例：OSの環境変数やカスタムAPI）から接続先を解決する方法。</td></tr>
+</tbody></table>
+</div>
+<h2 id="3">Oracle DB の起動に必要な情報</h2>
+<p>初期化パラメタファイルにはxxがある。
+制御ファイルにはxxがある。
+データファイルにはxxがある。
+REDOログファイルにはxxがある。</p>
+<p>xxには、下記の起動ステップで説明する内容について、必要十分な情報のみを書く。</p>
+<h2 id="4">Oracle DB の起動ステップ</h2>
+<p>Oracle には、 SHUTDOWN, NOMOUNT, MOUNT, OPEN の4つのモードがあります。
+それぞれ次のような状態です。</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">モード</th><th style="text-align: left">説明</th></tr></thead><tbody>
+<tr><td style="text-align: left">SHUTDOWN</td><td style="text-align: left">インスタンスもデータベースも停止した状態。すべてのメモリが解放されている。</td></tr>
+<tr><td style="text-align: left">NOMOUNT</td><td style="text-align: left">初期化パラメータファイルを読み、インスタンスを起動した状態。制御ファイルはまだ読み込まれていない。</td></tr>
+<tr><td style="text-align: left">MOUNT</td><td style="text-align: left">制御ファイルを読み込み、データベースをマウントした状態。データファイルやREDOログはまだ開かれていない。</td></tr>
+<tr><td style="text-align: left">OPEN</td><td style="text-align: left">データファイルとREDOログファイルも開かれ、データベースが利用可能な状態。ユーザー接続も可能。</td></tr>
+</tbody></table>
+</div>
+<p>sql*plus から SYSDBA 権限で <code>startup</code> コマンドを実行することでDBを起動できます。</p>
+<h2 id="5">インスタンス</h2>
+<p>Oracle DB の処理にはサーバプロセス以外にも様々なプロセスが使われます。
+そうしたプロセス群とメモリ領域をまとめて「インスタンス」と呼びます。</p>
+<p>TODO: 概要図</p>
+<h2 id="6">メモリ管理</h2>
+<p>インスタンスのメモリ領域は SGA と PGA に分けられます。
+SGA（System Global Area）は同一インスタンス内のすべてのプロセスで共有される領域で、解析済みSQLやデータブロックのキャッシュ、REDOバッファなどを格納します。
+PGA（Program Global Area）は各サーバプロセスに個別に割り当てられる作業用メモリで、ソートやハッシュ結合の中間データなどが入ります。</p>
+<p>SGA と PGA のサイズは、初期化パラメータファイルの設定により管理されます。</p>
+<h2 id="7">オブジェクトはいかにしてファイルに格納されるか</h2>
+<p>表領域の話もする。
+エクステントとかの話をする。</p>
+<h2 id="8">ユーザ</h2>
+<p>ユーザの作成には <code>CREATE USER</code> を使用します。</p>
+<pre><code class="language-sql">CREATE USER foo
+  IDENTIFIED BY bar          -- パスワード認証でユーザ作成
+  DEFAULT TABLESPACE users   -- デフォルト表領域
+  TEMPORARY TABLESPACE temp  -- 一時表領域
+  QUOTA 100M ON users        -- users 表領域に使える上限
+  PROFILE strict             -- パスワードポリシー等を定めるプロファイル
+  PASSWORD EXPIRE            -- パスワードを期限切れさせ、初回ログイン時に変更を強制
+;
+</code></pre>
+<p>デフォルト表領域について、割当 (<code>QUOTA 100M</code>) は領域を割り当てるだけです。
+テーブルを作る権限などは別途付与する必要があります。</p>
+<p>ユーザの削除には <code>DROP USER</code> を使用します。
+表や索引を持っているユーザは通常削除できませんが、 <code>DROP USER &lt;user&gt; CASCADE</code> を使うとオブジェクトもろとも削除できます。</p>
+<h2 id="9">権限・ロール</h2>
+<p>権限とロールについてまとめる</p>
+<h2 id="10">データ移行</h2>
+<p>sql loader, datapump の話をする</p>
+<h2 id="11">監視・分析</h2>
+<p>em express でどんなことができるか説明する
+awr, mmon, addm を説明する
+各種アドバイザを表にまとめる</p>
+<h2 id="12">バックアップ・リカバリ</h2>
+<p>archivelog/noarchivelog について表にまとめる</p>
+<h2 id="13">可用性</h2>
+<p>rac, asm, oracle data guard についてまとめる</p>
+<h2 id="14">SQL の分類</h2>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">カテゴリ</th><th style="text-align: left">コマンド</th><th style="text-align: left">備考</th></tr></thead><tbody>
+<tr><td style="text-align: left">検索</td><td style="text-align: left">SELECT</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">操作 (DML)</td><td style="text-align: left">INSERT, UPDATE, DELETE</td><td style="text-align: left">実行するとトランが開始する</td></tr>
+<tr><td style="text-align: left">定義 (DDL)</td><td style="text-align: left">CREATE, DROP, ALTER, TRUNCATE</td><td style="text-align: left">コマンド実行前に暗黙コミットが起こる</td></tr>
+<tr><td style="text-align: left">トラン</td><td style="text-align: left">COMMIT, ROLLBACK</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left">制御</td><td style="text-align: left">GRANT, REVOKE</td><td style="text-align: left"></td></tr>
+</tbody></table>
+</div>
+<p>MEMORY_MAX_TARGET
+SGA_MAX_SIZE</p>
+<h2 id="15">関連ソフトウェア</h2>
+<div class="table-wrapper"><table><thead><tr><th>ソフト</th><th>役割</th></tr></thead><tbody>
+<tr><td>DBCA (Oracle Database Configuration Assistant)</td><td>DB の作成</td></tr>
+<tr><td>OUI (Oracle Universal Installer)</td><td>ソフトの導入・削除</td></tr>
+<tr><td>DBUA (Oracle Database Upgrade Assistant)</td><td>DB のアップグレード</td></tr>
+<tr><td>EM Express (Oracle Enterprise Manager Database Express)</td><td>ブラウザから DB を管理・監視・診断・チューン</td></tr>
+<tr><td>Oracle Enterprise Manager Cloud Control</td><td>ブラウザから DB を一元管理</td></tr>
+<tr><td>SQL*Plus</td><td>CLI で SQL を発行して DB を管理</td></tr>
+<tr><td>Oracle Net Manager</td><td>Oracle DB をネットワーク上で使うための広範な設定</td></tr>
+<tr><td>NetCA (Oracle Net Configuration Assistant)</td><td>Oracle DB をネットワーク上で使うための主要な設定</td></tr>
+<tr><td>LSNRCTL (リスナ制御ユーティリティ)</td><td>リスナの起動・停止</td></tr>
+<tr><td>SQL*Loader</td><td>CSV ファイルなどを DB にロード</td></tr>
+<tr><td>Oracle Data Pump</td><td>データを別の DB に転送</td></tr>
+<tr><td>Recovery Manager</td><td>DB のバックアップとリカバリ</td></tr>
+</tbody></table>
+</div>
+<h3 id="15.1">EM Express vs EM Cloud Control</h3>
+<p>Could Control では、インスタンスの起動・停止、スキーマの管理、</p>
+<h3 id="15.2">SQL*Plus</h3>
+<pre><code># 対話形式でユーザ名、パスワードを指定
+&gt; sqlplus
+
+# ユーザ名・パスワードを引数で与える
+&gt; sqlplus &lt;user_name&gt;/&lt;password&gt;
+
+# ログインしない (CONNECT コマンドであとからログインする)
+&gt; sqlplus /nolog
+
+# SYS ユーザでログイン
+&gt; sqlplus sys/password as sysdba
+
+# SYS ユーザでログイン
+# インストール作業をした OS ユーザでログインする場合、パスワードを省略できる (OS 認証)
+&gt; sqlplus / as sysdba
+
+# スクリプトを実行 (スクリプト内には CONNECT 文を書く)
+&gt; sqlplus /nolog @script.sql
+</code></pre>
+<p>SQL*Plus コマンド</p>
+<ul>
+<li><code>EXIT</code> : DB 接続を切って終了する</li>
+<li><code>HOST</code> : シェルのコマンドを実行</li>
+<li><code>CONNECT</code> : ログイン</li>
+</ul>
+<h2 id="16">ユーザ・権限・ロール</h2>
+<p>データベースを作成すると、管理用ユーザ SYS, SYSTEM が作成されます。
+これらは権限が強すぎるため、まずは管理用ユーザを用いてアプリのデータ管理のためのユーザを作ります。</p>
+<p>ユーザー名は大文字・小文字が区別されません。</p>
+<pre><code>
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

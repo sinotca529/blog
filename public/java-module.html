@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>モジュールシステム (Java9)</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-02-16 ~ 2025-02-16
+      </div>
+      <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a></div>
+      <div id="toc"><ul><li><a href="#1">TR;DL</a></li><li><a href="#2">モジュールの作成</a></li><li><a href="#3">標準のモジュール</a></li><li><a href="#4">モジュールのコンパイル</a></li><li><a href="#5">実行</a></li><li><a href="#6">利用</a></li><li><a href="#7">自動モジュール</a></li><li><a href="#8">無名モジュール</a></li><li><a href="#9">非公開パッケージの参照</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">モジュールシステム (Java9)</h1>
+<p>Java のアクセス指定子では、特定のパッケージのみにクラスを公開するといったような細やかな制御ができません。
+モジュールシステムはそうした細かな制御を可能にする仕組みです。
+パッケージはモジュールという単位でまとめられ、
+モジュール単位でのアクセス制御の後にアクセス指定子によるアクセス制御が行われます。</p>
+<h2 id="1">TR;DL</h2>
+<div class="table-wrapper"><table><thead><tr><th>処理</th><th>コマンド</th></tr></thead><tbody>
+<tr><td>モジュールの作成</td><td><code>javac -d mods/foo src/foo/module-info.java  src/foo/example/com/foo/Main.java</code></td></tr>
+<tr><td>モジュールの作成</td><td><code>jmod create --class-path mods/foo foo.jmod</code></td></tr>
+<tr><td>モジュールの実行</td><td><code>java --module-path &lt;module path&gt; --module &lt;module name&gt;/&lt;class name&gt;</code></td></tr>
+<tr><td>モジュールの情報を確認</td><td><code>java --module-path mods --describe-module foo</code></td></tr>
+<tr><td>モジュールの情報を確認</td><td><code>jmod describe foo.jmod</code></td></tr>
+<tr><td>モジュールの依存を確認</td><td><code>jdeps --list-deps hello.jar</code></td></tr>
+<tr><td>利用モジュールの場所</td><td><code>java --module-path mods --show-module-resolution -m hello/com.example.Main</code></td></tr>
+</tbody></table>
+</div>
+<p><code>*.jmod</code> ファイルは JRE を含むような特別なモジュールのためにある。
+通常は JAR ファイルとして作る。</p>
+<h2 id="2">モジュールの作成</h2>
+<p>モジュール定義ファイル (<code>module-info.java</code>) を置くと、そのディレクトリがモジュール化します。
+次のディレクトリ構造では <code>foo/</code> <code>bar/</code> がそれぞれモジュール化します。</p>
+<pre><code>src/
+  foo/
+    com/example/foo/
+    module-info.java
+  bar/
+    com/example/bar/
+    module-info.java
+</code></pre>
+<p><code>module-info.java</code> には、</p>
+<ul>
+<li>モジュールが外に公開するパッケージ</li>
+<li>モジュールが参照する外部<strong>モジュール</strong></li>
+</ul>
+<p>を記述します。</p>
+<pre><code class="language-java">// 名付けにパッケージのような制約はないが、一意であるべき。
+module mod.foo {
+
+  // 外部に公開するパッケージを指定する。
+  exports com.example.foo.hoge;
+
+  // 公開先を限定するには to を使う。
+  exports com.example.foo.piyo to com.example.bar, com.example.baz;
+
+  // 使用する外部パッケージを指定する
+  requires mod.bar;
+
+  // requires によるアクセス権はデフォルトで推移しない。
+  // mod.foo に依存するモジュールに mod.baz へのアクセス権を
+  // 推移的に (暗黙的に)与えるには transitive をつける
+  requires transitive mod.baz;
+
+}
+</code></pre>
+<h2 id="3">標準のモジュール</h2>
+<p>Java SE のクラスライブラリはモジュール化されています。
+<code>java --list-modules</code> で一覧を確認できます。</p>
+<pre><code class="language-txt">&gt; java --list-modules
+java.base@23.0.2
+java.compiler@23.0.2
+java.datatransfer@23.0.2
+java.desktop@23.0.2
+...
+</code></pre>
+<h2 id="4">モジュールのコンパイル</h2>
+<p>コンパイル対象にはエントリポイントだけでなくモジュール定義ファイルも指定します。</p>
+<pre><code class="language-sh">javac \
+  -d mods/foo \
+  src/foo/module-info.java \
+  src/foo/example/com/foo/Main.java
+</code></pre>
+<p>モジュール登場以前との違いは、 <code>module-info.class</code> が作られることです。</p>
+<h2 id="5">実行</h2>
+<p><code>java</code> コマンドにモジュールパスとエントリポイントのあるクラスを指定します。</p>
+<pre><code class="language-sh"># java \
+#   --module-path &lt;module path&gt; \
+#   --module &lt;module name&gt;/&lt;class name&gt;
+
+java \
+  --module-path ./modules \
+  --module mod.com.example.foo/com.example.foo.hoge.Main
+</code></pre>
+<h2 id="6">利用</h2>
+<p>モジュールのあるパスを <code>--classpath</code> に渡してもエラーにはなりませんが、アクセスは制御されません。</p>
+<h2 id="7">自動モジュール</h2>
+<p>モジュールパス上に配置された JAR がモジュール定義を持っていない場合、
+その JAR は自動モジュールとして扱われます。
+自動モジュールはパッケージを全て <code>export</code> し、他のパッケージをすべて <code>requires</code> します。</p>
+<p>自動モジュールの名前は次のように決まります :</p>
+<ol>
+<li>JAR 内の META-INF/MANIFEST.MF ファイルの Automatic-Module-Name 属性。</li>
+<li>(1がなければ) JARファイルの名前から拡張子とバージョン番号を除去し、非英数字をドットに置き換えたもの。</li>
+</ol>
+<h2 id="8">無名モジュール</h2>
+<p>モジュール定義を持たない JAR がクラスパスから読み込まれた場合、無名モジュールとして扱われます。
+無名モジュールも同様、パッケージを全て <code>export</code> し、他のパッケージをすべて <code>requires</code> します。
+無名モジュールは名前を持たないので、明示的に <code>requires</code> することはできませんが、自動モジュールからは <code>requires</code> されます。</p>
+<h2 id="9">非公開パッケージの参照</h2>
+<p>コンパイル時に <code>--add-exports</code> オプションを使うと非公開のパッケージを無理やり参照できます。</p>
+<hr />
+<p>参考</p>
+<ul>
+<li><a href="https://qiita.com/KenyaSaitoh/items/a04a1e94d28153fd1afb">Qiita の記事</a></li>
+</ul>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>
