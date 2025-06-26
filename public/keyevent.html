@@ -6,10 +6,10 @@
   <meta name="path_to_root" content="..">
   <link rel="stylesheet" href="../style.css" />
   <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
-  <title>私的ヒットチャート</title>
+  <title>キーイベントチェッカー</title>
 </head>
 
-  <body data-page="crypto" data-cypher="vTxqIjE3hSXpu9W46Vy5EOJNFQwqADDYGsoKJB6fYgtpWlJM0jFf+kV3KKV75ZCRMmCE1xons78deqyKTey2TNdRvXaTL0rq6fXebCJloUbZBrgiU/BfzIZ3ABlyRk+ZuZ4EvX1rSDd8KbsWG2U+8p1BSjnb6cxKeEysFpiqkl8AVf6R+TFZMeH7hbpma+/NWKfVhsB5HlYPKqKbTUTNm9IC8qz1/JnsdWrezFvuiOFCVtb8KLubWjUnIKCyJ/4wHroB9CemDsM6UyVFo/l5F+mZSobRHZVdZ6xjidt5HmuQUdo06PI4Lbq7tjiJ+M2lHLtVxT3w1+rB1kORZlGX4sE3Md1+6si78ySzN5jS9bf8v/M0vBc59YEWAvd38SEa2XzNqUgvwKi2XLEx7HJNdGOJudjDzkLC8bbvK+4CIJGV9DivI1V8lH6MuaBNhuhv/aAD3GY8IqTdloLRvijMXOs94xOVRstqpmNz3bs3lL9Bu+fG7hf9SD8J95ezo8VFd41QDVaxeweIWr7KYYRAYQENYvc6QlKlNeJf2ViVK/AS6MS7TBYhgBXyWNGQBhmvo2btUELpTzkxXsnpiqaLwhyJOKFAiJG5jHSAYBfhbqg0LZUkX+466hXS+9DhlNZw42QXXachXZqsGtCPBjYVP17RWEavR4ik7J5lCGvH+Ao+72PJKlOlON8u06KB3WK0eNqimhTsue08H5u6de9FlmKETqHVt/mPYEByXg/mi1ZDT/hD5ZMz+WjElOFKYABWK47d8mvrZYsQ0QYpnEZxBBweG1aProzZl/wE7gBsFlBPVRShl/3fNVtrgtUkqq+HpVWXgtTxOpBHRPjFTt2RiC7ChxSUsRIeFpI9Szm8jBwQNLwvOMz4SHKLh0Zwnyp+GrZ2+PMBUalbGnXJZ1bqviiF2ZbjFUTl+pnK/QhKCf7N/44fvowTqVtrPOAjUdqnmtFhcF+3VVy0R4l3QYp/YhcITpDvdjjpgDIP0kIyUAt+nptUvWVU4sd2xFu2Ojme+u1/YTa3KjXuiAkYSPa8Kifn4V+swzPwyOh+jSk37HWqGssKe5A0VwFqp7PI56tnNwDzhEYudaaelUUyPQB2wu5fNVoRowND3SvzXvwulXrntbGOzmQANw/I/nPVFVOK">
+  <body>
     <header>
   <div id="menu-bar">
     <div id="menu-left-buttons">
@@ -47,18 +47,87 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-06-16 ~ 2024-06-16
+        2025-06-26 ~ 2025-06-26
       </div>
-      <div> <a class="tag" href="../index.html?tag=misc">misc</a></div>
+      <div> <a class="tag" href="../index.html?tag=tool">tool</a></div>
+      <div id="toc"></div>
       <div id="main-content">
-        <h1>This page is protected.</h1>
-        <input
-          autofocus
-          type="password"
-          id="decrypt-key"
-          placeholder="Enter your secret key"
-        />
-        <button id="decrypt-btn">Decode</button>
+        <h1 id="">キーイベントチェッカー</h1>
+<style>
+  .table-container {
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-top: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  thead th {
+    background: #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+</style>
+<div class="table-container">
+  <table id="logTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>イベント</th>
+        <th>キー</th>
+        <th>時刻</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+<script>
+    let count = 0;
+    const tbody = document.querySelector('#logTable tbody');
+    const container = document.querySelector('.table-container');
+
+    function addLog(eventType, keyName) {
+      count++;
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      const ms = String(now.getMilliseconds()).padStart(3, '0');
+      const time = `${hh}:${mm}:${ss}.${ms}`;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${count}</td>
+        <td>${eventType}</td>
+        <td>${keyName}</td>
+        <td>${time}</td>
+      `;
+      tbody.appendChild(tr);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    document.addEventListener('keydown', function(e) {
+      e.preventDefault();
+      const keyName = e.key ?? e.code ?? `KeyCode:${e.keyCode}`;
+      addLog('keydown', keyName);
+    }, { passive: false });
+
+    document.addEventListener('keyup', function(e) {
+      e.preventDefault();
+      const keyName = e.key ?? e.code ?? `KeyCode:${e.keyCode}`;
+      addLog('keyup', keyName);
+    }, { passive: false });
+</script>
+
       </div>
     </main>
     <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
