@@ -50,7 +50,7 @@
         2024-05-03 ~ 2025-03-17
       </div>
       <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
-      <div id="toc"><ul><li><a href="#1">拡張 for</a></li><li><a href="#2">型推論 (Java10 以降)</a></li><li><a href="#3">ラベル</a></li><li><a href="#4">コンスタントプール</a></li><li><a href="#5">アクセス修飾子</a></li><li><a href="#6">コンストラクタ</a></li><li><a href="#7">シグネチャ (sigature)</a></li><li><a href="#8">オーバーライド (override)</a></li><li><a href="#9">オーバーロード (overload)</a></li><li><a href="#10">ジェネリクス</a></li><li><a href="#11">インタフェース</a></li><li><a href="#12">実現 (implements) の条件</a></li><li><a href="#13">多重継承・多重実現と名前衝突</a></li><li><a href="#14">switch 文</a></li><li><a href="#15">初期化子</a></li><li><a href="#16">可変長引数</a></li><li><a href="#17">例外処理</a></li><li><a href="#18">関数型インタフェースとラムダ式 (Java8)</a></li><li><a href="#19">用語</a></li><li><a href="#20">他言語との違い</a></li><li><a href="#21">MISC</a></li><li><a href="#22">参考</a></li></ul></div>
+      <div id="toc"><ul><li><a href="#1">拡張 for</a></li><li><a href="#2">型推論 (Java10 以降)</a></li><li><a href="#3">ラベル</a></li><li><a href="#4">アクセス修飾子</a></li><li><a href="#5">コンストラクタ</a></li><li><a href="#6">シグネチャ (sigature)</a></li><li><a href="#7">オーバーライド (override)</a></li><li><a href="#8">オーバーロード (overload)</a></li><li><a href="#9">インタフェース</a></li><li><a href="#10">実現 (implements) の条件</a></li><li><a href="#11">多重継承・多重実現と名前衝突</a></li><li><a href="#12">switch 文</a></li><li><a href="#13">初期化子</a></li><li><a href="#14">可変長引数</a></li><li><a href="#15">例外処理</a></li><li><a href="#16">関数型インタフェースとラムダ式 (Java8)</a></li><li><a href="#17">インナークラス</a></li><li><a href="#18">メンバクラス</a></li><li><a href="#19">静的インナークラス</a></li><li><a href="#20">enum</a></li><li><a href="#21">用語</a></li><li><a href="#22">他言語との違い</a></li><li><a href="#23">MISC</a></li><li><a href="#24">参考</a></li></ul></div>
       <div id="main-content">
         <h1 id="">Java 文法まとめ</h1>
 <h2 id="1">拡張 for</h2>
@@ -104,9 +104,7 @@ System.out.println(a); // 1
 ただし、変数宣言にはラベルをつけられません。</p>
 <p>ラベルは式にもつけられますが、実用上の意味はありません。
 <code>goto</code> が予約語であること踏まえると、言語仕様制定時の名残かもしれません。</p>
-<h2 id="4">コンスタントプール</h2>
-<p>TODO</p>
-<h2 id="5">アクセス修飾子</h2>
+<h2 id="4">アクセス修飾子</h2>
 <div class="table-wrapper"><table><thead><tr><th>修飾子</th><th style="text-align: center">クラス内</th><th style="text-align: center">同PKG</th><th style="text-align: center">別PKG 子クラス</th><th style="text-align: center">別PKG 非子クラス</th></tr></thead><tbody>
 <tr><td><code>public</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td></tr>
 <tr><td><code>protected</code></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
@@ -114,18 +112,18 @@ System.out.println(a); // 1
 <tr><td><code>private</code></td><td style="text-align: center">o</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
 </tbody></table>
 </div>
-<h2 id="6">コンストラクタ</h2>
+<h2 id="5">コンストラクタ</h2>
 <ul>
 <li>ユーザ定義コンストラクタがある場合、デフォルトコンストラクタは定義されない。</li>
 <li><code>super()</code> や <code>this()</code> はコンストラクタの先頭で合計1回しか呼べない。</li>
 </ul>
-<h2 id="7">シグネチャ (sigature)</h2>
+<h2 id="6">シグネチャ (sigature)</h2>
 <p>Java においてシグネチャは、 (メソッド名, 型パラメタ, 引数の型) を指します。(<a href="https://docs.oracle.com/javase/specs/jls/se23/html/jls-8.html#jls-8.4.2">JLS 8.4.2 Method Signature</a>)
 ここで「型パラメタ」は、ジェネリックメソッドのパラメタを指しています。
 アクセス修飾子や戻り型は含まれません。</p>
 <p>シグネチャ <code>s</code>, <code>t</code> について、「それらが同じである」か「<code>t</code> に型消去をすると <code>s</code> に一致する」場合、 <code>s</code> は <code>t</code> のサブシグネチャであるといい、 <code>s ▷ t</code> と書きます (この記法はこの記事独自のものです)。
 <code>s ▷ t</code> か <code>t ▷ s</code> であるとき、 <code>s</code>, <code>t</code> はオーバーライド等価であるといいます。</p>
-<h2 id="8">オーバーライド (override)</h2>
+<h2 id="7">オーバーライド (override)</h2>
 <p>子クラスのメソッドのシグネチャを <code>c</code>、親クラスのメソッドのシグネチャを <code>p</code> とします。
 <code>c</code> が <code>p</code> をオーバーライドできる必要条件は、 <code>c ▷ p</code> であることです (<a href="https://docs.oracle.com/javase/specs/jls/se23/html/jls-8.html#jls-8.4.8.1">JLS 8.4.8.1. Overriding (by Instance Methods)</a>)。</p>
 <p>そのため、次は違法です。</p>
@@ -139,7 +137,7 @@ class B extends A {
   void m(List&lt;String&gt; a) {}
 }
 </code></pre>
-<h2 id="9">オーバーロード (overload)</h2>
+<h2 id="8">オーバーロード (overload)</h2>
 <p>メソッド <code>a</code> と <code>b</code> について、それぞれのシグネチャを <code>sa</code> と <code>sb</code> とおきます。
 <code>sa</code> と <code>sb</code> の名前が同じで、かつ <code>sa</code> と <code>sb</code> がオーバーライド等価でないとき、オーバーロードが起きます。 (<a href="https://docs.oracle.com/javase/specs/jls/se23/html/jls-8.html#jls-8.4.9">JLS 8.4.9. Overloading</a>)</p>
 <pre><code class="language-java">class A {}
@@ -159,9 +157,7 @@ class Err {
   void param(List&lt;Integer&gt; i) {} // シグネチャ : (param, (), List&lt;Integer&gt;)
 }
 </code></pre>
-<h2 id="10">ジェネリクス</h2>
-<p>Java のジェネリクスは非変です。</p>
-<h2 id="11">インタフェース</h2>
+<h2 id="9">インタフェース</h2>
 <p>メソッドは暗黙的に <code>abstract public</code> になります。
 <code>public</code> 以外のアクセス指定子はつけられません。</p>
 <pre><code class="language-java">public interface I {
@@ -198,7 +194,7 @@ class Err {
 また、抽象クラスでは抽象メソッドに <code>abstract</code> をつける必要があるのも同じように解釈できます。
 <code>default</code> を必須にするか <code>abstract</code> を必須にするかでダブスタ感がありますが、そこは目をつぶりましょう。</p>
 </blockquote>
-<h2 id="12">実現 (implements) の条件</h2>
+<h2 id="10">実現 (implements) の条件</h2>
 <p>実現すべきメソッドを自分で定義する必要はありません。
 親クラスから継いだものでも構いません。</p>
 <pre><code class="language-java">interface I {
@@ -217,7 +213,7 @@ void main(String[] args) {
   System.out.println(e.method()); // 1
 }
 </code></pre>
-<h2 id="13">多重継承・多重実現と名前衝突</h2>
+<h2 id="11">多重継承・多重実現と名前衝突</h2>
 <p>クラスには複数のインタフェースを実装できます。
 Java8 以降はインタフェースにデフォルトメソッドが実装できるので、多重継承における名前衝突への対処が必要です。</p>
 <p>名前解決には次のルールがあります :</p>
@@ -277,7 +273,7 @@ void main(String[] args) {
 }
 </code></pre>
 <p>なお、 <code>I1.super.m()</code> を書けるのは <code>I1</code> を直接実現している場合だけです。</p>
-<h2 id="14">switch 文</h2>
+<h2 id="12">switch 文</h2>
 <p><code>switch</code> できる型は以下のいずれか :</p>
 <ul>
 <li><code>int</code> 以下の整数型とそのラッパ</li>
@@ -291,7 +287,7 @@ void main(String[] args) {
 </ul>
 <p><code>case</code> が exhaustive である必要はありません。
 <code>default</code> は最後でない場所に書いても構いません。</p>
-<h2 id="15">初期化子</h2>
+<h2 id="13">初期化子</h2>
 <pre><code class="language-java">public class Sample {
   // 初期化子
   {
@@ -303,7 +299,7 @@ void main(String[] args) {
   }
 }
 </code></pre>
-<h2 id="16">可変長引数</h2>
+<h2 id="14">可変長引数</h2>
 <pre><code class="language-java">public class Main {
   static void varargsMethod(int... a) {
     // class [I
@@ -324,7 +320,7 @@ void main(String[] args) {
   }
 }
 </code></pre>
-<h2 id="17">例外処理</h2>
+<h2 id="15">例外処理</h2>
 <dl>
 <dt>Error (エラー)</dt>
 <dd>回復が困難なエラー。 OOM や assert 失敗など。</dd>
@@ -351,7 +347,7 @@ void main(String[] args) {
 <ul>
 <li><code>catche</code> はより具体的な型に対するものから並べる必要があります。</li>
 </ul>
-<h2 id="18">関数型インタフェースとラムダ式 (Java8)</h2>
+<h2 id="16">関数型インタフェースとラムダ式 (Java8)</h2>
 <p>関数型インタフェースは抽象メソッドを1つだけ持つインタフェースを指し、 <code>@FunctionalInterface</code> アノテーションをつけて明示します。
 アノテーションは省略可能ですが、つけておくと関数型インタフェースの条件を満たしていない場合にコンパイルエラーとすることができます。</p>
 <pre><code class="language-java">@FunctionalInterface
@@ -372,7 +368,84 @@ Adder&lt;Integer&gt; r = (a, b) -&gt; a + b;
 Adder&lt;Integer&gt; r = (a, b) -&gt; a + b + offset;
 System.out.println(r.add(2, 3)); // 15
 </code></pre>
-<h2 id="19">用語</h2>
+<h2 id="17">インナークラス</h2>
+<blockquote>
+<p>インナークラスとは、ネストされたクラスのうち陽にも暗にも <code>static</code> ではないものを指します。
+具体的には次のいずれかです。</p>
+<ul>
+<li>メンバクラスのうち、陽にも暗にも <code>static</code> でないもの</li>
+<li>ローカルクラスのうち、陽にも暗にも <code>static</code> でないもの</li>
+<li>匿名クラス。</li>
+</ul>
+<p>逆に、次はいずれも暗に <code>static</code> なのでインナークラスではありません。</p>
+<ul>
+<li>メンバ/ローカル enum</li>
+<li>メンバ/ローカル record</li>
+<li>インタフェースのメンバクラス</li>
+</ul>
+<p>(原文 : <a href="https://docs.oracle.com/javase/specs/jls/se24/html/jls-8.html#jls-8.1.3">Java 言語仕様 8.1.3</a>)</p>
+</blockquote>
+<p>インナークラスは静的メンバを持てません。</p>
+<p>インナークラスとエンクロージングクラスは相互にメンバにアクセスできます。</p>
+<blockquote>
+<ul>
+<li>Otherwise, if the member or constructor is declared with package access, then access is permitted only when the access occurs from within the package in which the class, interface, type parameter, or reference type is declared.</li>
+<li>A class member or constructor declared without an access modifier implicitly has package access.</li>
+</ul>
+<p>(原文 : <a href="https://docs.oracle.com/javase/specs/jls/se17/html/jls-6.html#jls-6.6.1">Java 言語仕様 6.6.1</a>)</p>
+</blockquote>
+<pre><code class="language-java">
+</code></pre>
+<h2 id="18">メンバクラス</h2>
+<p>インタフェース/クラス定義の中に書かれているクラスを指します。</p>
+<h2 id="19">静的インナークラス</h2>
+<p>名前と年齢を持った <code>Person</code> クラスがあります。
+このクラスを年齢順に並べ替えるための <code>AgeComparator</code> クラスを作ることを考えましょう。
+<code>Person</code> と <code>AgeComparator</code> は関連するクラスなので近いところに配置したいです。
+しかし、 Java は1ファイルにつき1つしか <code>public</code> なクラスを書けません。
+この問題の解決策として、次の2つを考えましょう。</p>
+<ol>
+<li><code>Person</code> のためのパッケージ階層を用意し、別々のファイルに書く</li>
+<li><code>AgeComparator</code> を <code>Person</code> の静的インナークラスとして書く</li>
+</ol>
+<p>2 を取るのは、 1 でファイルが増えるのを避けたいときです。
+静的インナークラスを使う場合、次のように書くことになります。</p>
+<pre><code class="language-java">public class Person implements Comparable&lt;Person&gt; {
+  private String name;
+  private int age;
+
+  public static class AgeComparator implements Comparator&lt;Person&gt; {
+    // ...
+  }
+}
+</code></pre>
+<p>他にも、 Java ではトップレベルクラスに <code>private</code> を付けられないので、
+外に見せないクラスを作るには、 <code>private static</code> な内部クラスを作ることになるという事情もあります。</p>
+<p>静的インナークラスはインナークラスではないという言説があり、要調査。
+https://zenn.dev/kariya_mitsuru/articles/c23ac5def58c1c</p>
+<p>インナークラスの private メソッドはエンクロージングクラスから見えるという謎。
+なぜそんな設計に…</p>
+<h2 id="20">enum</h2>
+<pre><code class="language-java">public enum Sample {
+  A("AAA"), // private static final なフィールドが作られる
+  B("BBB"),
+  C("CCC")
+
+  private final String value;
+
+  private Sample(String value) {
+    System.out.println(value);
+    this.value = value;
+  }
+
+  @Override
+  public String toString() {
+    return this.value;
+  }
+}
+</code></pre>
+<p><code>enum</code> を初めて使うときに全バリアントのコンストラクタが呼ばれる。</p>
+<h2 id="21">用語</h2>
 <dl>
 <dt>カプセル化</dt>
 <dd>関係するデータと処理をまとめること (いい感じなクラスを作ること)</dd>
@@ -381,7 +454,7 @@ System.out.println(r.add(2, 3)); // 15
 <dt>情報隠蔽</dt>
 <dd>実装を隠すこと (インタフェースや抽象クラスを使うこと)</dd>
 </dl>
-<h2 id="20">他言語との違い</h2>
+<h2 id="22">他言語との違い</h2>
 <ul>
 <li>C++ のコピーコンストラクタに相当するものはない。</li>
 <li>Cのカンマ演算子はない。</li>
@@ -390,14 +463,14 @@ System.out.println(r.add(2, 3)); // 15
 <li>不変参照はない。</li>
 <li>到達不能なコードがあるとコンパイルエラー。</li>
 </ul>
-<h2 id="21">MISC</h2>
+<h2 id="23">MISC</h2>
 <ul>
 <li><code>System.out.println(null)</code> は合法</li>
 <li><code>static</code> メンバはインスタンスからアクセス可能。</li>
 <li>代入は式。 <code>a = b = 10</code> は合法。</li>
 </ul>
 <hr />
-<h2 id="22">参考</h2>
+<h2 id="24">参考</h2>
 <ul>
 <li>https://tech.kurojica.com/archives/17792/</li>
 </ul>
