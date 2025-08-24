@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>Excel のリンク付きが重い問題に対処する</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-08-24 ~ 2025-08-24
+      </div>
+      <div> <a class="tag" href="../index.html?tag=excel">excel</a> <a class="tag" href="../index.html?tag=vba">vba</a></div>
+      <div id="toc"></div>
+      <div id="main-content">
+        <h1 id="">Excel のリンク付きが重い問題に対処する</h1>
+<pre><code>' =========================================================================================
+' llp - Lightweight Linked Picture
+'
+'   llp create    : コピー中のセル範囲（点線）→ リンク図を貼付け → 参照式を取得し
+'                   LLP_{ID} = IF(LLP_LINK, &lt;範囲&gt;, "") を作成 → 図の式を =LLP_{ID} に差替
+'   llp update    : LLP_LINK を TRUE→待機→FALSE にして全画像を更新
+'   llp migrate   : 既存リンク/カメラ画像を LLP 名参照へ一括移行
+'
+' 注意:
+'   - create は「セル範囲をコピー済み（点線が出ている）」が前提
+'   - 待機時間はブックの重さで調整（0.3〜2.0秒目安）
+' =========================================================================================
+
+Option Explicit
+
+Private Const MSO_LINKED_PICTURE As Long = 11
+Private Const MSO_PICTURE        As Long = 13
+
+Public Sub llp(Optional ByVal cmd As String = "")
+    On Error GoTo FINALLY
+
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
+    Application.DisplayAlerts = False
+
+    Call InitFollowFlag
+
+    If Len(cmd) = 0 Then
+        cmd = ChooseCmdByPrompt()
+    End If
+
+    Select Case cmd
+        Case "create", "c": Create
+        Case "update", "u": Update
+        Case "migrate", "m": Migrate
+    End Select
+
+FINALLY:
+    Call Disablelink
+    Application.ScreenUpdating = True
+    Application.EnableEvents = True
+    Application.DisplayAlerts = True
+
+    If Err.Number &lt;&gt; 0 Then
+        MsgBox "llp error :" &amp; Err.Description, vbCritical
+    End If
+End Sub
+
+Private Function ChooseCmdByPrompt() As String
+    Dim s As Variant
+    s = Application.InputBox( _
+        Prompt:="llp サブコマンドを入力してください:" &amp; vbCrLf &amp; _
+                "  migrate  … 既存リンク画像を新方式へ移行" &amp; vbCrLf &amp; _
+                "  create   … コピー中の範囲から作成（点線が前提）" &amp; vbCrLf &amp; _
+                "  update   … 一斉パルス更新" &amp; vbCrLf &amp; _
+                "  resize   … （新方式では不要・案内のみ）", _
+        Title:="llp - Lightweight Linked Picture", Type:=2)
+    If VarType(s) = vbBoolean And s = False Then s = ""
+    ChooseCmdByPrompt = CStr(s)
+End Function
+
+Private Sub InitFollowFlag()
+    On Error Resume Next
+    Call DisableLink
+    If Err.Number &lt;&gt; 0 Then
+        Err.Clear
+        ActiveWorkbook.Names.Add name:="LLP_LINK", RefersTo:="=FALSE"
+    End If
+    On Error GoTo 0
+End Sub
+
+Private Sub EnableLink()
+    ActiveWorkbook.Names("LLP_LINK").RefersTo = "=TRUE"
+    DoEvents
+End Sub
+Private Sub DisableLink()
+    ActiveWorkbook.Names("LLP_LINK").RefersTo = "=FALSE"
+    DoEvents
+End Sub
+
+Private Function NewLinkFormula(formula As String) As String
+    NewLinkFormula = _
+        "LLP_" &amp; _
+        Format(Now, "yyyymmddhhnnss") &amp; _
+        "_" &amp; _
+        Right$("000000" &amp; Hex$(CLng(Rnd * &amp;HFFFFFF)), 6)
+    ActiveWorkbook.Names.Add _
+        Name:=NewLinkFormula, _
+        RefersTo:="=IF(LLP_LINK," &amp; Mid$(formula, 1) &amp; ","""")"
+    DoEvents
+End Function
+
+Private Sub Create()
+    Dim shp As Shape
+    Dim formula As String
+
+    If Application.CutCopyMode &lt;&gt; xlCopy Then
+        MsgBox "リンク付き画像を貼り付けるためには範囲をコピーしてください。", vbExclamation
+        Exit Sub
+    End If
+
+    Application.CommandBars.ExecuteMso "PastePictureLink"
+    Set shp = ActiveSheet.Shapes(ActiveSheet.Shapes.Count)
+
+    formula = shp.DrawingObject.Formula
+    If Len(formula) = 0 Then
+        MsgBox "コピー元範囲の参照式を取得できませんでした。", vbExclamation
+        Exit Sub
+    End If
+
+    ' リンク用の名前を作成し、図形にセット
+    Call EnableLink
+    shp.DrawingObject.Formula = "=" &amp; NewLinkFormula(formula)
+    Call DisableLink
+End Sub
+
+Private Sub Update()
+    Call EnableLink
+    Application.Wait [Now()] + 1000 / (24 * 60 * 60 * 1000)' 1000ms 待機
+    Call DisableLink
+End Sub
+
+Private Sub Migrate()
+    Dim ws As Worksheet
+    Dim shp As Shape
+    Dim f As String
+    Dim id As String
+
+    Call EnableLink
+    For Each ws In ActiveWorkbook.Worksheets
+        For Each shp In ws.Shapes
+            f = shp.DrawingObject.Formula
+            If Not (Len(f) &gt; 0) Then GoTo CONTINUE_SHAPE
+            If (Left$(Mid$(f, 1), 4) = "LLP_") Then GoTo CONTINUE_SHAPE
+
+            ' リンク用の名前を作成し、図形にセット
+            shp.DrawingObject.Formula = "=" &amp; NewLinkFormula(f)
+CONTINUE_SHAPE:
+        Next shp
+    Next ws
+    Call DisableLink
+End Sub
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

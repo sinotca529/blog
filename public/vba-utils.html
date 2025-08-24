@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <link rel="stylesheet" href="../style.css" />
+  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  <title>VBA 便利マクロ集</title>
+</head>
+
+  <body>
+    <header>
+  <div id="menu-bar">
+    <div id="menu-left-buttons">
+      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
+      </button>
+    </div>
+    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div id="menu-right-buttons">
+      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+          </svg>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="searchbar" class="hidden">
+  <search>
+    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
+  </search>
+  <div id="search-result"></div>
+  <hr>
+</div>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-08-10 ~ 2025-08-10
+      </div>
+      <div> <a class="tag" href="../index.html?tag=vba">vba</a></div>
+      <div id="toc"><ul><li><a href="#1">色変更 (ModColorモジュール)</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">VBA 便利マクロ集</h1>
+<pre><code class="language-vba">Option Explicit
+
+' Excel 方眼紙を作成する
+' @param SizePt セルのサイズ
+Public Sub MakeGrid(Optional SizePt As Long = 32)
+    Application.ScreenUpdating = False
+    Columns("A").ColumnWidth = 1
+    Columns("A:XFD").ColumnWidth = SizePt / Columns("A").Width
+    Rows("1:1048576").RowHeight = Columns("A").Width
+    Application.ScreenUpdating = True
+End Sub
+</code></pre>
+<h2 id="1">色変更 (ModColorモジュール)</h2>
+<pre><code class="language-vba">Option Explicit
+'===============================================================================
+' NAME
+'     bg, fg, ol - Excel セル/図形の色を取得・設定・コピー・貼り付けする
+'
+' SYNOPSIS
+'     bg [ copy | c | paste | p | set COLOR | COLOR ]
+'     fg [ copy | c | paste | p | set COLOR | COLOR ]
+'     bo [ copy | c | paste | p | set COLOR | COLOR ]
+'
+' DESCRIPTION
+'     bg はセル/図形の塗り (Range.Interior / Shape.Fill) を操作する。
+'     fg はセル/図形の文字色 (Range.Font / Shape.TextFrame2 など) を操作する。
+'     bo は図形の枠線色 (Shape.Line) を操作する。セルの罫線は対象外。
+'     引数なしで実行すると、現在の色を #rrggbb 形式でステータスバーに表示する。
+'
+' COMMANDS
+'     copy, c    アクティブセル（または選択中の先頭図形）の色をコピー用バッファに保存。
+'     paste, p   コピー済みの色を選択範囲の全セル/全図形に適用。
+'     set COLOR  指定色をアクティブセル/先頭図形に設定。
+'     COLOR      set の短縮形。COLOR の形式は ARGUMENTS を参照。
+'
+' ARGUMENTS
+'     COLOR は以下の形式が使用可能：
+'         #rrggbb     - 16進指定 (例: #ffcc00)
+'         rrggbb      - 16進指定 (先頭の # は省略可)
+'         HUE[0-9]    - カラースケール (例: blue0～blue9, gray0～gray9)
+'                       0 が最も明るく、9 が最も暗い（濃い）
+'         HUE         - 段階省略時はデフォルト段階 5 にフォールバック
+'
+'     HUE は以下のいずれか：
+'         red, orange, amber, yellow, lime, green, teal, cyan, sky,
+'         blue, indigo, violet, purple, magenta, pink, gray, black, white
+'
+' NOTES
+'     - スコープは auto。セル選択時はセルへ、図形選択時は図形へ操作する。
+'     - コピー用バッファは bg / fg / bo で独立（Variant 番兵: Empty）。
+'     - fg は Range.Font / 図形テキストのフォント色を扱う。セル内の部分的な色は考慮しない。
+'     - ol は図形の枠線色のみ。セルの罫線は対象外。
+'     - すべてのメッセージやエラーはステータスバーに表示される。
+'===============================================================================
+
+'========================
+' バッファ（Variant 番兵: Empty）
+'========================
+Private gBgColor As Variant   ' Empty = 未コピー / Long = コピー済み
+Private gFgColor As Variant   ' Empty = 未コピー / Long = コピー済み
+Private gBoColor As Variant   ' Empty = 未コピー / Long = コピー済み
+
+Private Const DEFAULT_STEP As Long = 5  ' HUE 単独指定時の段階
+' 段階が大きいほど濃い（暗い）：L は 0.88 - n*0.078
+
+'========================
+' エントリポイント
+'========================
+Public Sub bg(Optional arg1 As String, Optional arg2 As String)
+    ApplyColorCommand "bg", arg1, arg2
+End Sub
+
+Public Sub fg(Optional arg1 As String, Optional arg2 As String)
+    ApplyColorCommand "fg", arg1, arg2
+End Sub
+
+Public Sub bo(Optional arg1 As String, Optional arg2 As String)
+    ApplyColorCommand "bo", arg1, arg2
+End Sub
+
+'========================
+' 分岐専用ディスパッチャ
+'========================
+Private Sub ApplyColorCommand(ByVal target As String, Optional arg1 As String, Optional arg2 As String)
+    Dim cmd As String
+    cmd = LCase$(Trim$(arg1))
+
+    Select Case cmd
+        Case ""                    ' 現在色表示
+            ShowCurrentColor target
+        Case "copy", "c"           ' コピー
+            DoCopy target
+        Case "paste", "p"          ' 貼り付け（選択範囲）
+            DoPaste target
+        Case "set"                 ' 明示 set
+            DoSet target, arg2
+        Case Else                  ' 短縮 set（arg1 を色トークンとして解釈）
+            DoSet target, cmd
+    End Select
+End Sub
+
+'========================
+' サブコマンド実装
+'========================
+Private Sub DoCopy(ByVal target As String)
+    Dim prefix As String: prefix = "[" &amp; target &amp; "] "
+    Dim sr As ShapeRange
+
+    If target = "bg" Then
+        If TryGetShapeRange(sr) Then
+            gBgColor = CLng(sr(1).Fill.ForeColor.RGB)
+        Else
+            gBgColor = CLng(ActiveCell.Interior.Color)
+        End If
+        Application.StatusBar = prefix &amp; "Copied " &amp; target &amp; " color."
+        Exit Sub
+    End If
+
+    If target = "fg" Then
+        If TryGetShapeRange(sr) Then
+            Dim c As Long
+            If GetShapeTextColor(sr(1), c) Then
+                gFgColor = CLng(c)
+                Application.StatusBar = prefix &amp; "Copied " &amp; target &amp; " color."
+            Else
+                Application.StatusBar = prefix &amp; "No text in the selected shape."
+            End If
+        Else
+            gFgColor = CLng(ActiveCell.Font.Color)
+            Application.StatusBar = prefix &amp; "Copied " &amp; target &amp; " color."
+        End If
+        Exit Sub
+    End If
+
+    If target = "bo" Then
+        If TryGetShapeRange(sr) Then
+            gBoColor = CLng(sr(1).Line.ForeColor.RGB)
+            Application.StatusBar = prefix &amp; "Copied " &amp; target &amp; " color."
+        Else
+            Application.StatusBar = prefix &amp; "No shape selected."
+        End If
+        Exit Sub
+    End If
+End Sub
+
+Private Sub DoPaste(ByVal target As String)
+    Dim prefix As String: prefix = "[" &amp; target &amp; "] "
+    Dim sr As ShapeRange
+    Dim applied As Long
+    On Error GoTo PasteErr
+
+    If target = "bg" Then
+        If IsEmpty(gBgColor) Then
+            Application.StatusBar = prefix &amp; "No " &amp; target &amp; " color copied yet. Run: " &amp; target &amp; " copy"
+            Exit Sub
+        End If
+        If TryGetShapeRange(sr) Then
+            Dim i As Long
+            For i = 1 To sr.Count
+                sr(i).Fill.Visible = True
+                sr(i).Fill.ForeColor.RGB = gBgColor
+                applied = applied + 1
+            Next
+            Application.StatusBar = prefix &amp; "Pasted " &amp; target &amp; " color to " &amp; applied &amp; " shape(s)."
+        Else
+            Selection.Interior.Color = gBgColor
+            Application.StatusBar = prefix &amp; "Pasted " &amp; target &amp; " color to " &amp; Selection.Cells.Count &amp; " cell(s)."
+        End If
+        Exit Sub
+    End If
+
+    If target = "fg" Then
+        If IsEmpty(gFgColor) Then
+            Application.StatusBar = prefix &amp; "No " &amp; target &amp; " color copied yet. Run: " &amp; target &amp; " copy"
+            Exit Sub
+        End If
+        If TryGetShapeRange(sr) Then
+            Dim j As Long
+            For j = 1 To sr.Count
+                If SetShapeTextColor(sr(j), gFgColor) Then applied = applied + 1
+            Next
+            Application.StatusBar = prefix &amp; "Pasted " &amp; target &amp; " color to " &amp; applied &amp; " shape(s) with text."
+        Else
+            Selection.Font.Color = gFgColor
+            Application.StatusBar = prefix &amp; "Pasted " &amp; target &amp; " color to " &amp; Selection.Cells.Count &amp; " cell(s)."
+        End If
+        Exit Sub
+    End If
+
+    If target = "ol" Then
+        If IsEmpty(gBoColor) Then
+            Application.StatusBar = prefix &amp; "No " &amp; target &amp; " color copied yet. Run: " &amp; target &amp; " copy"
+            Exit Sub
+        End If
+        If TryGetShapeRange(sr) Then
+            Dim k As Long
+            For k = 1 To sr.Count
+                sr(k).Line.Visible = True
+                sr(k).Line.ForeColor.RGB = gBoColor
+                applied = applied + 1
+            Next
+            Application.StatusBar = prefix &amp; "Pasted " &amp; target &amp; " color to " &amp; applied &amp; " shape(s)."
+        Else
+            Application.StatusBar = prefix &amp; "No shapes in selection."
+        End If
+        Exit Sub
+    End If
+
+    Exit Sub
+PasteErr:
+    Application.StatusBar = prefix &amp; "Paste failed for current selection."
+End Sub
+
+Private Sub DoSet(ByVal target As String, ByVal token As String)
+    Dim prefix As String: prefix = "[" &amp; target &amp; "] "
+    Dim c As Long, ok As Boolean
+    Dim sr As ShapeRange
+    token = LCase$(Trim$(token))
+
+    If token = "" Then
+        Application.StatusBar = prefix &amp; "Please specify a color. e.g. " &amp; target &amp; " set blue6 / " &amp; target &amp; " set #ffcc00"
+        Exit Sub
+    End If
+
+    ok = TryParseHexColor(token, c)
+    If Not ok Then ok = TryParseHueToken(token, c) ' "blue" → blue5、black/white固定を含む
+    If Not ok Then
+        Application.StatusBar = prefix &amp; "Invalid color: " &amp; token
+        Exit Sub
+    End If
+
+    If target = "bg" Then
+        If TryGetShapeRange(sr) Then
+            sr(1).Fill.Visible = True
+            sr(1).Fill.ForeColor.RGB = c
+        Else
+            ActiveCell.Interior.Color = c
+        End If
+        Application.StatusBar = prefix &amp; "set: " &amp; ColorLongToHex(c)
+        Exit Sub
+    End If
+
+    If target = "fg" Then
+        If TryGetShapeRange(sr) Then
+            If SetShapeTextColor(sr(1), c) Then
+                Application.StatusBar = prefix &amp; "set: " &amp; ColorLongToHex(c)
+            Else
+                Application.StatusBar = prefix &amp; "No text in the selected shape."
+            End If
+        Else
+            ActiveCell.Font.Color = c
+            Application.StatusBar = prefix &amp; "set: " &amp; ColorLongToHex(c)
+        End If
+        Exit Sub
+    End If
+
+    ' ol
+    If target = "ol" Then
+        If TryGetShapeRange(sr) Then
+            sr(1).Line.Visible = True
+            sr(1).Line.ForeColor.RGB = c
+            Application.StatusBar = prefix &amp; "set: " &amp; ColorLongToHex(c)
+        Else
+            Application.StatusBar = prefix &amp; "No shape selected."
+        End If
+        Exit Sub
+    End If
+End Sub
+
+Private Sub ShowCurrentColor(ByVal target As String)
+    Dim prefix As String: prefix = "[" &amp; target &amp; "] current: "
+    Dim sr As ShapeRange
+    Dim c As Long
+
+    If target = "bg" Then
+        If TryGetShapeRange(sr) Then
+            If sr(1).Fill.Visible Then
+                Application.StatusBar = prefix &amp; ColorLongToHex(sr(1).Fill.ForeColor.RGB)
+            Else
+                Application.StatusBar = prefix &amp; "none"
+            End If
+        Else
+            If ActiveCell.Interior.ColorIndex = xlColorIndexNone Then
+                Application.StatusBar = prefix &amp; "none"
+            Else
+                Application.StatusBar = prefix &amp; ColorLongToHex(ActiveCell.Interior.Color)
+            End If
+        End If
+        Exit Sub
+    End If
+
+    If target = "fg" Then
+        If TryGetShapeRange(sr) Then
+            If GetShapeTextColor(sr(1), c) Then
+                Application.StatusBar = prefix &amp; ColorLongToHex(c)
+            Else
+                Application.StatusBar = prefix &amp; "(no text)"
+            End If
+        Else
+            Application.StatusBar = prefix &amp; ColorLongToHex(ActiveCell.Font.Color)
+        End If
+        Exit Sub
+    End If
+
+    ' ol
+    If target = "ol" Then
+        If TryGetShapeRange(sr) Then
+            If sr(1).Line.Visible Then
+                Application.StatusBar = prefix &amp; ColorLongToHex(sr(1).Line.ForeColor.RGB)
+            Else
+                Application.StatusBar = prefix &amp; "none"
+            End If
+        Else
+            Application.StatusBar = prefix &amp; "(n/a for cells)"
+        End If
+        Exit Sub
+    End If
+End Sub
+
+'========================
+' 形状ユーティリティ
+'========================
+Private Function TryGetShapeRange(ByRef sr As ShapeRange) As Boolean
+    On Error Resume Next
+    Set sr = Selection.ShapeRange
+    TryGetShapeRange = Not (sr Is Nothing)
+    On Error GoTo 0
+End Function
+
+Private Function GetShapeTextColor(ByVal shp As Shape, ByRef outColor As Long) As Boolean
+    On Error GoTo OldApi
+    ' TextFrame2 優先
+    If shp.TextFrame2.HasText Then
+        outColor = shp.TextFrame2.TextRange.Font.Fill.ForeColor.RGB
+        GetShapeTextColor = True
+        Exit Function
+    End If
+OldApi:
+    On Error Resume Next
+    If shp.TextFrame.HasText Then
+        outColor = shp.TextFrame.Characters.Font.Color
+        GetShapeTextColor = True
+        Exit Function
+    End If
+    GetShapeTextColor = False
+End Function
+
+Private Function SetShapeTextColor(ByVal shp As Shape, ByVal c As Long) As Boolean
+    On Error GoTo OldApi
+    If shp.TextFrame2.HasText Then
+        shp.TextFrame2.TextRange.Font.Fill.Visible = True
+        shp.TextFrame2.TextRange.Font.Fill.ForeColor.RGB = c
+        SetShapeTextColor = True
+        Exit Function
+    End If
+OldApi:
+    On Error Resume Next
+    If shp.TextFrame.HasText Then
+        shp.TextFrame.Characters.Font.Color = c
+        SetShapeTextColor = True
+        Exit Function
+    End If
+    SetShapeTextColor = False
+End Function
+
+'========================
+' 色トークン解析ユーティリティ
+'========================
+Private Function TryParseHexColor(ByVal s As String, ByRef outColor As Long) As Boolean
+    If Left$(s, 1) = "#" Then s = Mid$(s, 2)
+    If Len(s) &lt;&gt; 6 Then Exit Function
+    If Not IsHex6(s) Then Exit Function
+
+    Dim r As Long, g As Long, b As Long
+    On Error GoTo Fail
+    r = CLng("&amp;H" &amp; Mid$(s, 1, 2))
+    g = CLng("&amp;H" &amp; Mid$(s, 3, 2))
+    b = CLng("&amp;H" &amp; Mid$(s, 5, 2))
+    outColor = RGB(r, g, b)
+    TryParseHexColor = True
+    Exit Function
+Fail:
+    TryParseHexColor = False
+End Function
+
+Private Function IsHex6(ByVal s As String) As Boolean
+    Dim i As Long, ch As Integer
+    For i = 1 To Len(s)
+        ch = Asc(Mid$(s, i, 1))
+        Select Case ch
+            Case 48 To 57, 65 To 70, 97 To 102 ' 0-9 A-F a-f
+            Case Else: Exit Function
+        End Select
+    Next
+    IsHex6 = True
+End Function
+
+Private Function TryParseHueToken(ByVal token As String, ByRef outColor As Long) As Boolean
+    token = LCase$(Trim$(token))
+
+    ' 特殊：black / white は固定値で即決
+    If token = "black" Then
+        outColor = RGB(0, 0, 0)
+        TryParseHueToken = True
+        Exit Function
+    ElseIf token = "white" Then
+        outColor = RGB(255, 255, 255)
+        TryParseHueToken = True
+        Exit Function
+    End If
+
+    Dim baseName As String, stepStr As String, n As Long
+    Dim h As Double, s As Double, l As Double
+
+    If SplitNameAndTrailingDigit(token, baseName, stepStr) Then
+        If stepStr = "" Or Not IsNumeric(stepStr) Then Exit Function
+        n = CLng(stepStr)
+        If n &lt; 0 Or n &gt; 9 Then Exit Function
+        h = HueNameToDegrees(baseName)
+        If h &lt; 0 Then Exit Function
+    Else
+        h = HueNameToDegrees(token)
+        If h &lt; 0 Then Exit Function
+        n = DEFAULT_STEP
+    End If
+
+    ' 無彩色（gray）の扱い：S=0
+    If token = "gray" Or baseName = "gray" Then
+        s = 0#
+    Else
+        s = 0.72
+    End If
+    l = LightnessForStep(n) ' 濃く＝暗く：n↑で l↓
+
+    outColor = HslToRgbLong(h, s, l)
+    TryParseHueToken = True
+End Function
+
+Private Function SplitNameAndTrailingDigit(ByVal token As String, _
+                                           ByRef baseName As String, _
+                                           ByRef digit As String) As Boolean
+    Dim l As Long
+    l = Len(token)
+    If l &lt; 2 Then Exit Function
+
+    Dim lastCh As String
+    lastCh = Right$(token, 1)
+    If lastCh &lt; "0" Or lastCh &gt; "9" Then Exit Function
+
+    baseName = Left$(token, l - 1)
+    digit = lastCh
+    SplitNameAndTrailingDigit = (Len(baseName) &gt; 0)
+End Function
+
+Private Function HueNameToDegrees(ByVal name As String) As Double
+    Select Case name
+        Case "red":      HueNameToDegrees = 0
+        Case "orange":   HueNameToDegrees = 30
+        Case "amber":    HueNameToDegrees = 45
+        Case "yellow":   HueNameToDegrees = 60
+        Case "lime":     HueNameToDegrees = 75
+        Case "green":    HueNameToDegrees = 120
+        Case "teal":     HueNameToDegrees = 165
+        Case "cyan":     HueNameToDegrees = 180
+        Case "sky":      HueNameToDegrees = 200
+        Case "blue":     HueNameToDegrees = 220
+        Case "indigo":   HueNameToDegrees = 245
+        Case "violet":   HueNameToDegrees = 270
+        Case "purple":   HueNameToDegrees = 285
+        Case "magenta":  HueNameToDegrees = 300
+        Case "pink":     HueNameToDegrees = 330
+        Case "gray":     HueNameToDegrees = 0   ' S=0% のため角度は実質無関係
+        Case Else:       HueNameToDegrees = -1
+    End Select
+End Function
+
+Private Function LightnessForStep(ByVal n As Long) As Double
+    LightnessForStep = 0.88 - n * 0.078 ' 0→0.88 (明) ～ 9→約0.178 (暗)
+End Function
+
+Private Function HslToRgbLong(ByVal h As Double, ByVal s As Double, ByVal l As Double) As Long
+    Dim r As Double, g As Double, b As Double
+    HslToRgb h, s, l, r, g, b
+    HslToRgbLong = RGB(CLng(r * 255# + 0.5), CLng(g * 255# + 0.5), CLng(b * 255# + 0.5))
+End Function
+
+Private Sub HslToRgb(ByVal h As Double, ByVal s As Double, ByVal l As Double, _
+                     ByRef r As Double, ByRef g As Double, ByRef b As Double)
+    h = h Mod 360#
+    If h &lt; 0 Then h = h + 360#
+    Dim c As Double, x As Double, m As Double
+    c = (1# - Abs(2# * l - 1#)) * s
+    x = c * (1# - Abs(((h / 60#) Mod 2#) - 1#))
+    m = l - c / 2#
+
+    Dim rp As Double, gp As Double, bp As Double
+    Select Case True
+        Case h &lt; 60#:   rp = c: gp = x: bp = 0
+        Case h &lt; 120#:  rp = x: gp = c: bp = 0
+        Case h &lt; 180#:  rp = 0: gp = c: bp = x
+        Case h &lt; 240#:  rp = 0: gp = x: bp = c
+        Case h &lt; 300#:  rp = x: gp = 0: bp = c
+        Case Else:      rp = c: gp = 0: bp = x
+    End Select
+
+    r = Clamp01(rp + m): g = Clamp01(gp + m): b = Clamp01(bp + m)
+End Sub
+
+Private Function Clamp01(ByVal v As Double) As Double
+    If v &lt; 0# Then v = 0#
+    If v &gt; 1# Then v = 1#
+    Clamp01 = v
+End Function
+
+Private Function ColorLongToHex(ByVal c As Long) As String
+    Dim r As Long, g As Long, b As Long
+    r = (c And &amp;HFF&amp;)
+    g = (c \ &amp;H100&amp;) And &amp;HFF&amp;
+    b = (c \ &amp;H10000) And &amp;HFF&amp;
+    ColorLongToHex = "#" &amp; TwoHex(r) &amp; TwoHex(g) &amp; TwoHex(b)
+End Function
+
+Private Function TwoHex(ByVal v As Long) As String
+    TwoHex = Right$("0" &amp; Hex$(v), 2)
+End Function
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>
