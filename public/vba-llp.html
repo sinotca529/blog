@@ -56,48 +56,46 @@
 <pre><code>' =========================================================================================
 ' llp - Lightweight Linked Picture
 '
-'   llp create    : コピー中のセル範囲（点線）→ リンク図を貼付け → 参照式を取得し
-'                   LLP_{ID} = IF(LLP_LINK, &lt;範囲&gt;, "") を作成 → 図の式を =LLP_{ID} に差替
-'   llp update    : LLP_LINK を TRUE→待機→FALSE にして全画像を更新
-'   llp migrate   : 既存リンク/カメラ画像を LLP 名参照へ一括移行
-'
-' 注意:
-'   - create は「セル範囲をコピー済み（点線が出ている）」が前提
-'   - 待機時間はブックの重さで調整（0.3〜2.0秒目安）
+'   llp insert     : コピー中のセル範囲（点線）→ リンク図を貼付け → 参照式を取得し
+'                     LLP_{ID} = IF(LLP_UPDATE, &lt;範囲&gt;, "") を作成 → 図の式を =LLP_{ID} に差替
+'   llp update     : LLP_UPDATE を TRUE→待機→FALSE にして全画像を更新
+'   llp migrate    : 既存リンク/カメラ画像を LLP 名参照へ一括移行
+'   llp clean      : どの図形からも参照されていない LLP_* 名称（孤児リンク）を即時一括削除（短縮 c）
+'   llp resize     : 選択中の画像が1枚のときのみ、「図とサイズのリセット」を実行（短縮 r）
+'   llp goto       : 選択中の画像が1枚のときのみ、参照先レンジへジャンプ（短縮 g）
+'   llp localize   : LLP名の参照から外部ブック名（[Book.xlsx]）を一括削除（短縮 l）
 ' =========================================================================================
 
 Option Explicit
-
-Private Const MSO_LINKED_PICTURE As Long = 11
-Private Const MSO_PICTURE        As Long = 13
+Private Const MSO_PICTURE As Long = 13
 
 Public Sub llp(Optional ByVal cmd As String = "")
-    On Error GoTo FINALLY
 
+    On Error GoTo FINALLY
     Application.ScreenUpdating = False
     Application.EnableEvents = False
     Application.DisplayAlerts = False
 
-    Call InitFollowFlag
-
-    If Len(cmd) = 0 Then
-        cmd = ChooseCmdByPrompt()
-    End If
-
-    Select Case cmd
-        Case "create", "c": Create
-        Case "update", "u": Update
-        Case "migrate", "m": Migrate
+    InitLlpUpdateFlag
+    If Len(cmd) = 0 Then cmd = ChooseCmdByPrompt()
+    Select Case LCase$(cmd)
+        Case "insert", "i": InsertLlp
+        Case "update", "u": UpdateAll
+        Case "migrate", "m": MigrateAll
+        Case "clean", "c": CleanOrphanNames
+        Case "resize", "r": ResizeSelected
+        Case "goto", "g": GotoSelected
+        Case "localize", "l": LocalizeBookRefs
     End Select
 
 FINALLY:
-    Call Disablelink
+    On Error GoTo 0
+    SetLlpUpdateFlag False
     Application.ScreenUpdating = True
     Application.EnableEvents = True
     Application.DisplayAlerts = True
-
-    If Err.Number &lt;&gt; 0 Then
-        MsgBox "llp error :" &amp; Err.Description, vbCritical
+    If ERR.Number &lt;&gt; 0 Then
+        Application.StatusBar = "E" &amp; ERR.Number &amp; ": " &amp; ERR.Description
     End If
 End Sub
 
@@ -105,96 +103,254 @@ Private Function ChooseCmdByPrompt() As String
     Dim s As Variant
     s = Application.InputBox( _
         Prompt:="llp サブコマンドを入力してください:" &amp; vbCrLf &amp; _
-                "  migrate  … 既存リンク画像を新方式へ移行" &amp; vbCrLf &amp; _
-                "  create   … コピー中の範囲から作成（点線が前提）" &amp; vbCrLf &amp; _
-                "  update   … 一斉パルス更新" &amp; vbCrLf &amp; _
-                "  resize   … （新方式では不要・案内のみ）", _
+                "  migrate  : 既存リンク画像を新方式へ移行" &amp; vbCrLf &amp; _
+                "  insert   : コピー中の範囲から作成（点線が前提）" &amp; vbCrLf &amp; _
+                "  update   : 一斉パルス更新" &amp; vbCrLf &amp; _
+                "  clean    : 孤児リンク(未使用の LLP_*)を即時一括削除" &amp; vbCrLf &amp; _
+                "  resize   : 選択中1枚の画像を『図とサイズのリセット』" &amp; vbCrLf &amp; _
+                "  goto     : 選択中1枚の画像の参照先へジャンプ" &amp; vbCrLf &amp; _
+                "  localize : LLP名の参照から外部ブック名を一括削除", _
         Title:="llp - Lightweight Linked Picture", Type:=2)
     If VarType(s) = vbBoolean And s = False Then s = ""
     ChooseCmdByPrompt = CStr(s)
 End Function
 
-Private Sub InitFollowFlag()
+Private Sub InitLlpUpdateFlag()
     On Error Resume Next
-    Call DisableLink
-    If Err.Number &lt;&gt; 0 Then
-        Err.Clear
-        ActiveWorkbook.Names.Add name:="LLP_LINK", RefersTo:="=FALSE"
-    End If
-    On Error GoTo 0
+    ActiveWorkbook.Names.Add name:="LLP_UPDATE", RefersTo:="=FALSE"
 End Sub
 
-Private Sub EnableLink()
-    ActiveWorkbook.Names("LLP_LINK").RefersTo = "=TRUE"
-    DoEvents
-End Sub
-Private Sub DisableLink()
-    ActiveWorkbook.Names("LLP_LINK").RefersTo = "=FALSE"
-    DoEvents
+Private Sub SetLlpUpdateFlag(ByVal state As Boolean)
+    ActiveWorkbook.Names("LLP_UPDATE").RefersTo = "=" &amp; state
 End Sub
 
-Private Function NewLinkFormula(formula As String) As String
-    NewLinkFormula = _
-        "LLP_" &amp; _
-        Format(Now, "yyyymmddhhnnss") &amp; _
-        "_" &amp; _
-        Right$("000000" &amp; Hex$(CLng(Rnd * &amp;HFFFFFF)), 6)
-    ActiveWorkbook.Names.Add _
-        Name:=NewLinkFormula, _
-        RefersTo:="=IF(LLP_LINK," &amp; Mid$(formula, 1) &amp; ","""")"
-    DoEvents
+Function GenId(Optional ByVal length As Long = 21) As String
+    Const chars As String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    Dim i As Long
+    Dim result As String
+    Randomize Timer
+
+    GenId = ""
+    For i = 1 To length
+        GenId = GenId &amp; Mid$(chars, Int(Rnd() * Len(chars)) + 1, 1)
+    Next i
 End Function
 
-Private Sub Create()
-    Dim shp As Shape
-    Dim formula As String
+' LLP_UPDATE フラグが TRUE のときに f と評価される名前を作り、返す。
+Private Function NewLlpName(ByVal f As String) As String
+    NewLlpName = "LLP_" &amp; GenId()
+    ActiveWorkbook.Names.Add name:=NewLlpName, RefersTo:="=IF(LLP_UPDATE," &amp; f &amp; ","""")"
+End Function
+
+Private Sub InsertLlp()
+    Dim s As Shape
+    Dim f As String
 
     If Application.CutCopyMode &lt;&gt; xlCopy Then
-        MsgBox "リンク付き画像を貼り付けるためには範囲をコピーしてください。", vbExclamation
-        Exit Sub
+        ERR.Raise 601, "llp insert", "参照範囲をコピーした状態で実行してください。"
     End If
 
+    ' リンクされた図を貼り付ける
     Application.CommandBars.ExecuteMso "PastePictureLink"
-    Set shp = ActiveSheet.Shapes(ActiveSheet.Shapes.Count)
+    Set s = ActiveSheet.Shapes(ActiveSheet.Shapes.Count)
 
-    formula = shp.DrawingObject.Formula
-    If Len(formula) = 0 Then
-        MsgBox "コピー元範囲の参照式を取得できませんでした。", vbExclamation
-        Exit Sub
-    End If
+    ' 貼り付けた図から、参照先を表す式を取得する
+    f = GetFormulaOrEmpty(s)
+    If Len(f) = 0 Then ERR.Raise 602, "llp insert", "参照範囲を取得できませんでした。"
 
-    ' リンク用の名前を作成し、図形にセット
-    Call EnableLink
-    shp.DrawingObject.Formula = "=" &amp; NewLinkFormula(formula)
-    Call DisableLink
+    ' 範囲として評価できない式はセットできないので、一度フラグを TRUE にする
+    SetLlpUpdateFlag True
+    s.DrawingObject.formula = NewLlpName(f)
+    SetLlpUpdateFlag False
 End Sub
 
-Private Sub Update()
-    Call EnableLink
-    Application.Wait [Now()] + 1000 / (24 * 60 * 60 * 1000)' 1000ms 待機
-    Call DisableLink
+Private Sub UpdateAll()
+    SetLlpUpdateFlag True
+    Application.Wait Now + TimeSerial(0, 0, 1)
+    SetLlpUpdateFlag False
 End Sub
 
-Private Sub Migrate()
+Private Sub MigrateAll()
     Dim ws As Worksheet
-    Dim shp As Shape
+    Dim s As Shape
     Dim f As String
-    Dim id As String
 
-    Call EnableLink
+    SetLlpUpdateFlag True
     For Each ws In ActiveWorkbook.Worksheets
-        For Each shp In ws.Shapes
-            f = shp.DrawingObject.Formula
-            If Not (Len(f) &gt; 0) Then GoTo CONTINUE_SHAPE
-            If (Left$(Mid$(f, 1), 4) = "LLP_") Then GoTo CONTINUE_SHAPE
-
-            ' リンク用の名前を作成し、図形にセット
-            shp.DrawingObject.Formula = "=" &amp; NewLinkFormula(f)
-CONTINUE_SHAPE:
-        Next shp
+        For Each s In ws.Shapes
+            f = GetFormulaOrEmpty(s)
+            If Len(f) &lt;&gt; 0 And Not (f Like "LLP_*") Then
+                s.DrawingObject.formula = "=" &amp; NewLlpName(f)
+            End If
+        Next s
     Next ws
-    Call DisableLink
+    SetLlpUpdateFlag False
+    Application.StatusBar = "移行が完了しました。"
 End Sub
+
+Private Sub CleanOrphanNames()
+    Dim used As Object
+    Dim ws As Worksheet
+    Dim s As Shape
+    Dim nm As name
+    Dim llpName As String
+    Set used = CreateObject("Scripting.Dictionary")
+
+    ' 使用中の LLP_* を収集
+    used.Add "LLP_UPDATE", True
+    For Each ws In ActiveWorkbook.Worksheets
+        For Each s In ws.Shapes
+            llpName = GetLlpNameOrEmpty(s)
+            If Not used.Exists(llpName) Then used.Add llpName, True
+        Next s
+    Next ws
+
+    ' 未使用の LLP_* を削除（LLP_UPDATE は除外）
+    For Each nm In ActiveWorkbook.Names
+        If (nm.name Like "LLP_*") And (Not used.Exists(nm.name)) Then nm.Delete
+    Next nm
+
+    Application.StatusBar = "孤児リンクを削除しました。"
+End Sub
+
+
+Private Sub ResizeSelected()
+    Dim shp As Shape
+    Dim bk As String
+    Dim sr As String
+
+    On Error GoTo ERR
+    For Each shp In Selection.ShapeRange
+        sr = GetLlpSrcRangeOrEmptyS(shp)
+        If Len(sr) = 0 Then GoTo NEXT_SHAPE
+
+        ' 式を範囲に戻す
+        bk = Trim$(shp.DrawingObject.formula)
+        shp.DrawingObject.formula = "=" &amp; sr
+
+        ' リサイズ
+        shp.ScaleHeight 1, True   ' 高さをリセット
+        shp.ScaleWidth 1, True    ' 幅をリセット
+
+        ' 式を名前に戻す
+        SetLlpUpdateFlag True
+        shp.DrawingObject.formula = bk
+        SetLlpUpdateFlag False
+NEXT_SHAPE:
+    Next shp
+    Exit Sub
+ERR:
+    On Error GoTo 0
+    SetLlpUpdateFlag True
+    shp.DrawingObject.formula = bk
+    SetLlpUpdateFlag False
+    ERR.Raise 604, , "LLP画像を選択してください。"
+End Sub
+
+
+Private Sub GotoSelected()
+    Dim src As String
+
+    ' 選択中の画像の参照範囲を取得
+    On Error GoTo ERR
+    If (Selection.ShapeRange.Count &lt;&gt; 1) Then GoTo ERR
+    src = GetLlpSrcRangeOrEmptyS(Selection.ShapeRange(1))
+    If Len(src) = 0 Then GoTo ERR
+
+    ' 選択範囲に移動
+    Application.Goto Application.Range(src), True
+    Exit Sub
+
+ERR:
+    On Error GoTo 0
+    ERR.Raise 603, "llp goto ", "LLP 画像を1つだけ選択してください。"
+End Sub
+
+Private Sub LocalizeBookRefs()
+    Dim nm As name
+    Dim srcRange As String
+    Dim srcRangeWoBk As String
+
+    For Each nm In ActiveWorkbook.Names
+        If nm.name = "LLP_UPDATE" Then GoTo NEXT_NAME
+        If Not (nm.name Like "LLP_*") Then GoTo NEXT_NAME
+
+        srcRange = GetLlpSrcRangeOrEmptyF(nm.RefersTo)
+        If Len(srcRange) = 0 Then GoTo NEXT_NAME
+
+        srcRangeWoBk = RemoveBookQualifier(srcRange)
+        If srcRangeWoBk = srcRange Then GoTo NEXT_NAME
+
+        nm.RefersTo = "=IF(LLP_UPDATE," &amp; srcRangeWoBk &amp; ","""")"
+NEXT_NAME:
+    Next nm
+
+    Application.StatusBar = "LLP 画像から外部ブック名を削除しました。"
+End Sub
+
+' 画像から参照先の式を取得
+Private Function GetFormulaOrEmpty(ByRef s As Shape) As String
+    On Error Resume Next
+    ' リンク付き画像は msoPicuture なので、 msoLinkedPicture は見なくて良い。
+    If s.Type &lt;&gt; MSO_PICTURE Then Exit Function
+    GetFormulaOrEmpty = Trim$(s.DrawingObject.formula)
+    On Error GoTo 0
+End Function
+
+' LLP 管理下の Shape について、参照している名前を返す
+Private Function GetLlpNameOrEmpty(ByRef s As Shape) As String
+    Dim f As String
+    f = GetFormulaOrEmpty(s)
+    If f Like "LLP_*" Then GetLlpNameOrEmpty = f
+    On Error GoTo 0
+End Function
+
+
+' LLP 管理下の Shape について、参照先の範囲を返す
+Private Function GetLlpSrcRangeOrEmptyS(ByRef s As Shape) As String
+    Dim nm As String
+    Dim f As String
+    nm = GetLlpNameOrEmpty(s)
+    If Len(nm) = 0 Then Exit Function
+
+    f = ActiveWorkbook.Names(Trim$(nm)).RefersTo
+    GetLlpSrcRangeOrEmptyS = GetLlpSrcRangeOrEmptyF(f)
+End Function
+
+' LLP 式から参照先の範囲を取り出す
+Private Function GetLlpSrcRangeOrEmptyF(ByRef f As String) As String
+    Const PREFIX As String = "=IF(LLP_UPDATE,"
+    Const SUFFIX As String = ","""")"
+    If Not f Like (PREFIX &amp; "*") Then Exit Function
+    If Not f Like ("*" &amp; SUFFIX) Then Exit Function
+    GetLlpSrcRangeOrEmptyF = Mid$(f, Len(PREFIX) + 1, Len(f) - Len(PREFIX) - Len(SUFFIX))
+End Function
+
+' 範囲から 外部ブック修飾を除去
+'  例:  "'[C:\path\[Book.xlsx]Sheet A'!$A$1" → "'Sheet A'!$A$1"
+'       "[Book.xlsx]Sheet1!$A$1:$B$2"        → "Sheet1!$A$1:$B$2"
+Function RemoveBookQualifier(ByRef RefText As String) As String
+    Dim exclPos As Long
+    Dim bracketPos As Long
+
+    RemoveBookQualifier = RefText
+
+    ' 末尾から ! を探す。
+    exclPos = InStrRev(RefText, "!")
+    If exclPos = 0 Then Exit Function
+
+    ' ] を探す
+    bracketPos = InStrRev(Left$(RefText, exclPos - 1), "]")
+    If bracketPos = 0 Then Exit Function
+
+
+    RemoveBookQualifier = Mid$(RefText, bracketPos + 1)
+
+    ' ! の直前がシングルクォートなら、 ' 頭に ' を付与
+    If Mid$(RefText, exclPos - 1, 1) = "'" Then
+        RemoveBookQualifier = "'" &amp; RemoveBookQualifier
+    End If
+End Function
 </code></pre>
 
       </div>
