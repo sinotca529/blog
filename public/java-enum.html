@@ -6,10 +6,10 @@
   <meta name="path_to_root" content="..">
   <link rel="stylesheet" href="../style.css" />
   <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
-  <title>私的ヒットチャート</title>
+  <title>(Java) enum</title>
 </head>
 
-  <body data-page="crypto" data-cypher="lCklz7frJFFlbuIGoS5h/mSuzGbczzKOeulsXCCyrfiwFlnm72qznBreIAOLZpXLQ6np0+6Guu4m6l08YyjBDbhIoDYWVNRx9o5UXlqgtY3smy3erCYr2WHIVJdb9PjNvJN4REFZkVoo0m53yzZ/BPx4ZQEgO4jadQ+fqB1TPycmZYYSlzfG4bZwFWiUbvjs3pik50aGknvMMIZpB2wNABjXDfyOsBjj7mXZ4AQCxRe9DKr0/JAhd/3LYoQRn4FT0cGHKn4vZXV1cOWiY005HRnSyKw5tkJwYdxBHeb3j7gw6YLUIKZ8fSm/s25razc5ZtY9TRmSf3pseAnyN1oEacl1Rr9dztbZh5N4I0ZAe8XfNVCfylv2E2mk6MN0/ttqCLYGk6U+yE8Aq/j5q1HyXWtjMj0sjm0J8pnX6twTT2/mSS9lPygbGV3/pD/7Khw0GB7vXzFuiyGpnUCwzhq91ZFT0hcvfKleh5vPrpEMInL3MUGoxQBKIgK7uSuvWJKVvWwa2M6J/DI8lYIqlpFeksFsG4JM/VACc5aFtyfiQPQjb5G+MQ/xofoTdSSeoI3SJRV6wvs6T0BLB1P0W0LoQbj+BIhXYIrmDBoY7Rx1AQhPqs4GHBa/HGNrbv83sDqlFp9kjtJcg7q7rJositH6hCNyv0fi9QCf+Eik5RBqqyOgUxNGjEY5ll+mc10DFfs7QO1huY9H7Y356EFXVS9MsyjovvyhLch5yVpjYAX5PzgMvyfSQhpb5QkDsNKeOrikX6Zo92PpzfEknGHROE2eD1p3nwlC3zDO2n80cGl+PAr5QVPQmolRBK2qMpLYEN+DBbojKvNWFKxw/F1swuO2L15nZZ2DBHsZLsDXqZHRuVuoTDtjNqzik9fit5+jueuZhWI3vs1OriFyg0sZCV+1nP2KLw50MFhAMcE8sQ4JUdzuHYb/t6Asaw52bfbnb11mnB8Z4NAMDOp8Nb4bKdsBcBeqd9M5QGm+xiEDpi+U4QXZRwy0mnMbTv8LD3WcYx8YcICj4ZRPnYpa/I/mHyCbMEzQjVxS/htwfoxxLMG2sIDYDCub514W77A6xHYISkW/RUbaEhhsLSqiLgzhjvB+xZnfYsicPo1kVOLX8hHLYuTChfQfNVAHbwgBpETYDHMn">
+  <body>
     <header>
   <div id="menu-bar">
     <div id="menu-left-buttons">
@@ -47,18 +47,32 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-06-16 ~ 2024-06-16
+        2025-09-07 ~ 2025-09-07
       </div>
-      <div> <a class="tag" href="../index.html?tag=misc">misc</a></div>
+      <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
+      <div id="toc"></div>
       <div id="main-content">
-        <h1>This page is protected.</h1>
-        <input
-          autofocus
-          type="password"
-          id="decrypt-key"
-          placeholder="Enter your secret key"
-        />
-        <button id="decrypt-btn">Decode</button>
+        <h1 id="">(Java) enum</h1>
+<pre><code class="language-java">public enum Sample {
+  A("AAA"), // private static final なフィールドが作られる
+  B("BBB"),
+  C("CCC")
+
+  private final String value;
+
+  private Sample(String value) {
+    System.out.println(value);
+    this.value = value;
+  }
+
+  @Override
+  public String toString() {
+    return this.value;
+  }
+}
+</code></pre>
+<p><code>enum</code> を初めて使うときに全バリアントのコンストラクタが呼ばれる。</p>
+
       </div>
     </main>
     <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
