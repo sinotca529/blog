@@ -47,31 +47,53 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2025-09-07 ~ 2025-09-07
+        2025-09-07 ~ 2025-09-21
       </div>
       <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
       <div id="toc"></div>
       <div id="main-content">
         <h1 id="">(Java) enum</h1>
-<pre><code class="language-java">public enum Sample {
-  A("AAA"), // private static final なフィールドが作られる
-  B("BBB"),
-  C("CCC")
+<p>Java の enum は <code>java.lang.Enum</code> を継承する <code>final</code> クラスとしてコンパイルされます。
+<ruby>列挙子<rt>variant</rt></ruby>は <code>public static final</code> なインスタンスとして表現されます。
+あくまでクラスなので、コンストラクタ, フィールド, メソッドを定義できます。</p>
+<p>列挙子のインスタンスが作成されるのはクラスのロード時です。
+<code>enum</code> を初めて使うときに全バリアントのコンストラクタが呼ばれます。</p>
+<pre><code class="language-java">enum Signal {
+  RED("red"), GREEN("green"), YELLOW("yellow");
 
-  private final String value;
+  private final String color;
 
-  private Sample(String value) {
-    System.out.println(value);
-    this.value = value;
+  private Signal(String color) {
+    System.out.println(color);
+    this.color = color;
   }
+}
 
-  @Override
-  public String toString() {
-    return this.value;
+public class Main {
+  public static void main(String args[]) {
+    // 列挙子が作成され、 red green yellow と表示される。
+    var s = Signal.RED;
   }
 }
 </code></pre>
-<p><code>enum</code> を初めて使うときに全バリアントのコンストラクタが呼ばれる。</p>
+<blockquote class="markdown-alert-note">
+<p>これは <code>enum</code> 特有の挙動ではなく、静的メンバの挙動です。
+通常のクラスの静的メンバについても同じ現象が起こります。</p>
+<pre><code class="language-java">class A { A(String s) { System.out.println(s); } }
+
+class B {
+  static final A a1 = new A("1");
+  static final A a2 = new A("2");
+}
+
+public class Main {
+  public static void main(String args[]) {
+    // B.a1, B.a2 が作成され、 1 2 と表示される。
+    var s = B.a1;
+  }
+}
+</code></pre>
+</blockquote>
 
       </div>
     </main>

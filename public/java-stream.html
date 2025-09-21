@@ -6,10 +6,10 @@
   <meta name="path_to_root" content="..">
   <link rel="stylesheet" href="../style.css" />
   <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
-  <title>暗号化テスト</title>
+  <title>(Java) Stream 処理</title>
 </head>
 
-  <body data-page="crypto" data-cypher="Qnv7sJviDjGtbwKxBzDM95xpOtOYATTMRAxRZHrSpDniscT/ZKJeWrKKYjeptetgkdtWfpjyoLqhlEe/liFCLTt3CYgVAymCZVMAwOGm7XChde9mmjoO0tmBxIJe/5/EmIV9AHHtAG7h0A6PIkIPMg==">
+  <body>
     <header>
   <div id="menu-bar">
     <div id="menu-left-buttons">
@@ -47,18 +47,28 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-05-12 ~ 2024-05-12
+        2025-09-21 ~ 2025-09-21
       </div>
-      <div> <a class="tag" href="../index.html?tag=test">test</a></div>
+      <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">Collector インタフェース</a></li></ul></div>
       <div id="main-content">
-        <h1>This page is protected.</h1>
-        <input
-          autofocus
-          type="password"
-          id="decrypt-key"
-          placeholder="Enter your secret key"
-        />
-        <button id="decrypt-btn">Decode</button>
+        <h1 id="">(Java) Stream 処理</h1>
+<h2 id="1">Collector インタフェース</h2>
+<div class="table-wrapper"><table><thead><tr><th>メソッドとシグネチャ</th><th>役割</th></tr></thead><tbody>
+<tr><td><code>Supplier&lt;A&gt; supplier()</code></td><td>アキュムレータの初期化</td></tr>
+<tr><td><code>BiConsumer&lt;A, T&gt; accumulator()</code></td><td>アキュムレータの更新</td></tr>
+<tr><td><code>BinaryOperator&lt;A&gt; combiner()</code></td><td>アキュムレータのマージ</td></tr>
+<tr><td><code>Function&lt;A, R&gt; finisher()</code></td><td>アキュムレータから結果取り出し</td></tr>
+<tr><td><code>Set&lt;Characteristics&gt; characteristics()</code></td><td>並列性や順序のヒント</td></tr>
+</tbody></table>
+</div>
+<p><code>characteristics</code> には次のバリアントがあります。</p>
+<div class="table-wrapper"><table><thead><tr><th>値</th><th>意味</th></tr></thead><tbody>
+<tr><td><code>CONCURRENT</code></td><td>複数スレッドが同時に <code>accumulator</code> を呼んで良い。</td></tr>
+<tr><td><code>UNORDERED</code></td><td>要素の処理順が自由。</td></tr>
+<tr><td><code>IDENTITY_FINISH</code></td><td><code>finisher</code> が不要。</td></tr>
+</tbody></table>
+</div>
       </div>
     </main>
     <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
