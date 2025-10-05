@@ -4,42 +4,67 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="path_to_root" content="..">
+  <script type="text/javascript" src="../theme.js"></script>
+  <script type="text/javascript" src="../script.js" defer></script>
+  <script type="text/javascript" src="../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../gtag.js" defer></script>
   <link rel="stylesheet" href="../style.css" />
-  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  
   <title>Java 文法まとめ</title>
 </head>
 
   <body>
-    <header>
-  <div id="menu-bar">
-    <div id="menu-left-buttons">
-      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
-            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
         </svg>
       </button>
-    </div>
-    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
-    <div id="menu-right-buttons">
-      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
-          </svg>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
         </svg>
       </button>
     </div>
   </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
 </header>
-<div id="searchbar" class="hidden">
-  <search>
-    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
-  </search>
-  <div id="search-result"></div>
-  <hr>
-</div>
 
     <main>
       <div id="date">
@@ -217,6 +242,19 @@ void main(String[] args) {
 }
 </code></pre>
 <p>なお、 <code>I1.super.m()</code> を書けるのは <code>I1</code> を直接実現している場合だけです。</p>
+<p>また、ルール2に従って実行するメソッドが選択されるのは実行時であるため、
+次のコードは実行時エラーになります。</p>
+<pre><code class="language-java">public class Main {
+  public static void main(String[] args) {
+    // java.lang.IllegalAccessError
+    System.out.println((new E()).m());
+  }
+}
+
+interface I1 { default String m() { return "I1"; } }
+class C1 { private String m() { return "C1"; } }
+class E extends C1 implements I1 {}
+</code></pre>
 <h2 id="10">switch 文</h2>
 <p><code>switch</code> できる型は以下のいずれか :</p>
 <ul>
@@ -228,6 +266,7 @@ void main(String[] args) {
 <ul>
 <li>定数 (<code>final</code> またはリテラル)</li>
 <li>コンパイル時に値が決まる</li>
+<li>enum のバリアント (<code>MyEnum.A</code> ではなく <code>A</code> と記述する。)</li>
 </ul>
 <p><code>case</code> が exhaustive である必要はありません。
 <code>default</code> は最後でない場所に書いても構いません。</p>
@@ -293,7 +332,8 @@ void main(String[] args) {
 </ul>
 <h2 id="14">関数型インタフェースとラムダ式 (Java8)</h2>
 <p>関数型インタフェースは抽象メソッドを1つだけ持つインタフェースを指し、 <code>@FunctionalInterface</code> アノテーションをつけて明示します。
-アノテーションは省略可能ですが、つけておくと関数型インタフェースの条件を満たしていない場合にコンパイルエラーとすることができます。</p>
+アノテーションは省略可能ですが、つけておくと関数型インタフェースの条件を満たしていない場合にコンパイルエラーとすることができます。
+なお、 抽象メソッドとは別に <code>private</code> メソッドや <code>static</code> メソッドを持つことは許されています。</p>
 <pre><code class="language-java">@FunctionalInterface
 interface Adder&lt;T&gt; { T add(T a, T b); }
 </code></pre>

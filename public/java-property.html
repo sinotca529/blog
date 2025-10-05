@@ -10,7 +10,7 @@
   <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../gtag.js" defer></script>
   <link rel="stylesheet" href="../style.css" />
   
-  <title>レンダリング法</title>
+  <title>(Java) プロパティファイル</title>
 </head>
 
   <body>
@@ -72,31 +72,40 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-09-29 ~ 2024-09-29
+        2025-10-04 ~ 2025-10-04
       </div>
-      <div> <a class="tag" href="../index.html?tag=algo">algo</a> <a class="tag" href="../index.html?tag=graphic">graphic</a></div>
-      <div id="toc"></div>
+      <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">プロパティの読み込み</a></li><li><a href="#2">プロパティファイルの記述</a></li><li><a href="#3">言語の切り替え</a></li></ul></div>
       <div id="main-content">
-        <h1 id="">レンダリング法</h1>
-<dl>
-<dt>Zソート法</dt>
-<dd>カメラから遠い位置にある面から順に描画します。
-交差した面を正しく描画できません。</dd>
-<dt>Zバッファ法</dt>
-<dd>ピクセル単位でカメラから遠い位置にある順に描画します。
-交差する面を描画できます。
-レンダリングバッファとは別に、「Zバッファ」という領域を持ちます。
-Zバッファにはカメラからの距離を表す色 (モノクロ。白いほど遠い。) を書き込みます。
-面を描画する際には、ピクセルごとにZバッファの情報を取得・更新して陰面消去を判断します。</dd>
-<dt>スキャンライン方式</dt>
-<dd>カメラからスキャンライン (走査線) を出して、それが交差した物を描画します。
-交差した面を描画できます。</dd>
-<dt>レイトレーシング</dt>
-<dd>光の反射 (鏡面反射)・透過・屈折を表現できます。
-カメラからレーザーを出し、その進路を追跡するイメージです。</dd>
-</dl>
-<hr />
-<p>参考 : <a href="https://blender3d.biz/knowledge_rendering_renderingmethods.html">様々なレンダリング方式</a></p>
+        <h1 id="">(Java) プロパティファイル</h1>
+<p><code>java.util.Properties</code> クラスを利用します。</p>
+<h2 id="1">プロパティの読み込み</h2>
+<pre><code class="language-java">Properties p = new Properties();
+p.load(new FileReader("settings.properties"))
+for (Object key: p.keySet()) System.out.println(p.get(key));
+</code></pre>
+<p>キーを文字列型で指定できるならば、 <code>get</code> の代わりに <code>getProperty</code> を利用します。
+<code>get</code> は引数も戻り値も <code>Object</code> ですが、 <code>getProperty</code> はともに <code>String</code> です。</p>
+<pre><code class="language-java">var name = p.getProperty("name");
+</code></pre>
+<h2 id="2">プロパティファイルの記述</h2>
+<p>プロパティファイルに利用できる文字コードは ISO-8859-1 (Latin-1) もしくは UTF-8 です。
+ただし、 UTF-8 が利用できるのは Java SE 9 以降です。
+それ以前、日本語を扱いたい場合は <code>native2ascii</code> コマンドを用いて ISO-8859-1 への変換を行っていました。</p>
+<pre><code class="language-properties"># 変換前
+name=太郎
+
+# 変換後
+name=\u592a\u90ce
+</code></pre>
+<h2 id="3">言語の切り替え</h2>
+<p>利用者の環境に応じて読み込むプロパティファイルを変更するには <code>java.util.ResourceBundle</code> を利用します。</p>
+<pre><code class="language-java">// デフォルトのロケールが en_US の場合 settings_en_US.properties を読み込む。
+// 存在しない場合は settings.properties を読み込む。
+ResourceBundle rb = ResourceBundle.getBundle("settings");
+System.out.println(rg.getString("name"));
+</code></pre>
+<p><code>getBundle</code> はファクトリメソッドです。</p>
 
       </div>
     </main>

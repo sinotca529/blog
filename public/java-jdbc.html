@@ -10,7 +10,7 @@
   <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../gtag.js" defer></script>
   <link rel="stylesheet" href="../style.css" />
   
-  <title>レンダリング法</title>
+  <title>(Java) JDBC</title>
 </head>
 
   <body>
@@ -72,31 +72,70 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-09-29 ~ 2024-09-29
+        2025-10-04 ~ 2025-10-04
       </div>
-      <div> <a class="tag" href="../index.html?tag=algo">algo</a> <a class="tag" href="../index.html?tag=graphic">graphic</a></div>
-      <div id="toc"></div>
+      <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">データベース接続</a></li><li><a href="#2">SQL の実行</a></li></ul></div>
       <div id="main-content">
-        <h1 id="">レンダリング法</h1>
-<dl>
-<dt>Zソート法</dt>
-<dd>カメラから遠い位置にある面から順に描画します。
-交差した面を正しく描画できません。</dd>
-<dt>Zバッファ法</dt>
-<dd>ピクセル単位でカメラから遠い位置にある順に描画します。
-交差する面を描画できます。
-レンダリングバッファとは別に、「Zバッファ」という領域を持ちます。
-Zバッファにはカメラからの距離を表す色 (モノクロ。白いほど遠い。) を書き込みます。
-面を描画する際には、ピクセルごとにZバッファの情報を取得・更新して陰面消去を判断します。</dd>
-<dt>スキャンライン方式</dt>
-<dd>カメラからスキャンライン (走査線) を出して、それが交差した物を描画します。
-交差した面を描画できます。</dd>
-<dt>レイトレーシング</dt>
-<dd>光の反射 (鏡面反射)・透過・屈折を表現できます。
-カメラからレーザーを出し、その進路を追跡するイメージです。</dd>
-</dl>
-<hr />
-<p>参考 : <a href="https://blender3d.biz/knowledge_rendering_renderingmethods.html">様々なレンダリング方式</a></p>
+        <h1 id="">(Java) JDBC</h1>
+<p>JDBC (Java DataBase Connectivity) は RDBMS を統一的に扱うための仕組みです。
+DB の操作に必要なインタフェースや共通実装を提供します。
+個別 RDBMS 向けの実装は、ベンダーが提供するドライバ (ライブラリ) で補填します。</p>
+<h2 id="1">データベース接続</h2>
+<pre><code class="language-java">try {
+    // 接続開始
+    Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/data/Sample");
+    // 接続終了
+    con.close();
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+}
+</code></pre>
+<h2 id="2">SQL の実行</h2>
+<p>検索をするには <code>executeQuery</code> を利用します。</p>
+<pre><code class="language-java">var sql = "SELECT * FROM emps WHERE age &gt; ?";
+try (PreparedStatement ps = con.prepareStatement(sql)) {
+    ps.setInt(1, 30); // パラメタ位置は1始まり
+
+    ResultSet rs = ps.executeQuery();
+    while (rs.next()) {
+        System.out.println(rs.getInt(1) + ", " + rs.getString(2));
+    }
+
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+}
+</code></pre>
+<p>挿入・更新・削除をするには <code>executeUpdate</code> を利用します。</p>
+<pre><code class="language-java">var sql = "INSERT INTO emps VALUES (?, ?)";
+try (PreparedStatement ps = con.prepareStatement(sql)) {
+    ps.setString(1, "Taro"); // パラメタ位置は1始まり
+    ps.set(1, 30); // パラメタ位置は1始まり
+
+    int n = ps.executeUpdate(); // 処理件数
+    System.out.println(n);
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+}
+</code></pre>
+<p><code>execute</code> は検索/挿入・更新・削除のいずれも扱えます。
+真偽値を返し、 <code>true</code> なら <code>ps.getResultSet</code> で <code>executeQuery</code> 相当の結果を、
+<code>false</code> なら <code>ps.getUpdateCount</code> で <code>executeUpdate</code> 相当の結果を得られます。</p>
+<p>また、 <code>setX</code> 系メソッドは <code>executeX</code> 系メソッドの実行後も発行できます。</p>
+<pre><code class="language-java">var sql = "INSERT INTO emps VALUES (?, ?)";
+try (PreparedStatement ps = con.prepareStatement(sql)) {
+    ps.set(1, 30);
+
+    ps.setString(1, "Taro");
+    ps.executeUpdate();
+
+    ps.setString(1, "Jiro"); // OK
+    ps.executeUpdate();
+
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+}
+</code></pre>
 
       </div>
     </main>

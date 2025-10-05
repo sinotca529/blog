@@ -4,42 +4,67 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="path_to_root" content="..">
+  <script type="text/javascript" src="../theme.js"></script>
+  <script type="text/javascript" src="../script.js" defer></script>
+  <script type="text/javascript" src="../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../gtag.js" defer></script>
   <link rel="stylesheet" href="../style.css" />
-  <script defer type="text/javascript" src="../metadata.js"></script><script defer type="text/javascript" src="../script.js"></script><script defer type="text/javascript" src="../theme.js"></script><script defer type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L"></script><script defer type="text/javascript" src="../gtag.js"></script>
+  
   <title>ASCII表</title>
 </head>
 
   <body>
-    <header>
-  <div id="menu-bar">
-    <div id="menu-left-buttons">
-      <button id="search-toggle" class="button-on-menu" onclick="toggleSearchInput()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
-            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
         </svg>
       </button>
-    </div>
-    <h1 id="menu-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
-    <div id="menu-right-buttons">
-      <button id="theme-toggle" class="button-on-menu" onclick="toggleTheme()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" style="fill: var(--header-fg);">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-            <path d="M448 256c0-106-86-192-192-192l0 384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
-          </svg>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
         </svg>
       </button>
     </div>
   </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
 </header>
-<div id="searchbar" class="hidden">
-  <search>
-    <input type="search" id="search-input" onkeyup="searchAndRender()" placeholder="Input to search...">
-  </search>
-  <div id="search-result"></div>
-  <hr>
-</div>
 
     <main>
       <div id="date">
@@ -50,7 +75,7 @@
         2022-04-03 ~ 2022-04-03
       </div>
       <div> <a class="tag" href="../index.html?tag=misc">misc</a></div>
-      <div id="toc"></div>
+      <div id="toc"><ul><li><a href="#1">制御コードの意味</a></li></ul></div>
       <div id="main-content">
         <h1 id="">ASCII表</h1>
 <div class="table-wrapper"><table><thead><tr><th>hex</th><th>data</th><th>hex</th><th>data</th><th>hex</th><th>data</th><th>hex</th><th>data</th></tr></thead><tbody>
@@ -86,6 +111,43 @@
 <tr><td>1D</td><td>GS</td><td>3D</td><td>=</td><td>5D</td><td>]</td><td>7D</td><td>}</td></tr>
 <tr><td>1E</td><td>RS</td><td>3E</td><td>&gt;</td><td>5E</td><td>^</td><td>7E</td><td>~</td></tr>
 <tr><td>1F</td><td>US</td><td>3F</td><td>?</td><td>5F</td><td>_</td><td>7F</td><td>DEL</td></tr>
+</tbody></table>
+</div>
+<h2 id="1">制御コードの意味</h2>
+<div class="table-wrapper"><table><thead><tr><th>hex</th><th>名称</th><th>説明</th></tr></thead><tbody>
+<tr><td>00</td><td>NUL</td><td>ヌル文字 (データのパディングや終端に使用)</td></tr>
+<tr><td>01</td><td>SOH</td><td>ヘッダ開始 (Start of Header)</td></tr>
+<tr><td>02</td><td>STX</td><td>テキスト開始 (Start of Text)</td></tr>
+<tr><td>03</td><td>ETX</td><td>テキスト終了 (End of Text)</td></tr>
+<tr><td>04</td><td>EOT</td><td>伝送終了 (End of Transmission)</td></tr>
+<tr><td>05</td><td>ENQ</td><td>問い合わせ (Enquiry)</td></tr>
+<tr><td>06</td><td>ACK</td><td>受信確認応答 (Acknowledge)</td></tr>
+<tr><td>07</td><td>BEL</td><td>警告ベル (ベル音を鳴らす)</td></tr>
+<tr><td>08</td><td>BS</td><td>バックスペース (Backspace)</td></tr>
+<tr><td>09</td><td>HT</td><td>水平タブ (Horizontal Tab)</td></tr>
+<tr><td>0A</td><td>LF</td><td>改行 (Line Feed, Unix系の改行)</td></tr>
+<tr><td>0B</td><td>VT</td><td>垂直タブ (Vertical Tab)</td></tr>
+<tr><td>0C</td><td>FF</td><td>改ページ (Form Feed, ページ切替)</td></tr>
+<tr><td>0D</td><td>CR</td><td>復帰 (Carriage Return, 行頭へ戻る)</td></tr>
+<tr><td>0E</td><td>SO</td><td>シフトアウト (Shift Out, 代替文字セット切替)</td></tr>
+<tr><td>0F</td><td>SI</td><td>シフトイン (Shift In, 元の文字セットに戻す)</td></tr>
+<tr><td>10</td><td>DLE</td><td>データリンクエスケープ (Data Link Escape)</td></tr>
+<tr><td>11</td><td>DC1</td><td>制御文字1 (Device Control 1, 通信装置制御)</td></tr>
+<tr><td>12</td><td>DC2</td><td>制御文字2 (Device Control 2)</td></tr>
+<tr><td>13</td><td>DC3</td><td>制御文字3 (Device Control 3)</td></tr>
+<tr><td>14</td><td>DC4</td><td>制御文字4 (Device Control 4)</td></tr>
+<tr><td>15</td><td>NAK</td><td>否定応答 (Negative Acknowledge)</td></tr>
+<tr><td>16</td><td>SYN</td><td>同期 (Synchronous Idle, 同期維持)</td></tr>
+<tr><td>17</td><td>ETB</td><td>伝送ブロック終了 (End of Transmission Block)</td></tr>
+<tr><td>18</td><td>CAN</td><td>取り消し (Cancel)</td></tr>
+<tr><td>19</td><td>EM</td><td>メディア終了 (End of Medium)</td></tr>
+<tr><td>1A</td><td>SUB</td><td>代替 (Substitute, 不正文字置換)</td></tr>
+<tr><td>1B</td><td>ESC</td><td>エスケープ (Escape, 制御シーケンス開始)</td></tr>
+<tr><td>1C</td><td>FS</td><td>ファイル区切り (File Separator)</td></tr>
+<tr><td>1D</td><td>GS</td><td>グループ区切り (Group Separator)</td></tr>
+<tr><td>1E</td><td>RS</td><td>レコード区切り (Record Separator)</td></tr>
+<tr><td>1F</td><td>US</td><td>単位区切り (Unit Separator)</td></tr>
+<tr><td>7F</td><td>DEL</td><td>削除 (Delete, 通常の削除操作)</td></tr>
 </tbody></table>
 </div>
       </div>
