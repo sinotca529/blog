@@ -79,21 +79,22 @@
       <div id="main-content">
         <h1 id="">(Java) マルチスレッド処理</h1>
 <h2 id="1">Thread</h2>
-<p>基本は <code>Thread</code> を生で触るのではなく、高級な <code>Executor</code> 系を利用することになるでしょう。</p>
+<p><code>Thread</code> を使うと、別スレッドを立てて処理を実行することができます。</p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">メソッド</th><th style="text-align: left">役割</th></tr></thead><tbody>
-<tr><td style="text-align: left"><code>run</code></td><td style="text-align: left">処理の実態を記述する。</td></tr>
-<tr><td style="text-align: left"><code>start</code></td><td style="text-align: left">新しいスレッドを作成して <code>run</code> を実行する。</td></tr>
+<tr><td style="text-align: left"><code>void run()</code></td><td style="text-align: left">処理の実態を記述する。</td></tr>
+<tr><td style="text-align: left"><code>void start()</code></td><td style="text-align: left">新しいスレッドを作成して <code>run</code> を実行する。</td></tr>
 </tbody></table>
 </div>
-<blockquote class="markdown-alert-note">
-<p><code>run</code> メソッドを直接呼び出すこともできます。
+<blockquote>
+<p>[!NOTE] &gt; <code>run</code> メソッドを直接呼び出すこともできます。
 その場合は新規スレッドは作成されず、現在のスレッドで処理が実行されます。</p>
 </blockquote>
 <h2 id="2">Executor</h2>
 <p><code>Executor</code> はスレッドプールに関するインタフェースです。
+基本は <code>Thread</code> を生で触る代わりに、より高級な <code>Executor</code> 系を利用します。
 インスタンスは <code>Executors</code> ファクトリクラスで作成します。
-作成したスレッドプールにタスクを投げ、結果を得るの基本的な使い方です。</p>
-<div class="table-wrapper"><table><thead><tr><th>メソッド</th><th>戻り値</th><th>特徴</th></tr></thead><tbody>
+作成したスレッドプールにタスクを投げ、結果を得るのが基本的な使い方です。</p>
+<div class="table-wrapper"><table><thead><tr><th>ファクトリメソッド</th><th>戻り値</th><th>特徴</th></tr></thead><tbody>
 <tr><td><code>newSingleThreadExecutor()</code></td><td><code>ExecutorService</code></td><td>単一スレッドで逐次タスクを実行。</td></tr>
 <tr><td><code>newFixedThreadPool(int nThreads)</code></td><td><code>ExecutorService</code></td><td>スレッド数固定。</td></tr>
 <tr><td><code>newCachedThreadPool()</code></td><td><code>ExecutorService</code></td><td>必要に応じてスレッドを生成し、アイドル状態が続けば破棄。</td></tr>
@@ -103,7 +104,7 @@
 </tbody></table>
 </div>
 <h3 id="2.1">タスクの実行方法</h3>
-<p><code>Executor</code> にタスクを投げるには、 <code>submit</code> を利用します。
+<p><code>Executor</code> にタスクを投げるには <code>submit</code> を利用します。
 <code>submit</code> にはいくつかオーバーロードがあり、役割ごとに使い分けます。</p>
 <div class="table-wrapper"><table><thead><tr><th>シグネチャ</th><th>用途</th><th><code>future.get()</code> の戻り値</th></tr></thead><tbody>
 <tr><td><code>Future&lt;?&gt; submit(Runnable task)</code></td><td>戻り値を持たない処理</td><td><code>null</code></td></tr>

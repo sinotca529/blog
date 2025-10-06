@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="..">
+  <script type="text/javascript" src="../theme.js"></script>
+  <script type="text/javascript" src="../script.js" defer></script>
+  <script type="text/javascript" src="../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../gtag.js" defer></script>
+  <link rel="stylesheet" href="../style.css" />
+  
+  <title>(Java) 関数型インタフェース</title>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+        </svg>
+      </button>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
+</header>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-10-06 ~ 2025-10-06
+      </div>
+      <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">ラムダ式</a></li><li><a href="#2">あらかじめ用意されている主要なインタフェース</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">(Java) 関数型インタフェース</h1>
+<p>関数型インタフェースは抽象メソッドを1つだけ持つインタフェースを指し、 <code>@FunctionalInterface</code> アノテーションをつけて明示します。
+アノテーションは省略可能ですが、つけておくと関数型インタフェースの条件を満たしていない場合にコンパイルエラーとすることができます。
+なお、 抽象メソッドとは別に <code>private</code> メソッドや <code>static</code> メソッドを持つことは許されています。</p>
+<pre><code class="language-java">@FunctionalInterface
+interface Adder&lt;T&gt; { T add(T a, T b); }
+</code></pre>
+<h2 id="1">ラムダ式</h2>
+<p>ラムダ式を評価すると関数型インタフェースを実装した無名クラスのインスタンスが得られます。</p>
+<pre><code class="language-java">// Adder を実装した無名クラスのインスタンスを生成
+Adder&lt;Integer&gt; r = (a, b) -&gt; a + b;
+System.out.println(r.getClass()); // class Main$$Lambda/0x00007f828b154408
+System.out.println(r.add(2, 3));  // 5
+</code></pre>
+<p>引数名として、スコープにある変数と同じ名前は使えません。</p>
+<pre><code class="language-java">var a = 10;
+Adder&lt;Integer&gt; r = (a, b) -&gt; a + b;
+</code></pre>
+<p>ラムダ式は、式の外にある変数のうち、宣言に <code>final</code> がついている (または付けてもコンパイルが通る) ものを参照できます。
+これはラムダ式固有の制約ではなく、ローカルクラスの制約に由来するものと考えられます。</p>
+<pre><code class="language-java">var offset = 10;
+Adder&lt;Integer&gt; r = (a, b) -&gt; a + b + offset;
+System.out.println(r.add(2, 3)); // 15
+</code></pre>
+<h2 id="2">あらかじめ用意されている主要なインタフェース</h2>
+<p>主要な関数型インタフェースを次の表に示します。
+Rust の <code>Fn</code> トレイト的なものがないため、色々使い分ける必要があります。</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">インタフェース</th><th style="text-align: left">メソッド</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>Supplier&lt;T&gt;</code></td><td style="text-align: left"><code>T get()</code></td></tr>
+<tr><td style="text-align: left"><code>Consumer&lt;T&gt;</code></td><td style="text-align: left"><code>void accept(T)</code></td></tr>
+<tr><td style="text-align: left"><code>BiConsumer&lt;T, U&gt;</code></td><td style="text-align: left"><code>void accept(T, U)</code></td></tr>
+<tr><td style="text-align: left"><code>Predicate&lt;T&gt;</code></td><td style="text-align: left"><code>boolean test(T)</code></td></tr>
+<tr><td style="text-align: left"><code>BiPredicate&lt;T, U&gt;</code></td><td style="text-align: left"><code>boolean test(T, U)</code></td></tr>
+<tr><td style="text-align: left"><code>Function&lt;T, R&gt;</code></td><td style="text-align: left"><code>R apply(T)</code></td></tr>
+<tr><td style="text-align: left"><code>BiFunction&lt;T, U, R&gt;</code></td><td style="text-align: left"><code>R apply(T, U)</code></td></tr>
+<tr><td style="text-align: left"><code>UnaryOperator&lt;T&gt;</code></td><td style="text-align: left"><code>T apply(T)</code></td></tr>
+<tr><td style="text-align: left"><code>BinaryOperator&lt;T&gt;</code></td><td style="text-align: left"><code>T apply(T, T)</code></td></tr>
+<tr><td style="text-align: left"><code>Runnable</code></td><td style="text-align: left"><code>void run()</code></td></tr>
+<tr><td style="text-align: left"><code>Callable&lt;V&gt;</code></td><td style="text-align: left"><code>V call()</code></td></tr>
+</tbody></table>
+</div>
+<ul>
+<li><code>Runnable</code> と <code>Callble</code> の覚え方
+<ul>
+<li>Run は走ったっきり帰ってこないので戻り値なし。 Call は呼びかけへの応答があるので戻り値ありと覚える。</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

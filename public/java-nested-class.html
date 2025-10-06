@@ -75,12 +75,9 @@
         2025-09-07 ~ 2025-09-07
       </div>
       <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
-      <div id="toc"><ul><li><a href="#1">種類</a></li><li><a href="#2">修飾子</a></li><li><a href="#3">インナークラス</a></li><li><a href="#4">メンバクラス</a></li><li><a href="#5">静的インナークラス</a></li></ul></div>
+      <div id="toc"><ul><li><a href="#1">種類</a></li><li><a href="#2">修飾子</a></li><li><a href="#3">インナークラス</a></li><li><a href="#4">メンバクラス</a></li><li><a href="#5">静的インナークラス</a></li><li><a href="#6">ローカルクラス</a></li></ul></div>
       <div id="main-content">
-        <style>
-rt { text-align: left; color: green; }
-</style>
-<h1 id="">(Java) 内部クラス</h1>
+        <h1 id="">(Java) 内部クラス</h1>
 <p>Java では、クラス内にクラスを書くことができます。</p>
 <p>ローカルクラス
 匿名クラス</p>
@@ -114,8 +111,6 @@ rt { text-align: left; color: green; }
 <tr><td style="text-align: left">匿名クラス</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
 </tbody></table>
 </div>
-<p>ローカルクラスを <code>static</code> にできないのは、</p>
-<p>インナークラスは</p>
 <h2 id="3">インナークラス</h2>
 <blockquote>
 <p>インナークラスとは、ネストされたクラスのうち陽にも暗にも <code>static</code> ではないものを指します。
@@ -165,12 +160,14 @@ rt { text-align: left; color: green; }
   }
 }
 </code></pre>
-<p>他にも、 Java ではトップレベルクラスに <code>private</code> を付けられないので、
-外に見せないクラスを作るには、 <code>private static</code> な内部クラスを作ることになるという事情もあります。</p>
-<p>静的インナークラスはインナークラスではないという言説があり、要調査。
-https://zenn.dev/kariya_mitsuru/articles/c23ac5def58c1c</p>
-<p>インナークラスの private メソッドはエンクロージングクラスから見えるという謎。
-なぜそんな設計に…</p>
+<h2 id="6">ローカルクラス</h2>
+<p>ローカルクラス内で利用できるローカル変数は、実質的に <code>final</code> であるものに限ります。
+この制約はラムダと同じです。</p>
+<!-- 他にも、 Java ではトップレベルクラスに `private` を付けられないので、 -->
+<!-- 外に見せないクラスを作るには、 `private static` な内部クラスを作ることになるという事情もあります。 -->
+<!---->
+<!-- インナークラスの private メソッドはエンクロージングクラスから見えるという謎。 -->
+<!-- なぜそんな設計に… -->
 
       </div>
     </main>
