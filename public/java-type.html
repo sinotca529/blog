@@ -84,7 +84,7 @@
 <tr><td style="text-align: left"><code>char</code></td><td style="text-align: left"><code>u16</code></td></tr>
 <tr><td style="text-align: left"><code>short</code></td><td style="text-align: left"><code>i16</code></td></tr>
 <tr><td style="text-align: left"><code>int</code></td><td style="text-align: left"><code>i32</code></td></tr>
-<tr><td style="text-align: left"><code>long</code></td><td style="text-align: left"><code>u64</code></td></tr>
+<tr><td style="text-align: left"><code>long</code></td><td style="text-align: left"><code>i64</code></td></tr>
 <tr><td style="text-align: left"><code>float</code></td><td style="text-align: left"><code>f32</code></td></tr>
 <tr><td style="text-align: left"><code>double</code></td><td style="text-align: left"><code>f64</code></td></tr>
 </tbody></table>
@@ -103,8 +103,7 @@ char a = (1 &lt;&lt; x) - 1; // 65535
 </code></pre>
 <p>収まらなければコンパイルエラーになります。</p>
 <pre><code class="language-java">final int x = 16;
-// エラー
-// char b = 1 &lt;&lt; x;
+char b = 1 &lt;&lt; x; // エラー
 </code></pre>
 <h3 id="1.2">Autoboxing, Autounboxing</h3>
 <p>整数型と対応する参照型とは、相互に暗黙変換されます。</p>

@@ -75,7 +75,7 @@
         2025-09-21 ~ 2025-09-21
       </div>
       <div> <a class="tag" href="../index.html?tag=lang">lang</a> <a class="tag" href="../index.html?tag=java">java</a> <a class="tag" href="../index.html?tag=ref">ref</a></div>
-      <div id="toc"><ul><li><a href="#1">Collector インタフェース</a></li><li><a href="#2">Stream</a></li></ul></div>
+      <div id="toc"><ul><li><a href="#1">Collector インタフェース</a></li><li><a href="#2">Stream</a></li><li><a href="#3">Optional</a></li></ul></div>
       <div id="main-content">
         <h1 id="">(Java) Stream 処理</h1>
 <h2 id="1">Collector インタフェース</h2>
@@ -96,8 +96,22 @@
 </div>
 <h2 id="2">Stream<T></h2>
 <p>Java は言語仕様上 <code>Stream&lt;Integer&gt;</code> のみにメソッドを生やすことができません。
-そのため、 <code>IntStream</code>, <code>DoubleStream</code>, <code>LongStream</code> などの特定の型に特化したストリームが存在します。
+そのため、 <code>IntStream</code>, <code>DoubleStream</code>, <code>LongStream</code> などの特定のプリミティブ型に特化したストリームが存在します。
 これらストリームには、最小値、最大値、平均値などを取得するメソッドが用意されています。</p>
+<p>ただし、 <code>Stream&lt;Integer&gt;</code> と <code>IntStream</code> は継承関係にありません。
+そのため、 <code>Stream</code> にあるメソッドが <code>IntStream</code> にあるとは限りません。
+おそらくボクシングによるコストを避けるため、 <code>IntStream</code> 内部では <code>Integer</code> ではなく <code>int</code> で処理を行いたいという動機だと考えられます。</p>
+<pre><code>BaseStream&lt;T, S extends BaseStream&lt;T, S&gt;&gt;
+ ▲
+ ├─ Stream&lt;T&gt;
+ ├─ IntStream
+ ├─ LongStream
+ └─ DoubleStream
+</code></pre>
+<h2 id="3">Optional</h2>
+<ul>
+<li><code>Optional.ofNullable</code> に <code>null</code> を渡すと <code>Optional.empty()</code> と同じものが戻る。</li>
+</ul>
 
       </div>
     </main>

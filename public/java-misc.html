@@ -79,7 +79,16 @@
       <div id="main-content">
         <h1 id="">(Java) その他</h1>
 <ul>
-<li><code>List</code> の静的メソッドは変更不能なインスタンスを返す。</li>
+<li>
+<p><code>List</code> の静的メソッドは変更不能なインスタンスを返す。</p>
+</li>
+<li>
+<p><code>Console.readPassword</code> が <code>char[]</code> を返すのはセキュリティ上の理由。</p>
+<ul>
+<li><code>String</code> は GC のタイミングまで消されないため危険。さらに、イミュータブルなのでメモリの上書きもできない。</li>
+<li><code>char[]</code> は利用後すぐにゼロ埋めしてデータを消せる。</li>
+</ul>
+</li>
 </ul>
 
       </div>
