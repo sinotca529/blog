@@ -75,9 +75,37 @@
         2025-08-10 ~ 2025-08-10
       </div>
       <div> <a class="tag" href="../index.html?tag=vba">vba</a></div>
-      <div id="toc"><ul><li><a href="#1">色変更 (ModColorモジュール)</a></li></ul></div>
+      <div id="toc"><ul><li><a href="#1">各種更新の停止</a></li><li><a href="#2">方眼紙作成</a></li><li><a href="#3">色変更 (ModColorモジュール)</a></li></ul></div>
       <div id="main-content">
         <h1 id="">VBA 便利マクロ集</h1>
+<h2 id="1">各種更新の停止</h2>
+<p>描画等の更新停止/再開を行うためのクラスです。
+初期化時に各種停止処理を行い、インスタンス破棄のタイミングで各種状態を復元します。 (<a href="https://tonari-it.com/excel-vba-class-performance-booster">参考</a>)</p>
+<pre><code class="language-vba">' Class Module: StopUpdate
+Option Explicit
+
+Private c As XlCalculation
+Private s As Boolean
+Private e As Boolean
+
+Private Sub Class_Initialize()
+    c = Application.Calculation
+    s = Application.ScreenUpdating
+    e = Application.EnableEvents
+
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
+End Sub
+
+Private Sub Class_Terminate()
+    On Error Resume Next
+    Application.Calculation = c
+    Application.ScreenUpdating = s
+    Application.EnableEvents = e
+End Sub
+</code></pre>
+<h2 id="2">方眼紙作成</h2>
 <pre><code class="language-vba">Option Explicit
 
 ' Excel 方眼紙を作成する
@@ -90,7 +118,7 @@ Public Sub MakeGrid(Optional SizePt As Long = 32)
     Application.ScreenUpdating = True
 End Sub
 </code></pre>
-<h2 id="1">色変更 (ModColorモジュール)</h2>
+<h2 id="3">色変更 (ModColorモジュール)</h2>
 <pre><code class="language-vba">Option Explicit
 '===============================================================================
 ' NAME
