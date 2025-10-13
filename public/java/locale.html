@@ -3,20 +3,20 @@
   <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="path_to_root" content="..">
-  <script type="text/javascript" src="../theme.js"></script>
-  <script type="text/javascript" src="../script.js" defer></script>
-  <script type="text/javascript" src="../metadata.js" defer></script>
-  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../gtag.js" defer></script>
-  <link rel="stylesheet" href="../style.css" />
+  <meta name="path_to_root" content="../..">
+  <script type="text/javascript" src="../../theme.js"></script>
+  <script type="text/javascript" src="../../script.js" defer></script>
+  <script type="text/javascript" src="../../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../../gtag.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
   
-  <title>暗号化テスト</title>
+  <title>(Java) ロケール</title>
 </head>
 
-  <body data-page="crypto" data-cypher="pVflj2rZ+4lLdieuobV1D6XzgGg+ncJIs3xjAfFqhWUo9jZKnH/7BmAv9lHVcXRH5goHv0Ff95nytnRwQWD0i51dBtHzho5kLlqihIIdzlLysJXVJ8MYXx4ZwQpUj7VenecmlqvwtdYvURVsBeuUwg==">
+  <body>
     <header class="site-header">
   <div class="header-inner">
-    <h1 class="site-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
+    <h1 class="site-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
     <div class="header-actions">
       <button
         id="search-toggle"
@@ -72,18 +72,42 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2024-05-12 ~ 2024-05-12
+        2025-10-04 ~ 2025-10-04
       </div>
-      <div> <a class="tag" href="../index.html?tag=test">test</a></div>
+      <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a> <a class="tag" href="../../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">ロケールの作成</a></li></ul></div>
       <div id="main-content">
-        <h1>This page is protected.</h1>
-        <input
-          autofocus
-          type="password"
-          id="decrypt-key"
-          placeholder="Enter your secret key"
-        />
-        <button id="decrypt-btn">Decode</button>
+        <h1 id="">(Java) ロケール</h1>
+<p>国際化対応 (i18n) には <code>java.util.Locale</code> とその関連クラスを利用します。</p>
+<pre><code class="language-java">// システム規定のロケールを取得
+Locale l = Locale.getDefault();
+System.out.println(l); // en_US
+</code></pre>
+<h2 id="1">ロケールの作成</h2>
+<p>ロケールを作成するにはコンストラクタを利用します。
+コンストラクタは3つあります。
+<code>language</code> には言語コードを、 <code>country</code> には国コードを指定します。
+<code>variant</code> はより細かな分類が必要な際に利用します。</p>
+<ul>
+<li><code>Locale(String language)</code></li>
+<li><code>Locale(String language, String country)</code></li>
+<li><code>Locale(String language, String country, String variant)</code></li>
+</ul>
+<p>これらコンストラクタは引数の整合性をチェックしません。
+メジャーなロケールであれば定数を利用できます。</p>
+<pre><code class="language-java">Locale l = Locale.US; // en_US 相当
+</code></pre>
+<p>他にも、IETF言語タグも利用できます。</p>
+<pre><code class="language-java">Locale l = Locale.forLanguageTag("en-US")
+</code></pre>
+<p>ビルダーパターンによる構築も可能です。</p>
+<pre><code class="language-java">Builder b = new Locale.Builder();
+Locale l = b
+    .setLanguage("en")
+    .setRegion("US")
+    .build();
+</code></pre>
+
       </div>
     </main>
     <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>

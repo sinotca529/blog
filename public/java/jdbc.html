@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../..">
+  <script type="text/javascript" src="../../theme.js"></script>
+  <script type="text/javascript" src="../../script.js" defer></script>
+  <script type="text/javascript" src="../../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../../gtag.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+  
+  <title>(Java) JDBC</title>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+        </svg>
+      </button>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
+</header>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-10-04 ~ 2025-10-04
+      </div>
+      <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a> <a class="tag" href="../../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">データベース接続</a></li><li><a href="#2">SQL の実行</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">(Java) JDBC</h1>
+<p>JDBC (Java DataBase Connectivity) は RDBMS を統一的に扱うための仕組みです。
+DB の操作に必要なインタフェースや共通実装を提供します。
+個別 RDBMS 向けの実装は、ベンダーが提供するドライバ (ライブラリ) で補填します。</p>
+<h2 id="1">データベース接続</h2>
+<pre><code class="language-java">try {
+    // 接続開始
+    Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/data/Sample");
+    // 接続終了
+    con.close();
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+}
+</code></pre>
+<h2 id="2">SQL の実行</h2>
+<p>検索をするには <code>executeQuery</code> を利用します。</p>
+<pre><code class="language-java">var sql = "SELECT * FROM emps WHERE age &gt; ?";
+try (PreparedStatement ps = con.prepareStatement(sql)) {
+    ps.setInt(1, 30); // パラメタ位置は1始まり
+
+    ResultSet rs = ps.executeQuery();
+    while (rs.next()) {
+        System.out.println(rs.getInt(1) + ", " + rs.getString(2));
+    }
+
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+}
+</code></pre>
+<p>挿入・更新・削除をするには <code>executeUpdate</code> を利用します。</p>
+<pre><code class="language-java">var sql = "INSERT INTO emps VALUES (?, ?)";
+try (PreparedStatement ps = con.prepareStatement(sql)) {
+    ps.setString(1, "Taro"); // パラメタ位置は1始まり
+    ps.set(1, 30); // パラメタ位置は1始まり
+
+    int n = ps.executeUpdate(); // 処理件数
+    System.out.println(n);
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+}
+</code></pre>
+<p><code>execute</code> は検索/挿入・更新・削除のいずれも扱えます。
+真偽値を返し、 <code>true</code> なら <code>ps.getResultSet</code> で <code>executeQuery</code> 相当の結果を、
+<code>false</code> なら <code>ps.getUpdateCount</code> で <code>executeUpdate</code> 相当の結果を得られます。</p>
+<p>また、 <code>setX</code> 系メソッドは <code>executeX</code> 系メソッドの実行後も発行できます。</p>
+<pre><code class="language-java">var sql = "INSERT INTO emps VALUES (?, ?)";
+try (PreparedStatement ps = con.prepareStatement(sql)) {
+    ps.set(1, 30);
+
+    ps.setString(1, "Taro");
+    ps.executeUpdate();
+
+    ps.setString(1, "Jiro"); // OK
+    ps.executeUpdate();
+
+} catch (SQLException e) {
+    throw new RuntimeException(e);
+}
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../..">
+  <script type="text/javascript" src="../../theme.js"></script>
+  <script type="text/javascript" src="../../script.js" defer></script>
+  <script type="text/javascript" src="../../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../../gtag.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+  
+  <title>(Java) 内部クラス</title>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+        </svg>
+      </button>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
+</header>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-09-07 ~ 2025-09-07
+      </div>
+      <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a> <a class="tag" href="../../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">種類</a></li><li><a href="#2">修飾子</a></li><li><a href="#3">インナークラス</a></li><li><a href="#4">メンバクラス</a></li><li><a href="#5">静的インナークラス</a></li><li><a href="#6">ローカルクラス</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">(Java) 内部クラス</h1>
+<p>Java では、クラス内にクラスを書くことができます。</p>
+<p>ローカルクラス
+匿名クラス</p>
+<p>エンクロージングクラス
+トップレベルクラス</p>
+<h2 id="1">種類</h2>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">種類</th><th style="text-align: left">各場所</th></tr></thead><tbody>
+<tr><td style="text-align: left"><ruby>入れ子クラス<rt>nested class</rt></ruby></td><td style="text-align: left">クラスの中</td></tr>
+<tr><td style="text-align: left"><ruby>ローカルクラス<rt>local class</rt></ruby></td><td style="text-align: left">メソッドの中</td></tr>
+</tbody></table>
+</div>
+<pre><code class="language-java">class Outer {
+    // 静的入れ子クラス
+    static class StaticNested {}
+
+    // 入れ子クラス / インナークラス
+    class MemberInner {}
+
+    void method() {
+        // ローカルクラス
+        class LocalClass {}
+        LocalClass lc = new LocalClass();
+    }
+}
+</code></pre>
+<h2 id="2">修飾子</h2>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: center">public</th><th style="text-align: center">protected</th><th style="text-align: center">private</th><th style="text-align: center">abstract</th><th style="text-align: center">final</th><th style="text-align: center">static</th></tr></thead><tbody>
+<tr><td style="text-align: left"><ruby>インナークラス<rt>inner class</rt></ruby></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
+<tr><td style="text-align: left"><ruby>静的入れ子クラス<rt>static nested class</rt></ruby></td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">o</td></tr>
+<tr><td style="text-align: left">ローカルクラス</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">o</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
+<tr><td style="text-align: left">匿名クラス</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
+</tbody></table>
+</div>
+<h2 id="3">インナークラス</h2>
+<blockquote>
+<p>インナークラスとは、ネストされたクラスのうち陽にも暗にも <code>static</code> ではないものを指します。
+具体的には次のいずれかです。</p>
+<ul>
+<li>メンバクラスのうち、陽にも暗にも <code>static</code> でないもの</li>
+<li>ローカルクラスのうち、陽にも暗にも <code>static</code> でないもの</li>
+<li>匿名クラス。</li>
+</ul>
+<p>逆に、次はいずれも暗に <code>static</code> なのでインナークラスではありません。</p>
+<ul>
+<li>メンバ/ローカル enum</li>
+<li>メンバ/ローカル record</li>
+<li>インタフェースのメンバクラス</li>
+</ul>
+<p>(原文 : <a href="https://docs.oracle.com/javase/specs/jls/se24/html/jls-8.html#jls-8.1.3">Java 言語仕様 8.1.3</a>)</p>
+</blockquote>
+<p>インナークラスは静的メンバを持てません。</p>
+<p>インナークラスとエンクロージングクラスは相互にメンバにアクセスできます。</p>
+<blockquote>
+<ul>
+<li>Otherwise, if the member or constructor is declared with package access, then access is permitted only when the access occurs from within the package in which the class, interface, type parameter, or reference type is declared.</li>
+<li>A class member or constructor declared without an access modifier implicitly has package access.</li>
+</ul>
+<p>(原文 : <a href="https://docs.oracle.com/javase/specs/jls/se17/html/jls-6.html#jls-6.6.1">Java 言語仕様 6.6.1</a>)</p>
+</blockquote>
+<h2 id="4">メンバクラス</h2>
+<p>インタフェース/クラス定義の中に書かれているクラスを指します。</p>
+<h2 id="5">静的インナークラス</h2>
+<p>名前と年齢を持った <code>Person</code> クラスがあります。
+このクラスを年齢順に並べ替えるための <code>AgeComparator</code> クラスを作ることを考えましょう。
+<code>Person</code> と <code>AgeComparator</code> は関連するクラスなので近いところに配置したいです。
+しかし、 Java は1ファイルにつき1つしか <code>public</code> なクラスを書けません。
+この問題の解決策として、次の2つを考えましょう。</p>
+<ol>
+<li><code>Person</code> のためのパッケージ階層を用意し、別々のファイルに書く</li>
+<li><code>AgeComparator</code> を <code>Person</code> の静的インナークラスとして書く</li>
+</ol>
+<p>2 を取るのは、 1 でファイルが増えるのを避けたいときです。
+静的インナークラスを使う場合、次のように書くことになります。</p>
+<pre><code class="language-java">public class Person implements Comparable&lt;Person&gt; {
+  private String name;
+  private int age;
+
+  public static class AgeComparator implements Comparator&lt;Person&gt; {
+    // ...
+  }
+}
+</code></pre>
+<h2 id="6">ローカルクラス</h2>
+<p>ローカルクラス内で利用できるローカル変数は、実質的に <code>final</code> であるものに限ります。
+この制約はラムダと同じです。</p>
+<!-- 他にも、 Java ではトップレベルクラスに `private` を付けられないので、 -->
+<!-- 外に見せないクラスを作るには、 `private static` な内部クラスを作ることになるという事情もあります。 -->
+<!---->
+<!-- インナークラスの private メソッドはエンクロージングクラスから見えるという謎。 -->
+<!-- なぜそんな設計に… -->
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

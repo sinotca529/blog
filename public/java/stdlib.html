@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../..">
+  <script type="text/javascript" src="../../theme.js"></script>
+  <script type="text/javascript" src="../../script.js" defer></script>
+  <script type="text/javascript" src="../../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../../gtag.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+  
+  <title>Java ライブラリ</title>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+        </svg>
+      </button>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
+</header>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-02-23 ~ 2025-02-23
+      </div>
+      <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a> <a class="tag" href="../../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">String</a></li><li><a href="#2">StringBuffer</a></li><li><a href="#3">Arrays</a></li><li><a href="#4">Map</a></li><li><a href="#5">日時処理</a><ul><li><a href="#5.1">OffsetDateTime vs ZonedDateTime</a></li><li><a href="#5.2">LocalDateTime の利用は避けたい</a></li><li><a href="#5.3">閏秒の扱い</a></li></ul></li><li><a href="#6">比較</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">Java ライブラリ</h1>
+<h2 id="1">String</h2>
+<p>数値も <code>null</code> も文字列に足し込めます。
+Java に演算子オーバーロードの機能はありませんが、この <code>+</code> はコンパイラに特別扱いされています。</p>
+<pre><code class="language-java">// "nulla1"
+String s = null + "a" + 1;
+</code></pre>
+<pre><code class="language-java">var s = "0123456789";
+s.substring(3, 7); // "3456"
+</code></pre>
+<h2 id="2">StringBuffer</h2>
+<p><code>StrinbBuffer</code> の <code>capacity</code> は 16 + 文字列長です。</p>
+<pre><code class="language-java">var sb = new StringBuffer("123");
+assert sb.capacity() == 16 + 3;
+</code></pre>
+<p><code>substring(a, b)</code> の範囲は <code>[a, b)</code> です。</p>
+<h2 id="3">Arrays</h2>
+<p><code>asList</code> は、引数に与えた配列のビューを返します。
+そのため、要素の追加や削除といった操作はできず、加えた変更はもとの配列に反映されます。</p>
+<pre><code class="language-java">var m = new Integer[] {0, 1, 2};
+var l = Arrays.asList(m);
+System.out.println(m[0]); // 0
+l.set(0, 1);
+System.out.println(m[0]); // 1
+</code></pre>
+<hr />
+<p><code>mismatch</code> は2つの配列間の最初の不一致のインデックスを返します。
+不一致がない場合は -1 を返します。</p>
+<hr />
+<h2 id="4">Map</h2>
+<p><code>Map</code> は、キーも値も <code>null</code> を許容します。
+そのため、 <code>get</code> の結果が <code>null</code> だからといって、値がセットされていないとは限りません。</p>
+<pre><code class="language-java">var m = new HashMap&lt;Integer, Integer&gt;();
+m.put(null, 1);
+m.put(0, null);
+
+System.out.println(m.get(null)); // 1
+System.out.println(m.get(0));    // null
+System.out.println(m.get(1));    // null
+System.out.println(m.keySet());  // [null, 0]
+</code></pre>
+<h2 id="5">日時処理</h2>
+<p>Java8 以降なら <code>java.time</code> 配下のクラスを使いましょう。
+以下の表で <code>java.time</code> 配下のものは不変でスレッドセーフです。</p>
+<div class="table-wrapper"><table><thead><tr><th>クラス</th><th>パッケージ</th><th>表すもの</th><th>月のオリジン</th></tr></thead><tbody>
+<tr><td><del><code>Date</code></del></td><td><code>java.util</code></td><td>日時</td><td></td></tr>
+<tr><td><del><code>Calendar</code></del></td><td><code>java.util</code></td><td>日時</td><td>0</td></tr>
+<tr><td><code>LocalDate</code></td><td><code>java.time</code></td><td>日付</td><td>1</td></tr>
+<tr><td><code>LocalTime</code></td><td><code>java.time</code></td><td>時刻 (時差情報なし)</td><td>-</td></tr>
+<tr><td><code>OffsetTime</code></td><td><code>java.time</code></td><td>時刻 (時差情報付き)</td><td>-</td></tr>
+<tr><td><code>Instant</code></td><td><code>java.time</code></td><td>Unix Time</td><td>-</td></tr>
+<tr><td><code>LocalDateTime</code></td><td><code>java.time</code></td><td>日時</td><td>1</td></tr>
+<tr><td><code>OffsetDateTime</code></td><td><code>java.time</code></td><td>日時 (時差情報付き)</td><td></td></tr>
+<tr><td><code>ZonedDateTime</code></td><td><code>java.time</code></td><td>日時 (タイムゾーン情報付き)</td><td></td></tr>
+<tr><td><code>Duration</code></td><td><code>java.time</code></td><td>時間</td><td>-</td></tr>
+</tbody></table>
+</div>
+<h3 id="5.1">OffsetDateTime vs ZonedDateTime</h3>
+<p>タイムゾーンは特定の時刻系 (標準時) を使う地域のことであって、その時差は変化し得ます。
+例えばサマータイムのあるゾーンでは、その期間だけ時差が変化します。</p>
+<p><code>OffsetDateTime</code> は時差付き時刻を扱うもので、<code>ZonedDateTime</code> はタイムゾーン付き時刻を扱うものです。
+サマータイムの切り替え時には存在しない時刻や重複する時刻が生まれて厄介なので、
+不必要にタイムゾーンを使うことは避けるべきです。</p>
+<h3 id="5.2">LocalDateTime の利用は避けたい</h3>
+<p>サマータイムの切り替え時には存在しない時刻や重複する時刻が生まれます。
+そのため、例えば <code>LocalDateTime</code> を元に発動するバッチがあったとして、それが実行されなかったり2回実行されたりという問題が起こり得ます。
+<code>ZonedDateTime</code> も同様の問題を抱えています。
+<code>OffsetDateTime</code> を使うとそのような事故を緩和できます。</p>
+<h3 id="5.3">閏秒の扱い</h3>
+<p>地球の自転速度は一定ではないので、人類は閏秒を導入するなどの工夫をしてきました。
+こうした工夫の手法は将来的に変わりうるため、 Java では <strong>Java タイム・スケール</strong> という独自の数え方を使います。
+Java タイム・スケールでは、1日を86400秒(= 24 * 60 * 60) に分割します。
+閏秒は、その日の最後の1000秒に均等に分散されます。</p>
+<h2 id="6">比較</h2>
+<p>C の <code>strcmp</code> の系譜を汲んでいます。</p>
+<ul>
+<li><code>a &lt; b</code> なら負の値を返す</li>
+<li><code>a = b</code> なら0を返す</li>
+<li><code>a &gt; b</code> なら正の値を返す</li>
+</ul>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

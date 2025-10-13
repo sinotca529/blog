@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../..">
+  <script type="text/javascript" src="../../theme.js"></script>
+  <script type="text/javascript" src="../../script.js" defer></script>
+  <script type="text/javascript" src="../../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../../gtag.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+  
+  <title>Java のモジュール</title>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+        </svg>
+      </button>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
+</header>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-02-16 ~ 2025-09-07
+      </div>
+      <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a></div>
+      <div id="toc"><ul><li><a href="#1">パッケージが抱える問題</a><ul><li><a href="#1.1">問題1. 細かなアクセス制御ができない</a></li><li><a href="#1.2">問題2. 完全修飾名の衝突を検知できない</a></li></ul></li><li><a href="#2">モジュールの機能</a></li><li><a href="#3">モジュールの作り方</a></li><li><a href="#4">モジュールの種類</a><ul><li><a href="#4.1">自動モジュール</a></li><li><a href="#4.2">無名モジュール</a></li></ul></li><li><a href="#5">標準のモジュール</a></li><li><a href="#6">モジュール定義の書き方</a><ul><li><a href="#6.1">requires ディレクティブ</a></li><li><a href="#6.2">exports ディレクティブ</a></li><li><a href="#6.3">provides </a></li><li><a href="#6.4">uses ディレクティブ</a></li><li><a href="#6.5">opens ディレクティブ</a></li></ul></li><li><a href="#7">アクセス制御を無視する</a></li><li><a href="#8">モジュールの情報を確認する</a></li><li><a href="#9">モジュールへの移行</a></li></ul></div>
+      <div id="main-content">
+        <style>
+rt { text-align: left; color: green; }
+</style>
+<h1 id="">Java のモジュール</h1>
+<p>Java のモジュールは複数のパッケージを束ねたものです。
+パッケージが抱える問題を解決するために、Java 9 で導入されました。</p>
+<h2 id="1">パッケージが抱える問題</h2>
+<p>Java のパッケージには2つの問題があります。</p>
+<ol>
+<li>細かなアクセス制御ができない</li>
+<li>完全修飾名 (例: <code>com.example.Foo</code>) の衝突を検知できない</li>
+</ol>
+<h3 id="1.1">問題1. 細かなアクセス制御ができない</h3>
+<p>Java の <code>public</code> の公開範囲は全パッケージです。
+そのため、「特定のパッケージのみに公開をする」といったことや、
+「<code>jar</code> 内部には公開するが、外部には公開しない」といった制御ができません。</p>
+<p>具体例 :</p>
+<pre><code class="language-java">// com.example.internal パッケージ
+package com.example.internal;
+
+public class InternalUtil {
+  public static void doSomething() { ... }
+}
+</code></pre>
+<p>このクラスは <code>public</code> なので、<code>com.example</code> 内部のクラスだけでなく、外部のユーザーからもアクセスできてしまいます。
+「ライブラリ利用者には見せたくないが、同じ JAR 内で共有したい」といった要求が満たせません。</p>
+<h3 id="1.2">問題2. 完全修飾名の衝突を検知できない</h3>
+<p>Java のクラスの探索にはクラスパスの衝突を検知する仕組みがありません。
+同じ完全修飾名 (例: <code>com.example.Foo</code>) のクラスが存在した場合、初めて見つかったものが採用されます。</p>
+<h2 id="2">モジュールの機能</h2>
+<p>モジュールには以下の機能があり、パッケージの抱える問題を解決します。</p>
+<ul>
+<li>エクスポート制御: パッケージ単位で外部への公開/非公開を宣言できる。</li>
+<li>依存関係の明示化: どのモジュールに依存するかを明示できる。</li>
+<li>衝突検知: モジュール名の衝突はエラーとして検出され、クラスパスのような曖昧さがなくなる。</li>
+</ul>
+<h2 id="3">モジュールの作り方</h2>
+<p>モジュールの実態は、モジュール定義 (<code>module-info.class</code>) を内包する JAR ファイルです。
+モジュール定義を JAR ファイルに内包するには、 <code>module-info.java</code> を作成して <code>javac</code> のコンパイル対象に加えます。</p>
+<pre><code class="language-java">// module-info.java
+module com.example.myapp {
+  requires java.sql;              // JDBC API を利用
+  exports com.example.myapp.api;  // API パッケージだけ公開
+}
+</code></pre>
+<p>コンパイルは <code>javac</code> で行います。</p>
+<pre><code>javac <ruby>-d out<rt>出力先</rt></ruby> <ruby>--module-source-path src<rt>モジュール化するコードのルートパス</rt></ruby> <ruby>$(find src -name "*.java")<rt>モジュール化対象ファイル</rt><ruby></pre></code>
+<p>その後、 <code>jar</code> で JAR に変換します。</p>
+<pre><code>jar \
+  <ruby>--create<rt>新しい JAR を作成</rt></ruby> \
+  <ruby>--file myapp.jar<rt>出力する JAR ファイル名</rt></ruby> \
+  <ruby>--main-class com.example.myapp.Main<rt>エントリポイント</rt></ruby> \
+  <ruby>-C out/com.example.myapp .<rt>指定ディレクトリに移動して中身を追加</rt></ruby></code></pre>
+<p>実行時には <code>--module-path</code> にモジュールを指定します。
+JAR 化する際にエントリポイントを指定しているため、実行時にクラス名まで指定する必要はありません。</p>
+<pre><code># クラス名未指定
+java <ruby>--module-path app.jar<rt>モジュール検索パス</rt></ruby> <ruby>--module com.example.myapp<rt>起動するモジュール名</rt></ruby>
+
+# クラス名指定
+java --module-path app.jar --module <ruby>com.example.myapp<rt>モジュール名</rt></ruby>/<ruby>com.example.myapp.Main<rt>実行対象</rt></ruby></code></pre>
+<p>依存先モジュールがある場合は、 <code>--module-path</code> にそれを加えます。</p>
+<pre><code>java <ruby>--module-path mods:app.jar<rt>依存＋自アプリをモジュールパスへ</rt></ruby> <ruby>-module com.example.myapp<rt>起動するモジュール名</rt></ruby></code></pre>
+<p>なお、<code>java -jar app.jar</code> でも実行できますが、 <code>module-info.class</code> は無視され、アクセス制御などの恩恵を受けられません。</p>
+<h2 id="4">モジュールの種類</h2>
+<p>モジュールには3つの種類があります。</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">種別</th><th style="text-align: left">内容</th></tr></thead><tbody>
+<tr><td style="text-align: left">名前付きモジュール</td><td style="text-align: left"><code>module-info.class</code> を持つモジュール</td></tr>
+<tr><td style="text-align: left">自動モジュール</td><td style="text-align: left">モジュールパスに指定されたが <code>module-info.class</code> を持たない JAR</td></tr>
+<tr><td style="text-align: left">無名モジュール</td><td style="text-align: left">クラスパスに置かれたもの全てを束ねるモジュール</td></tr>
+</tbody></table>
+</div>
+<h3 id="4.1">自動モジュール</h3>
+<p>モジュールパス上に配置された JAR がモジュール定義 (<code>module-info.class</code>) を持たない場合、
+その JAR は自動モジュールとして扱われます。
+自動モジュールはパッケージを全て <code>export</code> し、他のパッケージをすべて <code>requires</code> します。</p>
+<p>自動モジュールの名前は次のように決まります :</p>
+<ol>
+<li>JAR 内の META-INF/MANIFEST.MF ファイルの Automatic-Module-Name 属性。</li>
+<li>(1がなければ) JAR ファイルの名前から拡張子とバージョン番号を除去し、非英数字をドットに置き換えたもの。</li>
+</ol>
+<h3 id="4.2">無名モジュール</h3>
+<p>無名モジュールも同様、パッケージを全て <code>export</code> し、他のパッケージをすべて <code>requires</code> します。
+無名モジュールは名前を持たないので、明示的に <code>requires</code> することはできません。
+しかし、自動モジュールからは <code>requires</code> されます。</p>
+<h2 id="5">標準のモジュール</h2>
+<p>Java SE のクラスライブラリはモジュール化されています。
+一覧は <code>java --list-modules</code> で確認します。</p>
+<pre><code class="language-txt">&gt; java --list-modules
+java.base@23.0.2
+java.compiler@23.0.2
+java.datatransfer@23.0.2
+java.desktop@23.0.2
+...
+</code></pre>
+<p>このうち <code>java.base</code> は全てのモジュールが暗黙的に <code>requires</code> します。</p>
+<h2 id="6">モジュール定義の書き方</h2>
+<p>モジュール定義に書くことのできるディレクティブには次の種類があります。</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">ディレクティブ</th><th style="text-align: left">役割</th></tr></thead><tbody>
+<tr><td style="text-align: left">requires</td><td style="text-align: left">依存するモジュールを宣言する</td></tr>
+<tr><td style="text-align: left">exports</td><td style="text-align: left">外部に公開するパッケージを指定する</td></tr>
+<tr><td style="text-align: left">provides … with</td><td style="text-align: left">サービス実装を提供する</td></tr>
+<tr><td style="text-align: left">uses</td><td style="text-align: left">サービスインターフェースの利用を宣言する</td></tr>
+<tr><td style="text-align: left">opens</td><td style="text-align: left">リフレクションアクセスを許可する</td></tr>
+</tbody></table>
+</div>
+<h3 id="6.1">requires ディレクティブ</h3>
+<p>他のモジュールに依存していることを示します。</p>
+<pre><code class="language-java">module com.example.myapp {
+  requires java.sql;        // JDBC API に依存
+  requires com.example.lib; // 自作ライブラリに依存
+}
+</code></pre>
+<ul>
+<li><code>requires transitive</code> : 利用者にも依存を伝播させる</li>
+<li><code>requires static</code> : コンパイル時のみ必要で実行時には不要</li>
+</ul>
+<h3 id="6.2">exports ディレクティブ</h3>
+<p>パッケージを外部に公開することを指定します。
+公開しなければ外部モジュールからアクセスできません。</p>
+<pre><code class="language-java">module com.example.myapp {
+  // API のみ公開
+  exports com.example.myapp.api;
+
+  // 内部は特定モジュールにだけ公開
+  exports com.example.myapp.internal to com.example.friend;
+}
+</code></pre>
+<h3 id="6.3">provides … with ディレクティブ</h3>
+<p>サービスインターフェースに対する実装クラスを提供します。</p>
+<pre><code class="language-java">module com.example.myapp {
+  provides com.example.spi.Logger with com.example.myapp.impl.ConsoleLogger;
+}
+</code></pre>
+<p>サービスとはインタフェースのことです。
+上のケースでは、 <code>Logger</code> インタフェースを継承したクラス <code>ConsoleLogger</code> があるという宣言をしています。
+利用時には、 <code>ServiceLoader</code> でロードします。
+こうしたサービスのインタフェースのことを、 SPI (Service Programming Interface) と呼びます。</p>
+<pre><code class="language-java">import com.example.spi.Logger;
+import java.util.ServiceLoader;
+
+public class Main {
+  public static void main(String[] args) {
+    // 実装が存在しない場合も例外は出さない。
+    ServiceLoader&lt;Logger&gt; loader = ServiceLoader.load(Logger.class);
+    for (Logger logger : loader) {
+      logger.log("Hello, ServiceLoader!");
+    }
+  }
+}
+</code></pre>
+<p>こうした機構により、実装の差し替えが簡単に実現できます。</p>
+<h3 id="6.4">uses ディレクティブ</h3>
+<p>サービスインターフェースを利用することを宣言します。
+これにより <code>ServiceLoader.load()</code> が使えるようになります。</p>
+<pre><code class="language-java">module com.example.myapp {
+  uses com.example.spi.Logger;
+}
+</code></pre>
+<h3 id="6.5">opens ディレクティブ</h3>
+<p>リフレクションによるアクセスを許可します。
+JSON ライブラリなどがフィールドへアクセスするときに使います。</p>
+<pre><code class="language-java">module com.example.myapp {
+  // 全モジュールからリフレクション可
+  opens com.example.myapp.model;
+
+  // 特定モジュールにだけ許可
+  opens com.example.myapp.model to com.fasterxml.jackson.databind;
+}
+</code></pre>
+<h2 id="7">アクセス制御を無視する</h2>
+<p>どうしても許可されていないパッケージを参照したい場合は、 <code>--add-exports</code> を使います。</p>
+<pre><code>java \
+  <ruby>--module-path mods<rt>モジュールを探す場所</rt></ruby> \
+  <ruby>--add-exports java.sql.rowset/com.sun.rowset=com.example.myapp<rt>本来非公開のパッケージを com.example.myapp に公開</rt></ruby> \
+  <ruby>-module com.example.myapp<rt>起動するモジュール</rt></ruby></code></pre>
+<h2 id="8">モジュールの情報を確認する</h2>
+<p><code>requires</code> や <code>exports</code> の情報を確認するには、 <code>--describe-module</code> を利用します。</p>
+<pre><code class="language-sh">java --module-path mods --describe-module com.example.myapp
+</code></pre>
+<p>JAR の依存を確認するには、 <code>jdeps</code> を利用します。
+<code>jdeps</code> はモジュール情報を持たない JAR にも利用できます。</p>
+<pre><code class="language-sh">jdeps --list-deps app.jar
+</code></pre>
+<h2 id="9">モジュールへの移行</h2>
+<p>モジュールへの移行方法には、ボトムアップ移行とトップダウン移行があります。</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">移行方法</th><th style="text-align: left">内容</th></tr></thead><tbody>
+<tr><td style="text-align: left">ボトムアップ移行</td><td style="text-align: left">JARの依存グラフの葉から順にモジュール化する</td></tr>
+<tr><td style="text-align: left">トップダウン移行</td><td style="text-align: left">一時的に移行が難しいJARを自動モジュールにする</td></tr>
+</tbody></table>
+</div>
+<p>通常はボトムアップ移行を採用しますが、
+葉JARがメンテナンス中などでモジュールに移行できない場合にはトップダウン移行も視野に入れます。</p>
+<hr />
+<div class="table-wrapper"><table><thead><tr><th>処理</th><th>コマンド</th></tr></thead><tbody>
+<tr><td>モジュールの作成</td><td><code>javac -d mods/foo src/foo/module-info.java  src/foo/example/com/foo/Main.java</code></td></tr>
+<tr><td>モジュールの作成</td><td><code>jmod create --class-path mods/foo foo.jmod</code></td></tr>
+<tr><td>モジュールの実行</td><td><code>java --module-path &lt;module path&gt; --module &lt;module name&gt;/&lt;class name&gt;</code></td></tr>
+<tr><td>モジュールの情報を確認</td><td><code>jmod describe foo.jmod</code></td></tr>
+<tr><td>モジュールの依存を確認</td><td><code>jdeps --list-deps hello.jar</code></td></tr>
+<tr><td>利用モジュールの場所</td><td><code>java --module-path mods --show-module-resolution -m hello/com.example.Main</code></td></tr>
+</tbody></table>
+</div>
+<p><code>*.jmod</code> ファイルは JRE を含むような特別なモジュールのためにある。
+通常は JAR ファイルとして作る。</p>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

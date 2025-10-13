@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../..">
+  <script type="text/javascript" src="../../theme.js"></script>
+  <script type="text/javascript" src="../../script.js" defer></script>
+  <script type="text/javascript" src="../../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../../gtag.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+  
+  <title>(Java) シリアライズ</title>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+        </svg>
+      </button>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
+</header>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-10-05 ~ 2025-10-05
+      </div>
+      <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a> <a class="tag" href="../../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">Serializable マーカインタフェース</a></li><li><a href="#2">特殊なフィールド・メソッド</a><ul><li><a href="#2.1">writeReplace, readReplace</a></li></ul></li></ul></div>
+      <div id="main-content">
+        <h1 id="">(Java) シリアライズ</h1>
+<p>Java でのシリアライズ/デシリアライズの方法を整理します。</p>
+<h2 id="1">Serializable マーカインタフェース</h2>
+<p>シリアライズしたいクラスには <code>java.io.Serializable</code> を実装します。
+<code>Serializable</code> はマーカインタフェースであり、実装が必要なメソッドはありません。</p>
+<pre><code class="language-java">class User implements Serializable {
+    String name;
+    int age;
+
+    User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+</code></pre>
+<p>読み書きには <code>ObjectOutputStream</code>, <code>ObjectInputStream</code> のメソッドを利用します。</p>
+<pre><code class="language-java">// 書き出し
+try (var out = new ObjectOutputStream(Files.newOutputStream(Path.of("user.bin")))) {
+    out.writeObject(new User("Alice", 20));
+}
+
+// 読み込み
+try (var in = new ObjectInputStream(Files.newInputStream(Path.of("user.bin")))) {
+    User u = (User) in.readObject();
+}
+</code></pre>
+<h2 id="2">特殊なフィールド・メソッド</h2>
+<p><code>Serializable</code> 自体はメソッドを持ちませんが、シリアライザの挙動を制御するための特殊なメソッドや定数が存在します。</p>
+<div class="table-wrapper"><table><thead><tr><th>項目名</th><th>役割</th></tr></thead><tbody>
+<tr><td><code>serialVersionUID</code> (定数)</td><td>バージョンを識別する。デシリアライズ時にバージョンが不一致であった場合は <code>InvalidClassException</code> となる。</td></tr>
+<tr><td><code>transient</code>（修飾子）</td><td>メンバをシリアライズ対象から除外する。デシリアライズ時は <code>readObject</code> などで再初期化する。</td></tr>
+<tr><td><code>writeObject(ObjectOutputStream)</code></td><td>シリアライズ処理を上書きする。メソッドがない場合は <code>defaultWriteObject()</code> でシリアライズされる。</td></tr>
+<tr><td><code>readObject(ObjectInputStream)</code></td><td>デシリアライズ処理を上書きする。メソッドがない場合は <code>defaultReadObject()</code> でデシリアライズされる。</td></tr>
+<tr><td><code>writeReplace()</code></td><td>シリアライズ直前に呼ばれる。ストリームへ書き込む対象をこのメソッドの戻り値で置き換える。</td></tr>
+<tr><td><code>readResolve()</code></td><td>デシリアライズ直後に呼ばれる。デシリアライズ結果を別のインスタンスに変換する処理を書く。</td></tr>
+<tr><td><code>serialPersistentFields</code></td><td>シリアライズ時に保存するフィールド構成を明示的に定義する配列。実際のフィールド名や数とは無関係にフィールドを用意できる。</td></tr>
+</tbody></table>
+</div>
+<h3 id="2.1">writeReplace, readReplace</h3>
+<p><code>ObjectInputStream</code> はオブジェクトのデシリアライズ時にコンストラクタを介しません。
+そのため、不正な値を持つオブジェクトが発生する可能性があります。</p>
+<p>これを回避する手段に、対象と同じフィールドを持つ別クラスを用意し、
+それをデシリアライズした後に対象のコンストラクタを介してインスタンスを生成するというものがあります。</p>
+<pre><code class="language-java">import java.io.*;
+
+final class Range implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private final int start;
+    private final int end;
+
+    public Range(int start, int end) {
+        if (start &gt; end) throw new IllegalArgumentException("start &gt; end");
+        this.start = start;
+        this.end = end;
+    }
+
+    // シリアライズ時に代理オブジェクトに差し替え
+    private Object writeReplace() throws ObjectStreamException {
+        return new SerializationProxy(this);
+    }
+
+    // 直接デシリアライズされることを防止
+    private void readObject(ObjectInputStream in) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    private static class SerializationProxy implements Serializable {
+        private static final long serialVersionUID = 1L;
+        private final int start;
+        private final int end;
+
+        SerializationProxy(Range r) {
+            this.start = r.start;
+            this.end = r.end;
+        }
+
+        // デシリアライズ時にコンストラクタを通す
+        private Object readResolve() throws ObjectStreamException {
+            return new Range(start, end);
+        }
+    }
+}
+</code></pre>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

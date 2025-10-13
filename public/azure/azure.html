@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../..">
+  <script type="text/javascript" src="../../theme.js"></script>
+  <script type="text/javascript" src="../../script.js" defer></script>
+  <script type="text/javascript" src="../../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../../gtag.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+  
+  <title>Azure 簡易リファレンス</title>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+        </svg>
+      </button>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
+</header>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2024-10-26 ~ 2024-12-08
+      </div>
+      <div> <a class="tag" href="../../index.html?tag=cloud">cloud</a></div>
+      <div id="toc"><ul><li><a href="#1">クラウドの性質</a></li><li><a href="#2">マシンの配置</a></li><li><a href="#3">リソースの管理</a><ul><li><a href="#3.1">デプロイ</a></li></ul></li><li><a href="#4">ストレージ</a><ul><li><a href="#4.1">ストレージアカウント</a></li><li><a href="#4.2">ストレージの冗長オプション</a></li><li><a href="#4.3">ファイルの移動</a></li></ul></li><li><a href="#5">移行</a></li><li><a href="#6">ネットワーク</a><ul><li><a href="#6.1">Azure 内部</a></li><li><a href="#6.2">Azure 外部</a></li><li><a href="#6.3">PaaS</a></li><li><a href="#6.4">負荷分散</a></li><li><a href="#6.5">セキュリティ</a></li><li><a href="#6.6">ルーティング</a></li><li><a href="#6.7">その他</a></li><li><a href="#6.8">VM</a></li></ul></li><li><a href="#7">ID 管理</a></li><li><a href="#8">コンプラ系統</a></li><li><a href="#9">監視・分析</a></li><li><a href="#10">操作の制限</a></li><li><a href="#11">その他のセキュリティ</a></li><li><a href="#12">データベース系</a></li><li><a href="#13">AI, ビッグデータ</a></li><li><a href="#14">IoT 系</a></li><li><a href="#15">その他リソース</a></li><li><a href="#16">サポート</a></li><li><a href="#17">サポートプラン</a></li><li><a href="#18">お金</a></li></ul></div>
+      <div id="main-content">
+        <h1 id="">Azure 簡易リファレンス</h1>
+<p>筆者は Azure エアプです。
+このページの内容は至極乱雑で、他人がこのページから知識を得ることを想定していません。</p>
+<h2 id="1">クラウドの性質</h2>
+<dl>
+<dt>拡張性, Scalability</dt>
+<dd>スケールできること。</dd>
+<dt>弾力性, Elasticity</dt>
+<dd>負荷に応じて<strong>自動的</strong>にスケールする性質。</dd>
+<dt>機敏性, 機敏性, Agility</dt>
+<dd>変化に素早く対応できる能力。
+環境の作成・破壊が容易だということ。</dd>
+</dl>
+<h2 id="2">マシンの配置</h2>
+<dl>
+<dt>ゾーン</dt>
+<dd>
+<p>1つのデータセンター (建物) に対応する。
+可用性ゾーンのあるリージョンには、3つ以上のゾーンがある。</p>
+</dd>
+<dt>可用性ゾーン</dt>
+<dd>
+<p>異なるゾーンにある物理マシンにに仮想マシンをホストする。
+2024/07 現在、西日本リージョンは非対応。</p>
+</dd>
+<dt>可用性セット</dt>
+<dd>
+<p>同一ゾーン内の異なるドメインにある物理マシンに仮想マシンをホストする。</p>
+<dl>
+<dt>障害ドメイン</dt>
+<dd>同じ電源・NW機器を共有する範囲 (≒ サーバラック)。
+最大で3個のドメインに分散できる。</dd>
+<dt>更新ドメイン</dt>
+<dd>メンテナンスリブートが同時に起こる範囲。
+最大で20個のドメインに分散できる。</dd>
+</dl>
+</dd>
+<dt>リージョンペア</dt>
+<dd>
+<p>災害復旧やデータ冗長性確保のためにペアになっているリージョン。
+例えば、東日本と西日本はリージョンペアの関係にある。
+片方で大規模な障害が発生しても、もう片方が処理を引き継いでサービスを継続する。
+ペアは300マイル以上離れている。</p>
+</dd>
+</dl>
+<h2 id="3">リソースの管理</h2>
+<dl>
+<dt>サブスクリプション</dt>
+<dd>契約の単位。</dd>
+<dt>管理グループ</dt>
+<dd>6段までネストできる。
+ポリシーや RBAC をサブスク間で共有したいときに使う。</dd>
+</dl>
+<pre><code class="language-txt">管理グループ
+|
++--+- サブスクリプション1
+|  |
+|  +--+- リソースグループ1
+|  |  |
+|  |  +---- リソース1
+|  |  |
+|  |  +---- リソース2
+|  |
+|  +---- リソースグループ2
+|
++--- サブスクリプション2
+</code></pre>
+<dl>
+<dt>Azure Marketplace</dt>
+<dd>サードパーティ製のサービスを検索・購入・デプロイできる。</dd>
+</dl>
+<h3 id="3.1">デプロイ</h3>
+<dl>
+<dt>ARM テンプレート</dt>
+<dd>単一リソースの設定を書き連ねた json ファイル。</dd>
+<dt>Azure Blueprints</dt>
+<dd>複数の ARM テンプレートを纏めて、より高度な使い回しをできるようにするサービス。
+ロールの割当、ポリシーの割当、リソースグループの設定までテンプレ化できる。</dd>
+</dl>
+<h2 id="4">ストレージ</h2>
+<dl>
+<dt>Azure Storage (分類 : IaaS)</dt>
+<dd>耐久性・拡張性・安全性に優れる。
+保存データは自動的に暗号化される。
+マネージドディスクとストレージアカウントからなる。</dd>
+<dt>マネージドディスク</dt>
+<dd>Disk</dd>
+</dl>
+<h3 id="4.1">ストレージアカウント</h3>
+<p>これを作成しないと以下の物を作れない。</p>
+<p>作成時にはアカウント名や地域・性能・冗長性などを指定する。
+<strong>アカウント名は接続時の URL として使われる</strong>ので、全世界でユニークな名前を指定する。</p>
+<p>1つのサブスクリプションは、リージョンごとに最大250のストレージアカウントを持てる。
+各ストレージアカウントの容量は 5PiB。</p>
+<p>アカウント作成時には、 BLOB の既定のアクセス層を設定する。
+ただし、アーカイブは選べない。</p>
+<dl>
+<dt>BLOB</dt>
+<dd>大量の非構造化データの格納に使う。
+ストリーミング配信する動画や長期保管するバックアップデータの保存に使う。
+ディレクトリ構造は持たない。
+安価。
+アクセス頻度に応じてホット・クール・コールド・アーカイブから選択する。
+ホット以外は一定期間より早くデータを移動しようとすると別料金を取られる。</dd>
+<dt>File (Azure Files, ファイル共有)</dt>
+<dd>SMB/NFS プロトコルに対応したファイル共有サービス。
+Windows/Linux/macOS にマウント可能。
+ファイルサーバーの代わりとして使用する。
+BLOB の3倍ほどの価格。</dd>
+<dt>Table</dt>
+<dd>Json, Yaml などを格納する NoSQL キーバリューストア。</dd>
+<dt>Queue</dt>
+<dd>コンポーネント間の非同期通信に使うメッセージングサービス。</dd>
+</dl>
+<h3 id="4.2">ストレージの冗長オプション</h3>
+<ul>
+<li>ローカル冗長ストレージ (LRS)</li>
+<li>ゾーン冗長ストレージ (ZRS)</li>
+<li>ジオ冗長ストレージ (GRS)</li>
+<li>ジオゾーン冗長ストレージ (GZRS)</li>
+</ul>
+<h3 id="4.3">ファイルの移動</h3>
+<dl>
+<dt>Azure Storage Explorer</dt>
+<dd>Azure Storage 用の explorer.exe 的なもの。
+GUI でファイルやフォルダを管理できる。
+Windows/Linux/macOS で使える。</dd>
+<dt>AzCopy</dt>
+<dd>CUI ツール。
+Windows/Linux/macOS で使える。
+コマンド体系は <code>azcopy [操作] [引数]</code>。</dd>
+<dt>Azure File Sync</dt>
+<dd>ファイル共有を Windows Server にキャッシュする。
+OneDrive などに似ている。
+オンプレミスのファイルサーバーをクラウドに拡張できる。</dd>
+<dt>Azure Data Box</dt>
+<dd>オンプレミスのデータを Azure に移行したり、その逆をしたりするサービス。
+専用の記憶メディアで物理的に輸送する。</dd>
+</dl>
+<h2 id="5">移行</h2>
+<dl>
+<dt>Azure Migrate</dt>
+<dd>オンプレミスや他社クラウドから Azure への移行を支援。
+一元的な管理画面を提供。</dd>
+</dl>
+<h2 id="6">ネットワーク</h2>
+<h3 id="6.1">Azure 内部</h3>
+<dl>
+<dt>仮想ネットワーク (VNet)</dt>
+<dd>Azure 上にプライベートネットワークを構築する。</dd>
+<dt>サブネット</dt>
+<dd>仮想ネットワークをサブネットに分割する。
+リソースはサブネットに配置する。
+同一仮想ネットワーク内にある別サブネットとは通信できる。</dd>
+<dt>仮想ネットワークピアリング</dt>
+<dd>同一リージョン内の仮想ネットワークを接続。
+インターネットではなく、 Microsoft のバックボーンインフラが利用される。</dd>
+<dt>グローバル仮想ネットワークピアリング</dt>
+<dd>異なるリージョン間の仮想ネットワークを接続。
+インターネットではなく、 Microsoft のバックボーンインフラが利用される。</dd>
+</dl>
+<h3 id="6.2">Azure 外部</h3>
+<dl>
+<dt>ExpressRoute</dt>
+<dd>オンプレミスなどと Azure を専用回線で接続する。
+専用回線は別途、回線事業者との契約が必要。
+上り (to Azure) は無料。</dd>
+<dt>仮想ネットワークゲートウェイ, VPN Gateway</dt>
+<dd>オンプレミス等と Azure を VPN で接続。
+接続形態が3つある。
+<ul>
+<li>サイト間接続 (Site to Site, S2S)</li>
+<li>ポイント対サイト接続 (Point to Site, P2S)</li>
+<li>VNet 間接続</li>
+</ul>
+</dd>
+<dt>ローカルネットワークゲートウェイ</dt>
+<dd>TODO</dd>
+</dl>
+<h3 id="6.3">PaaS</h3>
+<dl>
+<dt>エンドポイント</dt>
+<dd>
+<p>Azure の PaaS には、それにアクセスするための URL が割り当たる。
+この URL をエンドポイントと呼ぶ。</p>
+<dl>
+<dt>サービスエンドポイント</dt>
+<dd>インターネットを経由せずに PaaS のリソースに接続できる。
+アクセス元を仮想ネットワークのみに限定できる。
+無料。</dd>
+<dt>プライベートエンドポイント</dt>
+<dd>VNet 内からプライベート IP アドレスでリソースに接続する。
+有料。</dd>
+</dl>
+</dd>
+</dl>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: left">送信元の IP アドレス</th><th style="text-align: left">宛先 (PaaS) の IP アドレス</th><th style="text-align: left">経路</th></tr></thead><tbody>
+<tr><td style="text-align: left">パブリック</td><td style="text-align: left">パブリック</td><td style="text-align: left">パブリック</td><td style="text-align: left">インターネット</td></tr>
+<tr><td style="text-align: left">サービス</td><td style="text-align: left">プライベート</td><td style="text-align: left">パブリック</td><td style="text-align: left">Microsoft のバックボーン</td></tr>
+<tr><td style="text-align: left">プライベート</td><td style="text-align: left">プライベート</td><td style="text-align: left">プライベート</td><td style="text-align: left">Microsoft のバックボーン</td></tr>
+</tbody></table>
+</div>
+<p>サービスエンドポイントは、ルーティングテーブルに細工をして PaaS への通信を Microsoft のバックボーンに通す。
+NAT/NAPT を経由しないので送信元 IP アドレスはプライベートになる。
+PaaS 側はファイアウォールで送信元の VNet 以外からのパケットを通さないようにしている。</p>
+<h3 id="6.4">負荷分散</h3>
+<dl>
+<dt>Azure Load Balancer</dt>
+<dd>L4 のロードバランサ。</dd>
+<dt>Azure Application Gateway</dt>
+<dd>ウェブアプリに対するトラフィックを管理できる L7 ロードバランサ。
+URL やヘッダーなど、 HTTP リクエストの属性に基づいてルーティングを決定できる。</dd>
+</dl>
+<h3 id="6.5">セキュリティ</h3>
+<dl>
+<dt>NSG</dt>
+<dd>IPパケットレベルでの保護を提供する。
+仮想ネットワークサブネットとNICに紐づけられる。
+仮想ネットワークには紐づけられない。</dd>
+<dt>ASG</dt>
+<dd>NSGの拡張機能。
+NICのグループを作り、そこにNSGを適用できる。
+このグループをASGと呼ぶ。</dd>
+</dl>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: center">NSG</th><th style="text-align: center">Azure Firewall</th></tr></thead><tbody>
+<tr><td style="text-align: left">VNet</td><td style="text-align: center">-</td><td style="text-align: center">✓</td></tr>
+<tr><td style="text-align: left">Subnet</td><td style="text-align: center">✓</td><td style="text-align: center">-</td></tr>
+<tr><td style="text-align: left">NIC</td><td style="text-align: center">✓</td><td style="text-align: center">-</td></tr>
+</tbody></table>
+</div>
+<dl>
+<dt>Azure DDoS Protection</dt>
+<dd>ネットワーク保護プランと IP 保護プランがある。
+ネットワーク保護は VNet レベルでの保護をする。</dd>
+</dl>
+<h3 id="6.6">ルーティング</h3>
+<dl>
+<dt>ユーザー定義ルート</dt>
+<dd>ルータのルーティングテーブルの静的エントリのこと。
+Azureでカスタムルート定義を実施するには仮想アプライアンスが必要。</dd>
+<dt>Azure DNS</dt>
+<dd>Pass</dd>
+</dl>
+<h3 id="6.7">その他</h3>
+<dl>
+<dt>仮想アプライアンス</dt>
+<dd>ハードではなくソフトとしてのアプライアンス。
+アプライアンスは、特定の機能に特化したネットワーク機器を指す用語 (だと思われる)。</dd>
+</dl>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">サービス名</th><th style="text-align: left">経路</th><th style="text-align: left">接続先</th></tr></thead><tbody>
+<tr><td style="text-align: left">VPNゲートウェイ</td><td style="text-align: left">インターネット</td><td style="text-align: left">オンプレミス等</td></tr>
+<tr><td style="text-align: left">ExpressRoute</td><td style="text-align: left">専用回線</td><td style="text-align: left">オンプレミス等</td></tr>
+<tr><td style="text-align: left">プライベートエンドポイント</td><td style="text-align: left">Azureバックボーン</td><td style="text-align: left">プライベートIPアドレス</td></tr>
+<tr><td style="text-align: left">パブリックエンドポイント</td><td style="text-align: left">インターネット</td><td style="text-align: left">パブリックIPアドレス</td></tr>
+<tr><td style="text-align: left">サービスエンドポイント</td><td style="text-align: left">Azureバックボーン</td><td style="text-align: left">パブリックIPアドレス</td></tr>
+<tr><td style="text-align: left">パブリックエンドポイント</td><td style="text-align: left">Azureバックボーン</td><td style="text-align: left">プライベートIPアドレス</td></tr>
+</tbody></table>
+</div><!-- -->
+<p><figure><div class="zakki-scroll"><object type="image/svg+xml" data="vnet.drawio.svg"></object></div><figcaption>拠点間の通信</figcaption></figure></p>
+<dl>
+<dt>Microsoft Defender for Cloud</dt>
+<dd>レポートをダウンロードできる。</dd>
+</dl>
+<h3 id="6.8">VM</h3>
+<dl>
+<dt>Azure Dedicated Host</dt>
+<dd>物理マシンを占有する。
+ただし、占有できるのは CPU, メモリ のみで、コンテナはできない。</dd>
+<dt>Azure Spot Virtual Machines</dt>
+<dd>Azure 内で余っているリソースを借りる。
+SLA がない代わりに安い。</dd>
+<dt>Azure JIT VM</dt>
+<dd>一時的に VM にアクセスできるようにする機能。
+Microsoft Defender for Cloud の機能。</dd>
+<dt>Azure Reserved VM Instances</dt>
+<dd>インスタンスを予約購入して価格を割り引く。
+最大3年。</dd>
+</dl>
+<h2 id="7">ID 管理</h2>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: left">Entra ID (旧 Azure AD)</th><th style="text-align: left">Active Directory Domain Service (ADDS)</th><th style="text-align: left">Active Directory (AD)</th></tr></thead><tbody>
+<tr><td style="text-align: left">環境</td><td style="text-align: left"></td><td style="text-align: left"></td><td style="text-align: left">Windows Server</td></tr>
+<tr><td style="text-align: left">プロトコル</td><td style="text-align: left">SAML, OpenID, OAuth</td><td style="text-align: left">Kerberos</td><td style="text-align: left">Kerberos, LDAP</td></tr>
+</tbody></table>
+</div>
+<dl>
+<dt>Microsoft Entra ID (旧 Azure ID)</dt>
+<dd>アカウント管理をする。
+SAML, OpenID, Oauth をサポート。
+Azure 固有ではなく、 M365 などみの使われる。
+1つの Entra ID に複数のサブスクリプションを紐づけられる。
+1つのサブスクリプションに複数の Entra ID を紐づけることはできない。
+参加できるデバイスは Windows10, 11 のみ。</dd>
+<dt>特権 ID 管理 (PIM)</dt>
+<dd>Azure アカウント内のユーザーのリソースへのアクセスを管理・監視する。</dd>
+<dt>AD (Active Directory Domain Service)</dt>
+<dd>Windows サーバーの機能。
+LDAP, Kerberos をサポート。
+オンプレミスで使う認証サービス。
+Entra ID とは互換性がない。</dd>
+<dt>Micorosoft Entra ID Protection</dt>
+<dd>不審なアクセスに自動対処する。
+パスワードが正しくても正常なログインとは限らない。
+アクセス元の位置情報や行動パターンなどに基づいて、不審なアクセスを検知し、
+それをブロックしたりMFAを要求したりできる。
+不審なアクセスに対する処置はユーザーが設定する。</dd>
+<dt>Microsoft Defender for Identity</dt>
+<dd>オンプレミス上の情報を収集し、クラウド側で分析をする。
+不審なアクセスの検知はするが、対処はしない。対処は別途ユーザーが行う。</dd>
+<dt>Microsoft Entra Domain Services</dt>
+<dd>AD の PaaS 版。
+「Azure 上の VM として用意した Windows Server に AD を立てた環境」を PaaS として提供するイメージ。</dd>
+<dt>Microsoft Entra Connect</dt>
+<dd>AD で管理する ID を Entra ID に同期する。
+ハイブリッドクラウドで利用する。</dd>
+<dt>RBAC (Roll Based Access Control, アールバック)</dt>
+<dd>どのグループ (管理者グループ, 運用グループ, …) に、どのロール (所有者, 共同作成者, …) を割り当てるかを決める。
+ユーザー以外にもロールを割り当てられることに注意。
+例えばアプリがストレージにアクセスする際にも権限が必要。</dd>
+<dt>セキュリティプリンシパル</dt>
+<dd>Azure リソースへのアクセスを要求するモノを表すオブジェクト。</dd>
+</dl>
+<h2 id="8">コンプラ系統</h2>
+<dl>
+<dt>Service Trust Portal</dt>
+<dd>Microsoft のセキュリティ・プライバシー・コンプライアンスの情報がある。
+監査レポート・証明書・侵入テストのレポートなどがある。
+一部のデータはログインしないと見られない。</dd>
+<dt>トラストセンター</dt>
+<dd>Azure の運営方針が書いてある。</dd>
+<dt>コンプライアンスマネージャー</dt>
+<dd>Microsoft 関連企業のコンプライアンスに関する情報を追える。</dd>
+</dl>
+<h2 id="9">監視・分析</h2>
+<dl>
+<dt>Azure Adovisor</dt>
+<dd>
+<p>信頼性・セキュリティ・パフォーマンス・運用性について推奨事項を表示。
+これ自体は無料で使えるが、サジェストには有料のサービスも含まれる。</p>
+</dd>
+<dt>Azure Service Health</dt>
+<dd>
+<p>障害や計画メンテナンスの把握に使う。
+Azure の状態・サービス正常性・リソース正常性からなる。</p>
+<dl>
+<dt>Azure の状態</dt>
+<dd>リージョンごとのサービスの正常性を確認できる。
+ログインしていなくても見れる。</dd>
+<dt>サービス正常性 (Service Health)</dt>
+<dd>使っているサービスの正常性が見れる。
+ラック単位の不具合を調べることはできない。
+アラートの設定もできる。
+ログイン中のみ使える。</dd>
+<dt>リソース正常性 (Resource Health)</dt>
+<dd>リソースの正常性について30日分の履歴が見れる。
+ラック単位の不具合もわかる。
+履歴を見たりアラート設定をしたりできる。</dd>
+</dl>
+</dd>
+<dt>Azure Monitor</dt>
+<dd>
+<p>オンプレミス・他社クラウドをまたいだ利用上の収集・分析・監視。
+アクティビティログ, アラート, メトリック (CPU利用率など),
+ログ (分析), Application Insights などがある。</p>
+</dd>
+<dt>Log Analytics Workspace</dt>
+<dd>
+<p>Azure Monitor, Micorosoft Sentinel, Microsoft Defender for Cloud などで発生したログを保存する専用ストレージ環境。</p>
+</dd>
+<dt>Microsoft Purview</dt>
+<dd>
+<p>組織のデータを管理・保護する。
+オンプレミス・他社クラウドを含め、データの分類などを横断的に行える。</p>
+</dd>
+</dl>
+<h2 id="10">操作の制限</h2>
+<dl>
+<dt>Azure Policy</dt>
+<dd>
+<dl>
+<dt>ポリシー定義</dt>
+<dd>リソースそのものについての制約。
+例えば、「リージョンは東西日本のみ」や「仮想マシンのサイズはD2s」など。
+(アクセス制御はしない)</dd>
+<dt>イニシアチブ定義</dt>
+<dd>ポリシー定義をまとめたもの。</dd>
+</dl>
+<p>管理グループ・サブスクリプション・リソースに
+イニシアチブ定義やポリシー定義を割り当てられる。
+ポリシーが適用されるのは割当後に作成したリソースのみ。</p>
+</dd>
+<dt>リソースロック</dt>
+<dd><div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: center">変更</th><th style="text-align: center">削除</th></tr></thead><tbody>
+<tr><td style="text-align: left">削除ロック</td><td style="text-align: center">o</td><td style="text-align: center">x</td></tr>
+<tr><td style="text-align: left">読み取り専用ロック</td><td style="text-align: center">x</td><td style="text-align: center">x</td></tr>
+</tbody></table>
+</div>
+<p>意味はないが、両方のロックを適用することもできる。</p>
+</dd>
+</dl>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left"></th><th style="text-align: center">ロック</th><th style="text-align: center">Azure Policy</th><th style="text-align: center">RBAC</th></tr></thead><tbody>
+<tr><td style="text-align: left">管理グループ</td><td style="text-align: center">-</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td></tr>
+<tr><td style="text-align: left">サブスクリプション</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td></tr>
+<tr><td style="text-align: left">リソースグループ</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td></tr>
+<tr><td style="text-align: left">リソース</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td><td style="text-align: center">✓</td></tr>
+</tbody></table>
+</div>
+<h2 id="11">その他のセキュリティ</h2>
+<dl>
+<dt>Azure Information Protection</dt>
+<dd>MIP の機能の一部。
+ファイルを暗号化し、特定の人しか触れないようにする。
+メールアドレス単位で編集/閲覧/印刷などの権限を与える。
+認証には Entra ID を使う。対応しているファイルフォーマットは限定的。
+MS Office 関連のもの、 PDF などに対応している。</dd>
+<dt>Microsoft Purview Information Protection</dt>
+<dd>(旧 Microsoft Information Protection)
+機密度レベルを設定し Microsoft 365 で作成したメール、 Word 、 Excel 、 Power Point などのデータを保護できる。
+具体的には、ファイルに対する編集・印刷・転送などの操作権限や有効期限を設定し、
+情報漏洩を防ぐ仕組みです。</dd>
+</dl>
+<h2 id="12">データベース系</h2>
+<dl>
+<dt>Azure SQL Database</dt>
+<dd>TODO</dd>
+<dt>Azure Cosmos DB</dt>
+<dd>NoSQLデータベースのPaaS。
+高速な応答、スケーラビリティ、高可用性、高セキュリティ、フルマネージド。</dd>
+<dt>Azure Cache for Redis</dt>
+<dd>Redis をもとにしたインメモリデータストア。</dd>
+</dl>
+<h2 id="13">AI, ビッグデータ</h2>
+<dl>
+<dt>Azure Machine Learning</dt>
+<dd>モデルの作成や使用、監視、再トレーニングができる。</dd>
+<dt>Azure Synapse Analytics</dt>
+<dd>データ分析サービス。</dd>
+<dt>Azure Coginitive Services</dt>
+<dd>Micorosoft が用意した画像/音声/言語認識モデルを使えるサービス。</dd>
+<dt>Azure Databricks</dt>
+<dd>レイクハウスプラットフォームの Databricks を Azure で使えるようにしたもの。データの分析や学習ができる。
+<ul>
+<li>データウェアハウス : 構造化されたデータを貯めておく</li>
+<li>データレイク : 構造化されていないデータを貯めておく</li>
+<li>レイクハウス : 両方のいいとこ取り</li>
+</ul>
+</dd>
+<dt>Azure Synapse Analytics</dt>
+<dd>データ ウェアハウスやビッグ データシステム全体にわたって、迅速なデータ分析が可能なエンタープライズ分析サービス。</dd>
+<dt>Azure HDInsight</dt>
+<dd>OSSを使った分析サービス。 Hadoop, Apache Spark, Apache Hive, LLAP, Apache Kafka などが使える。
+HD は Hadoop Distributed の略と思われるが、詳細不明。</dd>
+</dl>
+<h2 id="14">IoT 系</h2>
+<dl>
+<dt>IoT Central</dt>
+<dd>IoTデバイスの中央管理。</dd>
+<dt>IoT Hub</dt>
+<dd>デバイスの通信管理に特化。</dd>
+</dl>
+<h2 id="15">その他リソース</h2>
+<dl>
+<dt>Azure App Service</dt>
+<dd>.NET, Java, Node.js, Python などから好きな言語を選んで開発し、それをデプロイする。
+セキュリティ・負荷分散・自動スケーリング・自動管理などを勝手にやってくれる。
+CI/CDやパッケージ管理、TLS/SSL証明書などの DevOps 機能もある。</dd>
+<dt>Azure App Service Environment</dt>
+<dd>App Service アプリを大規模かつ安全に実行するための環境を提供する。
+Azure App Service の機能の一つ。
+Docker コンテナや Function, Logic Apps をホストできる。</dd>
+<dt>Azure DevTest Labs</dt>
+<dd>Azure内にテスト環境を設定できる。
+仮想マシンの数と設定内容を記した ARM (Azure Resource Manager) テンプレートを利用する。</dd>
+<dt>Azure Logic Apps</dt>
+<dd>ワークフローの作成。</dd>
+</dl>
+<h2 id="16">サポート</h2>
+<dl>
+<dt>Azure サポートリクエスト (サポートチケット)</dt>
+<dd>ポータル上で作成と管理ができる。
+Azure サポートチケット REST API や Azure CLI からも作成できる。</dd>
+<dt>料金計算ツール</dt>
+<dd>リソースの月額コストの見積もりに使う。</dd>
+<dt>Azure TCO 計算ツール</dt>
+<dd>光熱費や人件費・データセンターの維持コスト等も踏まえて、
+オンプレミスから Azure に移行した際の費用を比較・見積もりする。</dd>
+<dt>コストの管理と請求 (Azure Cost Management)</dt>
+<dd>過去の利用料を参照する。</dd>
+</dl>
+<h2 id="17">サポートプラン</h2>
+<p>安い方から順に :</p>
+<ul>
+<li>Basic</li>
+<li>Developer</li>
+<li>Standard</li>
+<li>Professional Direct</li>
+<li>Premier</li>
+</ul>
+<h2 id="18">お金</h2>
+<ul>
+<li>SLA 未達成時はクレジットがもらえる。</li>
+<li>可用性ゾーン間のデータ転送は有料。</li>
+<li>同一の可用性ゾーン内のデータ転送は無料。</li>
+</ul>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>

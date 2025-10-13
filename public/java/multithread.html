@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="path_to_root" content="../..">
+  <script type="text/javascript" src="../../theme.js"></script>
+  <script type="text/javascript" src="../../script.js" defer></script>
+  <script type="text/javascript" src="../../metadata.js" defer></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../../gtag.js" defer></script>
+  <link rel="stylesheet" href="../../style.css" />
+  <link rel="stylesheet" href="../../katex/katex.min.css" />
+  <title>(Java) マルチスレッド処理</title>
+</head>
+
+  <body>
+    <header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title"><a href="../../index.html">Sinotcaの雑記帳</a></h1>
+    <div class="header-actions">
+      <button
+        id="search-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleSearchInput()"
+        aria-label="Toggle search"
+        aria-controls="searchbar"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+        </svg>
+      </button>
+      <button
+        id="theme-toggle"
+        class="header-button"
+        type="button"
+        onclick="toggleTheme()"
+        aria-label="Toggle color theme"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+    <input
+      type="search"
+      id="search-input"
+      onkeyup="searchAndRender()"
+      placeholder="Search this site"
+      aria-label="Search site"
+    >
+    <button
+      type="button"
+      class="header-button search-close"
+      onclick="toggleSearchInput()"
+      aria-label="Close search"
+    >
+      &times;
+    </button>
+  </form>
+  <div id="search-result" class="hidden"></div>
+</header>
+
+    <main>
+      <div id="date">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+          <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
+        </svg>
+        2025-09-21 ~ 2025-09-21
+      </div>
+      <div> <a class="tag" href="../../index.html?tag=lang">lang</a> <a class="tag" href="../../index.html?tag=java">java</a> <a class="tag" href="../../index.html?tag=ref">ref</a></div>
+      <div id="toc"><ul><li><a href="#1">Thread</a></li><li><a href="#2">Executor</a><ul><li><a href="#2.1">タスクの実行方法</a></li><li><a href="#2.2">タスクの定期実行 (ScheduledExecutorService)</a></li></ul></li><li><a href="#3">排他制御</a><ul><li><a href="#3.1">synchronized ブロック</a></li><li><a href="#3.2">バリアを張る (CyclicBarrier)</a></li><li><a href="#3.3">ReentrantLock</a></li></ul></li></ul></div>
+      <div id="main-content">
+        <h1 id="">(Java) マルチスレッド処理</h1>
+<h2 id="1">Thread</h2>
+<p><code>Thread</code> を使うと、別スレッドを立てて処理を実行することができます。</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">メソッド</th><th style="text-align: left">役割</th></tr></thead><tbody>
+<tr><td style="text-align: left"><code>void run()</code></td><td style="text-align: left">処理の実態を記述する。</td></tr>
+<tr><td style="text-align: left"><code>void start()</code></td><td style="text-align: left">新しいスレッドを作成して <code>run</code> を実行する。</td></tr>
+</tbody></table>
+</div>
+<blockquote class="markdown-alert-note">
+<p><code>run</code> メソッドを直接呼び出すこともできます。
+その場合は新規スレッドは作成されず、現在のスレッドで処理が実行されます。</p>
+</blockquote>
+<h2 id="2">Executor</h2>
+<p><code>Executor</code> はスレッドプールに関するインタフェースです。
+基本は <code>Thread</code> を生で触る代わりに、より高級な <code>Executor</code> 系を利用します。
+インスタンスは <code>Executors</code> ファクトリクラスで作成します。
+作成したスレッドプールにタスクを投げ、結果を得るのが基本的な使い方です。</p>
+<div class="table-wrapper"><table><thead><tr><th>ファクトリメソッド</th><th>戻り値</th><th>特徴</th></tr></thead><tbody>
+<tr><td><code>newSingleThreadExecutor()</code></td><td><code>ExecutorService</code></td><td>単一スレッドで逐次タスクを実行。</td></tr>
+<tr><td><code>newFixedThreadPool(int nThreads)</code></td><td><code>ExecutorService</code></td><td>スレッド数固定。</td></tr>
+<tr><td><code>newCachedThreadPool()</code></td><td><code>ExecutorService</code></td><td>必要に応じてスレッドを生成し、アイドル状態が続けば破棄。</td></tr>
+<tr><td><code>newWorkStealingPool()</code></td><td><code>ExecutorService</code></td><td><code>ForkJoinPool</code> を利用。タスクをワークスティーリング方式で分配。</td></tr>
+<tr><td><code>newSingleThreadScheduledExecutor()</code></td><td><code>ScheduledExecutorService</code></td><td>単一スレッドでのスケジューリング実行。タスクが順次処理される。</td></tr>
+<tr><td><code>newScheduledThreadPool(int corePoolSize)</code></td><td><code>ScheduledExecutorService</code></td><td>複数スレッドでスケジュール実行。遅延実行・定期実行が可能。</td></tr>
+</tbody></table>
+</div>
+<h3 id="2.1">タスクの実行方法</h3>
+<p><code>Executor</code> にタスクを投げるには <code>submit</code> を利用します。
+<code>submit</code> にはいくつかオーバーロードがあり、役割ごとに使い分けます。</p>
+<div class="table-wrapper"><table><thead><tr><th>シグネチャ</th><th>用途</th><th><code>future.get()</code> の戻り値</th></tr></thead><tbody>
+<tr><td><code>Future&lt;?&gt; submit(Runnable task)</code></td><td>戻り値を持たない処理</td><td><code>null</code></td></tr>
+<tr><td><code>&lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result)</code></td><td>戻り値を持たない処理 + 固定の結果</td><td><code>result</code> で指定した値</td></tr>
+<tr><td><code>&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task)</code></td><td>戻り値を持つ処理</td><td><code>Callable.call()</code> の戻り値</td></tr>
+</tbody></table>
+</div>
+<p><code>Future.get</code> はタスクの終了まで待機します。
+タスクの実行中に例外が発生した場合は <code>ExecutionException</code> が送出されます。
+元の例外を得るには <code>ExecutionException.getCause</code> を使います。
+ただし、 <code>Runnable.run</code> はチェック例外を送出できません。</p>
+<h3 id="2.2">タスクの定期実行 (ScheduledExecutorService)</h3>
+<p>タスクを定期実行するには <code>ScheduledExecutorService</code> のインスタンスを利用します。
+これは <code>newSingleThreadScheduledExecutor</code> や <code>newScheduledThreadPool</code> で作成します。</p>
+<div class="table-wrapper"><table><thead><tr><th>メソッド</th><th>戻り値</th><th>初回実行</th><th>2回目以降</th></tr></thead><tbody>
+<tr><td><code>schedule(Runnable command, long delay, TimeUnit unit)</code></td><td><code>ScheduledFuture&lt;?&gt;</code></td><td>指定時間後</td><td>-</td></tr>
+<tr><td><code>schedule(Callable&lt;V&gt; callable, long delay, TimeUnit unit)</code></td><td><code>ScheduledFuture&lt;V&gt;</code></td><td>指定時間後</td><td>-</td></tr>
+<tr><td><code>scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit)</code></td><td><code>ScheduledFuture&lt;?&gt;</code></td><td>指定時間後</td><td><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span> 回目の実行開始は、前処理終了以降かつ、 <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">initialDelay</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">period</span></span></span></span></span> 以降</td></tr>
+<tr><td><code>scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit)</code></td><td><code>ScheduledFuture&lt;?&gt;</code></td><td>指定時間後</td><td>前回開始から <code>delay</code> 経過後に実行開始</td></tr>
+</tbody></table>
+</div>
+<h2 id="3">排他制御</h2>
+<h3 id="3.1">synchronized ブロック</h3>
+<p><code>synchronized</code> ブロックを使うと特定のインスタンスを鍵にロックをかけられる。
+同じインスタンスを鍵に synchronized ブロックを実行できるのは1スレッドまで。</p>
+<h3 id="3.2">バリアを張る (CyclicBarrier)</h3>
+<h3 id="3.3">ReentrantLock</h3>
+<p>リエントラントな制御をするときに使う。</p>
+
+      </div>
+    </main>
+    <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>
+  </body>
+</html>
