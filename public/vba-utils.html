@@ -72,53 +72,105 @@
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
-        2025-08-10 ~ 2025-08-10
+        2025-08-10 ~ 2025-11-02
       </div>
       <div> <a class="tag" href="../index.html?tag=vba">vba</a></div>
-      <div id="toc"><ul><li><a href="#1">各種更新の停止</a></li><li><a href="#2">方眼紙作成</a></li><li><a href="#3">色変更 (ModColorモジュール)</a></li></ul></div>
+      <div id="toc"><ul><li><a href="#1">各種更新の停止</a></li><li><a href="#2">Excel 方眼紙の作成</a></li><li><a href="#3">全シート A1 選択、ズーム・スクロールリセット</a></li><li><a href="#4">罫線削除</a></li><li><a href="#5">色変更 (ModColorモジュール)</a></li></ul></div>
       <div id="main-content">
         <h1 id="">VBA 便利マクロ集</h1>
 <h2 id="1">各種更新の停止</h2>
-<p>描画等の更新停止/再開を行うためのクラスです。
-初期化時に各種停止処理を行い、インスタンス破棄のタイミングで各種状態を復元します。 (<a href="https://tonari-it.com/excel-vba-class-performance-booster">参考</a>)</p>
-<pre><code class="language-vba">' Class Module: StopUpdate
+<p>VBA 高速化の基本に、画面の更新を止めるというものがあります。
+しかしながら、毎回停止と再開を記述するのは大変です。
+解決策として、次のようなクラスの利用が知られています (<a href="https://tonari-it.com/excel-vba-class-performance-booster">参考</a>)。</p>
+<pre><code class="language-vba">' Module: cBooster
 Option Explicit
 
-Private c As XlCalculation
 Private s As Boolean
 Private e As Boolean
 
 Private Sub Class_Initialize()
-    c = Application.Calculation
     s = Application.ScreenUpdating
     e = Application.EnableEvents
-
-    Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
     Application.EnableEvents = False
 End Sub
 
 Private Sub Class_Terminate()
     On Error Resume Next
-    Application.Calculation = c
     Application.ScreenUpdating = s
     Application.EnableEvents = e
 End Sub
 </code></pre>
-<h2 id="2">方眼紙作成</h2>
+<p>このクラスのインスタンスを関数の冒頭で呼び出すことで、コンストラクタにより各種更新がストップされます。
+関数の終了時には、デストラクタにより各種更新が再開されます。</p>
+<pre><code class="language-vba">Function foo()
+    Dim booster As cBooster: Set booster = New cBooster
+    ...
+End Function
+</code></pre>
+<h2 id="2">Excel 方眼紙の作成</h2>
 <pre><code class="language-vba">Option Explicit
 
 ' Excel 方眼紙を作成する
-' @param SizePt セルのサイズ
-Public Sub MakeGrid(Optional SizePt As Long = 32)
-    Application.ScreenUpdating = False
+' SizePt セルのサイズ
+Public Sub MakeGrid(Optional SizePt As Long = 20)
+    Dim booster As cBooster: Set booster = New cBooster
     Columns("A").ColumnWidth = 1
     Columns("A:XFD").ColumnWidth = SizePt / Columns("A").Width
     Rows("1:1048576").RowHeight = Columns("A").Width
-    Application.ScreenUpdating = True
 End Sub
 </code></pre>
-<h2 id="3">色変更 (ModColorモジュール)</h2>
+<h2 id="3">全シート A1 選択、ズーム・スクロールリセット</h2>
+<pre><code class="language-vba">Sub ResetView()
+    Dim booster As cBooster: Set booster = New cBooster
+
+    Dim ws As Worksheet
+    For Each ws In ActiveWorkbook.Worksheets
+        If ws.Type = xlWorksheet Then
+            ws.Activate
+            ActiveWindow.Zoom = 100
+            Application.Goto ws.Range("A1"), True
+        End If
+    Next ws
+
+    ActiveWorkbook.Worksheets(1).Activate
+End Sub
+</code></pre>
+<h2 id="4">罫線削除</h2>
+<pre><code class="language-vba">ub db(ByVal dir As String)
+    Dim booster As cBooster: Set booster = New cBooster
+
+    Dim targetEdge As XlBordersIndex
+    Dim adjacentEdge As XlBordersIndex
+    Dim rowOffset As Long
+    Dim colOffset As Long
+    Dim area As Range
+    Dim boundaryRange As Range
+
+    If TypeName(Selection) &lt;&gt; "Range" Then Exit Sub
+
+    Select Case LCase(dir)
+        Case "o": targetEdge = xlEdgeBottom: adjacentEdge = xlEdgeTop:    rowOffset = 1
+        Case "p": targetEdge = xlEdgeTop:    adjacentEdge = xlEdgeBottom: rowOffset = -1
+        Case "l": targetEdge = xlEdgeLeft:   adjacentEdge = xlEdgeRight:  colOffset = -1
+        Case "r": targetEdge = xlEdgeRight:  adjacentEdge = xlEdgeLeft:   colOffset = 1
+        Case Else: Exit Sub
+    End Select
+
+    For Each area In Selection.Areas
+        If rowOffset = 1 Then Set boundaryRange = area.Rows(area.Rows.Count)
+        If rowOffset = -1 Then Set boundaryRange = area.Rows(1)
+        If colOffset = 1 Then Set boundaryRange = area.Columns(area.Columns.Count)
+        If colOffset = -1 Then Set boundaryRange = area.Columns(1)
+
+        On Error Resume Next ' シート端は隣マスがエラーになる
+        boundaryRange.Borders(targetEdge).LineStyle = xlNone
+        boundaryRange.Offset(rowOffset, colOffset).Borders(adjacentEdge).LineStyle = xlNone
+        On Error GoTo 0
+    Next area
+End Sub
+</code></pre>
+<h2 id="5">色変更 (ModColorモジュール)</h2>
 <pre><code class="language-vba">Option Explicit
 '===============================================================================
 ' NAME
