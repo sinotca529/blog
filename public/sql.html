@@ -75,7 +75,7 @@
         2024-06-28 ~ 2024-06-28
       </div>
       <div> <a class="tag" href="../index.html?tag=sql">sql</a></div>
-      <div id="toc"><ul><li><a href="#1">ブール型は </a></li><li><a href="#2">NULL 値と他の値の比較は常に </a></li><li><a href="#3">副問い合わせはトランザクションを開始しうる</a></li><li><a href="#4">トランザクションは時刻印を持つ</a></li><li><a href="#5">カーソル</a></li><li><a href="#6">データを同時に触るトランザクションを「並行SQLトランザクション」と呼ぶ</a></li></ul></div>
+      <div id="toc"><ul><li><a href="#1">ブール型は </a></li><li><a href="#2">NULL 値と他の値の比較は常に </a></li><li><a href="#3">副問い合わせはトランザクションを開始しうる</a></li><li><a href="#4">トランザクションは時刻印を持つ</a></li><li><a href="#5">カーソル</a></li><li><a href="#6">データを同時に触るトランザクションを「並行SQLトランザクション」と呼ぶ</a></li><li><a href="#7">型</a></li><li><a href="#8">NUMBER</a></li><li><a href="#9">BFILE</a></li><li><a href="#10">DATE, TIMESTAMP</a></li><li><a href="#11">DDL</a><ul><li><a href="#11.1">CREATE TABLE</a></li><li><a href="#11.2">ALTER TABLE</a></li></ul></li><li><a href="#12">DML</a><ul><li><a href="#12.1">マルチテーブル INSERT (Oracle の機能)</a></li><li><a href="#12.2">MERGE</a></li><li><a href="#12.3">DELETE</a></li><li><a href="#12.4">SELECT</a></li></ul></li><li><a href="#13">特殊な表</a><ul><li><a href="#13.1">DUAL表</a></li><li><a href="#13.2">ビュー</a></li><li><a href="#13.3">一時表</a></li><li><a href="#13.4">プライベート一時表 (Oracle 18c～)</a></li><li><a href="#13.5">外部表</a></li></ul></li><li><a href="#14">SQL</a></li></ul></div>
       <div id="main-content">
         <h1 id="">SQL</h1>
 <p><a href="https://www.iso.org/standard/76584.html">ISO/IEC 9075-2:2023</a> は有償である。
@@ -120,6 +120,160 @@ SQLトランザクションは，
 <blockquote>
 <p>(4.36.3) 異なるSQLエージェントによって開始され，同じSQLデータ又はスキーマをアクセスし， かつ，時刻で重なり合うSQLトランザクションは，並行SQLトランザクション (concurrent SQL-transaction) とする。</p>
 </blockquote>
+<hr />
+<p>単一行服問い合わせは0行の時にNULLを返す。</p>
+<p>単一引数の集約関数は、何も残らなかった場合に NULL を返す。
+ただし、 COUNT は 0 を返す。</p>
+<p><code>COUNT(*)</code> は全列 NULL の行もカウントに含める。
+その他の <code>COUNT(e)</code> は、 <code>e</code> が NULL 以外に評価されるものの数を数える。
+たとえば <code>COUNT(1)</code> は <code>COUNT(*)</code> に等しく、 <code>COUNT(NULL)</code> は <code>0</code> となる。</p>
+<p><code>ORDER BY</code> は文末に1回だけ書ける。
+UNION などをしている場合、 <code>ORDER BY</code> で利用できる列名は初めの <code>SELECT</code> で指定したものだけである。</p>
+<p>Oracleでは、ソート時に <code>NULL</code> が無限大として扱われる。標準SQLでは規定なし。</p>
+<p>索引の利用はオプティマイザ次第であり、
+索引を作成したからと言って利用されるとは限らない。</p>
+<h2 id="7">型</h2>
+<h2 id="8">NUMBER</h2>
+<p>定義より多くの桁を持つ持つ数値を代入した場合、
+整数部が溢れる場合はエラーとなり、小数部があふれる場合は四捨五入される。</p>
+<h2 id="9">BFILE</h2>
+<p><code>BFILE</code> は OS 上に配置したバイナリファイル (画像等) へのロケータを格納する型。
+読み取り専用。 <code>SELECT</code> の結果はロケータ。
+なお、ロケータとは、ディレクトリオブジェクトとファイル名の組み合わせのこと。</p>
+<h2 id="10">DATE, TIMESTAMP</h2>
+<div class="table-wrapper"><table><thead><tr><th>型</th><th>日付</th><th>時刻</th><th>小数秒</th><th>タイムゾーン</th></tr></thead><tbody>
+<tr><td><code>DATE</code></td><td>○</td><td>○</td><td>×</td><td>×</td></tr>
+<tr><td><code>TIMESTAMP</code></td><td>○</td><td>○</td><td>○</td><td>×</td></tr>
+<tr><td><code>TIMESTAMP WITH TIME ZONE</code></td><td>○</td><td>○</td><td>○</td><td>○</td></tr>
+<tr><td><code>TIMESTAMP WITH LOCAL TIME ZONE</code></td><td>○</td><td>○</td><td>○</td><td>DBの設定に変換</td></tr>
+</tbody></table>
+</div>
+<h2 id="11">DDL</h2>
+<h3 id="11.1">CREATE TABLE</h3>
+<p>自身のスキーマ内に表を作成する際は <code>CREATE TABLE</code> システム権限が必要。
+他人のスキーマ内に表を作成する際は <code>CREATE ANY TABLE</code> システム権限が必要。</p>
+<pre><code class="language-sql">CREATE TABLE schema_a.table_a (
+  a CHAR(1) DEFAULT 'x' CHECK (...),
+  ...
+)
+</code></pre>
+<h3 id="11.2">ALTER TABLE</h3>
+<h2 id="12">DML</h2>
+<h3 id="12.1">マルチテーブル INSERT (Oracle の機能)</h3>
+<p>複数の表に一度に挿入できる。
+ただし、リモート表への挿入はできない。</p>
+<p>無条件でインサートする。</p>
+<pre><code class="language-SQL">-- table1, table2 の両方に値を入れる
+INSERT ALL
+    INTO table1 (col1) VALUES (val1)
+    INTO table2 (col1) VALUES (val2)
+SELECT ... FROM ...;
+</code></pre>
+<p>条件付きでインサートする。</p>
+<pre><code class="language-SQL">-- 条件に合致するものすべてに INSERT する
+INSERT ALL
+    WHEN col1 &gt; 100 THEN INTO table1 VALUES (...)
+    WHEN col2 = 'A' THEN INTO table2 VALUES (...)
+SELECT ... FROM ...;
+</code></pre>
+<p><code>INSERT ALL</code> ではなく <code>INSERT FIRST</code> を書くと、
+初めてヒットした行にだけ格納する。</p>
+<h3 id="12.2">MERGE</h3>
+<p>条件に一致する場合に <code>UPDATE</code>、一致しない場合に <code>INSERT</code> をする構文。</p>
+<pre><code class="language-sql">MERGE INTO target_table t
+USING source_table s ON (t.id = s.id)
+WHEN MATCHED THEN
+    UPDATE SET t.col1 = s.col1
+WHEN NOT MATCHED THEN
+    INSERT (id, col1) VALUES (s.id, s.col1);
+</code></pre>
+<p><code>WHEN MATCHED</code> と <code>WHEN NOT MATCHED</code> はどちらか一方だけでも問題ない。
+また、 <code>ON</code> に指定した列は更新できない。</p>
+<h3 id="12.3">DELETE</h3>
+<p><code>DELETE FROM</code> の <code>FROM</code> は省略可。</p>
+<h3 id="12.4">SELECT</h3>
+<p>SELECT は未取得行でもソートできる (ORACLE 限定)</p>
+<h2 id="13">特殊な表</h2>
+<h3 id="13.1">DUAL表</h3>
+<p>DUAL表はSYSユーザーのスキーマにあり、すべてのユーザーがDUALの名前でアクセスできる。
+VARCHAR2(1) の DUMMY列 を持ち、1行だけデータを持つ。データの値は ‘X’ である。</p>
+<h3 id="13.2">ビュー</h3>
+<p><code>SELECT</code> 文に名前を付けたもので、実体はない。
+単純なビューであれば、ビューを介して DML を実行できる。
+<code>DISTINCT</code>, <code>GROUP BY</code>, <code>JOIN</code>, <code>ORDER BY</code>, <code>SUM</code> などが入った複雑なビューに DML は適用できない。</p>
+<p>ビューの作成時に <code>WITH CHECK OPTION</code> をつけると、DML 発行時に、変更後のデータがビューに含まれるかの検証が入る。
+つまり、変更後の行がビューに現れない場合にエラーとなる (DELETE を除く)。</p>
+<h3 id="13.3">一時表</h3>
+<p>一時表は、セッションやトランザクション中だけデータを保持する表。
+ビュー, シノニム, 索引も作成できる。
+データはトランザクション終了時またはセッション終了時に削除されるが、テーブルは削除されない。
+データを見れるのは、自セッションのみ。</p>
+<pre><code class="language-sql">-- トランザクション終了時にデータを削除
+CREATE GLOBAL TEMPORARY TABLE tmp_table ( col NUMBER ) ON COMMIT DELETE ROWS;
+
+-- セッション終了時にデータを削除
+CREATE GLOBAL TEMPORARY TABLE tmp_table ( col NUMBER ) ON COMMIT PRESERVE ROWS;
+</code></pre>
+<h3 id="13.4">プライベート一時表 (Oracle 18c～)</h3>
+<p>表の定義もセッションまたはトランザクションの終了時に削除される一時表。
+普通の一時表がデータディクショナリで管理されるのに対し、プライベート一時表はメモリ上で管理される。</p>
+<h3 id="13.5">外部表</h3>
+<p>データベースの外部にあるファイルを扱う。
+<code>CREATE TABLE (...) ORGANIZATION EXTERNAL (...)</code> で作成する。
+外部ファイルを扱うため、ディレクトリオブジェクトへのアクセス権限が必要。</p>
+<p>アクセスドライバを2つから選択する。
+デフォルトでは <code>ORACLE_LOADER</code> が利用される。</p>
+<ul>
+<li><code>ORACLE_DATAPUMP</code> : バイナリのダンプファイルを利用。ロード・アンロードが可能</li>
+<li><code>ORACLE_LOADER</code> : CSV などのフラットファイルを利用。ロードのみ可能 (デフォルト)</li>
+</ul>
+<h2 id="14">SQL*Plus</h2>
+<ul>
+<li>SQL*Plus の EXIT コマンドは暗黙的に COMMIT する。</li>
+<li>置換変数について、 <code>&amp;</code> は実行のたびに値をきかれる、 <code>&amp;&amp;</code> は1回だけ聞かれる。</li>
+<li>置換変数は C の <code>#define</code> よろしく単なる文字列置換なので、エスケープとかはしてくれない。</li>
+<li>DESCRIBE → ()列名, NOT NULL かどうか, 型) の情報がでる</li>
+</ul>
+<hr />
+<ul>
+<li>
+<p>集計関数は NULL を集計対象としない</p>
+</li>
+<li></li>
+<li>
+<p>“x” は識別子に、‘x’ はその他の文字リテラルに使う。</p>
+</li>
+<li>
+<p>索引を UNUSABLE にすると実体が削除される</p>
+</li>
+<li>
+<p>ALTER TABLE は</p>
+<ul>
+<li>ADD : 列追加</li>
+<li>MODIFY : 列の型・制約編集 (型変更は全行NULLのときか、 TIMESTAMP系の一部変換, サイズ拡張のみ)</li>
+<li>DROP : 列削除</li>
+<li>SET UNUSED : 列の未使用化 (再び使用可能にはできない, 列のデータは即時解放されない (ALTER TABLE DROP UNUSED COLUMNS する), DESCRIBE で見えない, 消した列と同じ名前の列を新たに作れる, 即時解放されないので早い。データ削除は後からゆっくりやればよい。)</li>
+<li>READ ONLY : 読み取り専用に</li>
+<li>MOVE : 表の移動</li>
+</ul>
+</li>
+<li>
+<p>CREATE TABLE での制約指定の方法</p>
+<ul>
+<li>列レベルの制約指定 :</li>
+<li>表レベルの制約指定 :</li>
+</ul>
+</li>
+<li>
+<p>q’&lt; … &gt;’ のようなエスケープは oracle 独自</p>
+</li>
+<li>
+<p><code>NULLIF(a, b)</code> は、 <code>a = b</code> のときに <code>NULL</code> を返す。引数に <code>NULL</code> は指定できない。</p>
+</li>
+<li>
+<p>GRANT で権限を付与できるのは、ユーザーかパブリックロール。通常のロールにオブジェクト権限は付与できない。</p>
+</li>
+</ul>
 
       </div>
     </main>
