@@ -4,9 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="path_to_root" content="..">
-  <script type="text/javascript" src="../theme.js"></script>
   <script type="text/javascript" src="../script.js" defer></script>
-  <script type="text/javascript" src="../metadata.js" defer></script>
   <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="../gtag.js" defer></script>
   <link rel="stylesheet" href="../style.css" />
   
@@ -17,36 +15,8 @@
     <header class="site-header">
   <div class="header-inner">
     <h1 class="site-title"><a href="../index.html">Sinotcaの雑記帳</a></h1>
-    <div class="header-actions">
-      <button
-        id="search-toggle"
-        class="header-button"
-        type="button"
-        onclick="toggleSearchInput()"
-        aria-label="Toggle search"
-        aria-controls="searchbar"
-        aria-expanded="false"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
-          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-        </svg>
-      </button>
-      <button
-        id="theme-toggle"
-        class="header-button"
-        type="button"
-        onclick="toggleTheme()"
-        aria-label="Toggle color theme"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
-          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
-        </svg>
-      </button>
-    </div>
   </div>
-  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+  <form id="searchbar" class="site-search" role="search" onsubmit="return false;">
     <input
       type="search"
       id="search-input"
@@ -54,30 +24,21 @@
       placeholder="Search this site"
       aria-label="Search site"
     >
-    <button
-      type="button"
-      class="header-button search-close"
-      onclick="toggleSearchInput()"
-      aria-label="Close search"
-    >
-      &times;
-    </button>
   </form>
   <div id="search-result" class="hidden"></div>
 </header>
 
     <main>
       <div id="date">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: var(--header-fg);">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="1em" height="1em" style="fill: currentColor;">
           <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
           <path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256z"/>
         </svg>
         2024-06-28 ~ 2024-06-28
       </div>
       <div> <a class="tag" href="../index.html?tag=sql">sql</a></div>
-      <div id="toc"><ul><li><a href="#1">ブール型は </a></li><li><a href="#2">NULL 値と他の値の比較は常に </a></li><li><a href="#3">副問い合わせはトランザクションを開始しうる</a></li><li><a href="#4">トランザクションは時刻印を持つ</a></li><li><a href="#5">カーソル</a></li><li><a href="#6">データを同時に触るトランザクションを「並行SQLトランザクション」と呼ぶ</a></li><li><a href="#7">型</a></li><li><a href="#8">NUMBER</a></li><li><a href="#9">BFILE</a></li><li><a href="#10">DATE, TIMESTAMP</a></li><li><a href="#11">DDL</a><ul><li><a href="#11.1">CREATE TABLE</a></li><li><a href="#11.2">ALTER TABLE</a></li></ul></li><li><a href="#12">DML</a><ul><li><a href="#12.1">マルチテーブル INSERT (Oracle の機能)</a></li><li><a href="#12.2">MERGE</a></li><li><a href="#12.3">DELETE</a></li><li><a href="#12.4">SELECT</a></li></ul></li><li><a href="#13">特殊な表</a><ul><li><a href="#13.1">DUAL表</a></li><li><a href="#13.2">ビュー</a></li><li><a href="#13.3">一時表</a></li><li><a href="#13.4">プライベート一時表 (Oracle 18c～)</a></li><li><a href="#13.5">外部表</a></li></ul></li><li><a href="#14">SQL</a></li></ul></div>
-      <div id="main-content">
-        <h1 id="">SQL</h1>
+      <div id="article">
+        <details id="toc"><summary>目次</summary><ul><li><a href="#1">ブール型は <code>unknown</code> 値を取る</a></li><li><a href="#2">NULL 値と他の値の比較は常に <code>unknown</code></a></li><li><a href="#3">副問い合わせはトランザクションを開始しうる</a></li><li><a href="#4">トランザクションは時刻印を持つ</a></li><li><a href="#5">カーソル</a></li><li><a href="#6">データを同時に触るトランザクションを「並行SQLトランザクション」と呼ぶ</a></li><li><a href="#7">型</a></li><li><a href="#8">NUMBER</a></li><li><a href="#9">BFILE</a></li><li><a href="#10">DATE, TIMESTAMP</a></li><li><a href="#11">DDL</a><ul><li><a href="#11.1">CREATE TABLE</a></li><li><a href="#11.2">ALTER TABLE</a></li></ul></li><li><a href="#12">DML</a><ul><li><a href="#12.1">マルチテーブル INSERT (Oracle の機能)</a></li><li><a href="#12.2">MERGE</a></li><li><a href="#12.3">DELETE</a></li><li><a href="#12.4">SELECT</a></li></ul></li><li><a href="#13">特殊な表</a><ul><li><a href="#13.1">DUAL表</a></li><li><a href="#13.2">ビュー</a></li><li><a href="#13.3">一時表</a></li><li><a href="#13.4">プライベート一時表 (Oracle 18c～)</a></li><li><a href="#13.5">外部表</a></li></ul></li><li><a href="#14">SQL*Plus</a></li></ul></details><div id="main-content"><h1 id="">SQL</h1>
 <p><a href="https://www.iso.org/standard/76584.html">ISO/IEC 9075-2:2023</a> は有償である。
 代わりに <a href="https://kikakurui.com/x3/X3005-1-2014-01.html">JIS X3005-1:2014</a> と <a href="https://kikakurui.com/x3/X3005-2-2015-01.html">JIS 3005-2:2015</a> を参照する。</p>
 <h2 id="1">ブール型は <code>unknown</code> 値を取る</h2>
@@ -274,7 +235,7 @@ CREATE GLOBAL TEMPORARY TABLE tmp_table ( col NUMBER ) ON COMMIT PRESERVE ROWS;
 <p>GRANT で権限を付与できるのは、ユーザーかパブリックロール。通常のロールにオブジェクト権限は付与できない。</p>
 </li>
 </ul>
-
+</div>
       </div>
     </main>
     <footer>&copy; Sinotcaの雑記帳. All rights reserved.</footer>

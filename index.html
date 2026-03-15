@@ -4,9 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="path_to_root" content=".">
-  <script type="text/javascript" src="./theme.js"></script>
   <script type="text/javascript" src="./script.js" defer></script>
-  <script type="text/javascript" src="./metadata.js" defer></script>
   <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-9MVM0NZK9L" defer></script><script type="text/javascript" src="./gtag.js" defer></script>
   <link rel="stylesheet" href="./style.css" />
   
@@ -14,48 +12,11 @@
 </head>
 
   <body data-page="index">
-    <template id="card-template">
-      <a class="card" href="LINK">
-        <div class="card-header">TITLE</div>
-        <div class="card-meta">
-          <div class="card-date">DATE</div>
-          <div class="card-tags">TAGS</div>
-        </div>
-      </a>
-    </template>
     <header class="site-header">
   <div class="header-inner">
     <h1 class="site-title"><a href="./index.html">Sinotcaの雑記帳</a></h1>
-    <div class="header-actions">
-      <button
-        id="search-toggle"
-        class="header-button"
-        type="button"
-        onclick="toggleSearchInput()"
-        aria-label="Toggle search"
-        aria-controls="searchbar"
-        aria-expanded="false"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
-          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
-        </svg>
-      </button>
-      <button
-        id="theme-toggle"
-        class="header-button"
-        type="button"
-        onclick="toggleTheme()"
-        aria-label="Toggle color theme"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20" aria-hidden="true" focusable="false">
-          <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-          <path d="M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
-        </svg>
-      </button>
-    </div>
   </div>
-  <form id="searchbar" class="site-search hidden" role="search" onsubmit="return false;">
+  <form id="searchbar" class="site-search" role="search" onsubmit="return false;">
     <input
       type="search"
       id="search-input"
@@ -63,14 +24,6 @@
       placeholder="Search this site"
       aria-label="Search site"
     >
-    <button
-      type="button"
-      class="header-button search-close"
-      onclick="toggleSearchInput()"
-      aria-label="Close search"
-    >
-      &times;
-    </button>
   </form>
   <div id="search-result" class="hidden"></div>
 </header>
@@ -78,10 +31,486 @@
     <main>
       <div id="tag-filter"></div>
       <section>
-        <div id="contents-list"></div>
+        <div id="contents-list"><div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/jargon.html">小ネタ集</a></div>
+  <div class="card-meta">
+    <div class="card-date">2026-03-11</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="vba">
+  <div class="card-header"><a class="card-link" href="public/vba-utils.html">VBA 便利マクロ集</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-11-02</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=vba">vba</a></div>
+  </div>
+</div>
+<div class="card" data-tags="lang,java,ref">
+  <div class="card-header"><a class="card-link" href="public/java/index.html">Java</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-10-12</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=lang">lang</a><a class="tag" href="index.html?tag=java">java</a><a class="tag" href="index.html?tag=ref">ref</a></div>
+  </div>
+</div>
+<div class="card" data-tags="lang">
+  <div class="card-header"><a class="card-link" href="public/ietf-language-tag.html">IETF言語タグ</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-10-04</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=lang">lang</a></div>
+  </div>
+</div>
+<div class="card" data-tags="algo,math">
+  <div class="card-header"><a class="card-link" href="public/shoelace.html">靴紐公式 (多角形の求積)</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-09-23</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=algo">algo</a><a class="tag" href="index.html?tag=math">math</a></div>
+  </div>
+</div>
+<div class="card" data-tags="日本語,中国語">
+  <div class="card-header"><a class="card-link" href="public/simple-kanji.html">簡体字を知ろう。手書きメモのために。</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-09-08</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=日本語">日本語</a><a class="tag" href="index.html?tag=中国語">中国語</a></div>
+  </div>
+</div>
+<div class="card" data-tags="excel,vba">
+  <div class="card-header"><a class="card-link" href="public/vba-llp.html">Excel のリンク付きが重い問題に対処する</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-08-24</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=excel">excel</a><a class="tag" href="index.html?tag=vba">vba</a></div>
+  </div>
+</div>
+<div class="card" data-tags="Excel,Todo">
+  <div class="card-header"><a class="card-link" href="public/todo-xlsm.html">Excel で TODO リストを作る</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-08-03</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=Excel">Excel</a><a class="tag" href="index.html?tag=Todo">Todo</a></div>
+  </div>
+</div>
+<div class="card" data-tags="日本語,言葉遊び">
+  <div class="card-header"><a class="card-link" href="public/ginata.html">ぎなた読み</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-08-013</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=日本語">日本語</a><a class="tag" href="index.html?tag=言葉遊び">言葉遊び</a></div>
+  </div>
+</div>
+<div class="card" data-tags="言葉遊び">
+  <div class="card-header"><a class="card-link" href="public/ras.html">RAS症候群、あるいは頭痛が痛い。</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-07-27</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=言葉遊び">言葉遊び</a></div>
+  </div>
+</div>
+<div class="card" data-tags="tool">
+  <div class="card-header"><a class="card-link" href="public/keyevent.html">キーイベントチェッカー</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-06-26</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=tool">tool</a></div>
+  </div>
+</div>
+<div class="card" data-tags="java,spring,batch">
+  <div class="card-header"><a class="card-link" href="public/spring-batch-wo-meta-table.html">Spring Batch をメタデータ用テーブル無しで使う</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-06-01</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=java">java</a><a class="tag" href="index.html?tag=spring">spring</a><a class="tag" href="index.html?tag=batch">batch</a></div>
+  </div>
+</div>
+<div class="card" data-tags="">
+  <div class="card-header"><a class="card-link" href="public/raport.html">ラポール</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-06-01</div>
+    <div class="card-tags"></div>
+  </div>
+</div>
+<div class="card" data-tags="java,ref,junit,test">
+  <div class="card-header"><a class="card-link" href="public/junit.html">JUnit</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-04-05</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=java">java</a><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=junit">junit</a><a class="tag" href="index.html?tag=test">test</a></div>
+  </div>
+</div>
+<div class="card" data-tags="java,ref,spring,wip">
+  <div class="card-header"><a class="card-link" href="public/spring.html">Spring Framework</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-04-05</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=java">java</a><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=spring">spring</a><a class="tag" href="index.html?tag=wip">wip</a></div>
+  </div>
+</div>
+<div class="card" data-tags="it,ref,web">
+  <div class="card-header"><a class="card-link" href="public/vue.html">Vue</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-02-25</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=it">it</a><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=web">web</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ref">
+  <div class="card-header"><a class="card-link" href="public/tar.html">tar コマンド</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-02-24</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ref">ref</a></div>
+  </div>
+</div>
+<div class="card" data-tags="git">
+  <div class="card-header"><a class="card-link" href="public/git.html">Git 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-02-23</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=git">git</a></div>
+  </div>
+</div>
+<div class="card" data-tags="lang,java,batch">
+  <div class="card-header"><a class="card-link" href="public/spring-batch.html">Spring Batch</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-02-17</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=lang">lang</a><a class="tag" href="index.html?tag=java">java</a><a class="tag" href="index.html?tag=batch">batch</a></div>
+  </div>
+</div>
+<div class="card" data-tags="python,tips">
+  <div class="card-header"><a class="card-link" href="public/python-manage.html">Python のパッケージ管理</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-01-26</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=python">python</a><a class="tag" href="index.html?tag=tips">tips</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ref,vim">
+  <div class="card-header"><a class="card-link" href="public/vim.html">vim 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-01-21</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=vim">vim</a></div>
+  </div>
+</div>
+<div class="card" data-tags="it,ref">
+  <div class="card-header"><a class="card-link" href="public/python.html">Python 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-01-21</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=it">it</a><a class="tag" href="index.html?tag=ref">ref</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/dualboot-clocl.html">Linux と Windows を並用すると時計がずれる</a></div>
+  <div class="card-meta">
+    <div class="card-date">2025-01-21</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="it">
+  <div class="card-header"><a class="card-link" href="public/jwt-jws-jwe.html">JWT/JWS/JWE (アクセストークン)</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-12-28</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=it">it</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ref,shell">
+  <div class="card-header"><a class="card-link" href="public/shell.html">シェルスクリプト簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-12-22</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=shell">shell</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ref,shell">
+  <div class="card-header"><a class="card-link" href="public/awk.html">AWK 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-12-22</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=shell">shell</a></div>
+  </div>
+</div>
+<div class="card" data-tags="it">
+  <div class="card-header"><a class="card-link" href="public/command.html">いつか使えそうなコマンド</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-12-08</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=it">it</a></div>
+  </div>
+</div>
+<div class="card" data-tags="python,tips">
+  <div class="card-header"><a class="card-link" href="public/py-win-open.html">(Python, Windows) open したファイルを削除・移動する</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-12-07</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=python">python</a><a class="tag" href="index.html?tag=tips">tips</a></div>
+  </div>
+</div>
+<div class="card" data-tags="vim,tmux,tips">
+  <div class="card-header"><a class="card-link" href="public/vmux.html">tmux がなければ vim を使えばいいじゃない</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-10-26</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=vim">vim</a><a class="tag" href="index.html?tag=tmux">tmux</a><a class="tag" href="index.html?tag=tips">tips</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ref,windows">
+  <div class="card-header"><a class="card-link" href="public/windows.html">Windows 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-10-26</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=windows">windows</a></div>
+  </div>
+</div>
+<div class="card" data-tags="algo">
+  <div class="card-header"><a class="card-link" href="public/slide-minval.html">スライド最小値</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-10-26</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=algo">algo</a></div>
+  </div>
+</div>
+<div class="card" data-tags="lang,js">
+  <div class="card-header"><a class="card-link" href="public/js.html">JavaScript 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-10-16</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=lang">lang</a><a class="tag" href="index.html?tag=js">js</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ref,excel">
+  <div class="card-header"><a class="card-link" href="public/excel.html">Excel 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-10-16</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=excel">excel</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ref,vba,lang">
+  <div class="card-header"><a class="card-link" href="public/vba.html">VBA 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-09-29</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=vba">vba</a><a class="tag" href="index.html?tag=lang">lang</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ref,linux">
+  <div class="card-header"><a class="card-link" href="public/xargs.html">xargs 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-09-29</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=linux">linux</a></div>
+  </div>
+</div>
+<div class="card" data-tags="algo,graphic">
+  <div class="card-header"><a class="card-link" href="public/rendering.html">レンダリング法</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-09-29</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=algo">algo</a><a class="tag" href="index.html?tag=graphic">graphic</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/review.html">レビュー手法</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-09-15</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ime">
+  <div class="card-header"><a class="card-link" href="public/ime.html">IME 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-08-18</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ime">ime</a></div>
+  </div>
+</div>
+<div class="card" data-tags="lang,css">
+  <div class="card-header"><a class="card-link" href="public/css.html">CSS 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-08-18</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=lang">lang</a><a class="tag" href="index.html?tag=css">css</a></div>
+  </div>
+</div>
+<div class="card" data-tags="ref,zsh">
+  <div class="card-header"><a class="card-link" href="public/zsh.html">Zsh 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-08-18</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=ref">ref</a><a class="tag" href="index.html?tag=zsh">zsh</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/pl.html">損益計算書 (P/L)</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-08-18</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/cf.html">キャッシュフロー計算書損 (C/F)</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-08-18</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="tool">
+  <div class="card-header"><a class="card-link" href="public/segmentor.html">Segmenter によるトーカナイズ</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-08-10</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=tool">tool</a></div>
+  </div>
+</div>
+<div class="card" data-tags="money">
+  <div class="card-header"><a class="card-link" href="public/nisa.html">NISA</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-07-27</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=money">money</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/keyboard.html">キーボードあれこれ</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-07-06</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="sql">
+  <div class="card-header"><a class="card-link" href="public/sql.html">SQL</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-06-28</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=sql">sql</a></div>
+  </div>
+</div>
+<div class="card" data-tags="tmux">
+  <div class="card-header"><a class="card-link" href="public/tmux.html">tmux 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-06-22</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=tmux">tmux</a></div>
+  </div>
+</div>
+<div class="card crypto" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="private/hitchart.html">私的ヒットチャート</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-06-16</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="it">
+  <div class="card-header"><a class="card-link" href="public/ide.html">IDE簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-06-12</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=it">it</a></div>
+  </div>
+</div>
+<div class="card" data-tags="it">
+  <div class="card-header"><a class="card-link" href="public/package-manager.html">パッケージマネージャ簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-06-12</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=it">it</a></div>
+  </div>
+</div>
+<div class="card" data-tags="lang,yaml">
+  <div class="card-header"><a class="card-link" href="public/yaml.html">Yaml 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-06-02</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=lang">lang</a><a class="tag" href="index.html?tag=yaml">yaml</a></div>
+  </div>
+</div>
+<div class="card" data-tags="lang">
+  <div class="card-header"><a class="card-link" href="public/html.html">Html 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-25</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=lang">lang</a></div>
+  </div>
+</div>
+<div class="card" data-tags="algo">
+  <div class="card-header"><a class="card-link" href="public/bloom-filter.html">Bloom フィルタ</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-22</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=algo">algo</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/pwa.html">PWA (Progressive Web Apps)</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-18</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card crypto" data-tags="読書メモ">
+  <div class="card-header"><a class="card-link" href="private/real-world-http.html">Real World HTTP (ミニ版)</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-13</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=読書メモ">読書メモ</a></div>
+  </div>
+</div>
+<div class="card crypto" data-tags="test">
+  <div class="card-header"><a class="card-link" href="private/test-crypto.html">暗号化テスト</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-12</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=test">test</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/low-hack.html">法律ハック</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-03</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="tool">
+  <div class="card-header"><a class="card-link" href="public/rot.html">ROT</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-03</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=tool">tool</a></div>
+  </div>
+</div>
+<div class="card" data-tags="algo">
+  <div class="card-header"><a class="card-link" href="public/bin-search.html">めぐる式二分探索</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-03</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=algo">algo</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/life-hack.html">ライフハック</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-03</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="lang,rust">
+  <div class="card-header"><a class="card-link" href="public/rust.html">Rust 簡易リファレンス</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-03</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=lang">lang</a><a class="tag" href="index.html?tag=rust">rust</a></div>
+  </div>
+</div>
+<div class="card" data-tags="tool">
+  <div class="card-header"><a class="card-link" href="public/word-count.html">文字数カウント</a></div>
+  <div class="card-meta">
+    <div class="card-date">2024-05-03</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=tool">tool</a></div>
+  </div>
+</div>
+<div class="card" data-tags="shell">
+  <div class="card-header"><a class="card-link" href="public/bracketed-paste.html">Bracketed Paste を使ってターミナルに複数行のテキストを貼り付ける</a></div>
+  <div class="card-meta">
+    <div class="card-date">2023-04-21</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=shell">shell</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc,editor">
+  <div class="card-header"><a class="card-link" href="public/vimlike-vscode.html">Vimmer のための VSCode</a></div>
+  <div class="card-meta">
+    <div class="card-date">2022-10-14</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a><a class="tag" href="index.html?tag=editor">editor</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/mail-mojibake.html">メールの件名が文字化けする件</a></div>
+  <div class="card-meta">
+    <div class="card-date">2022-05-15</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/tricky-slice.html">トリッキーなスライスの取り方</a></div>
+  <div class="card-meta">
+    <div class="card-date">2022-04-25</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/ascii.html">ASCII表</a></div>
+  <div class="card-meta">
+    <div class="card-date">2022-04-03</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+<div class="card" data-tags="misc">
+  <div class="card-header"><a class="card-link" href="public/hensei.html">変性</a></div>
+  <div class="card-meta">
+    <div class="card-date">2022-04-03</div>
+    <div class="card-tags"><a class="tag" href="index.html?tag=misc">misc</a></div>
+  </div>
+</div>
+</div>
       </section>
-      <section>
-        <div id="tags-list" style="overflow-wrap: keep-all"></div>
+      <section id="tags-section">
+        <div id="tags-list" style="overflow-wrap: keep-all"><a class="tag" href="index.html?tag=Excel">Excel</a> <a class="tag" href="index.html?tag=Todo">Todo</a> <a class="tag" href="index.html?tag=algo">algo</a> <a class="tag" href="index.html?tag=batch">batch</a> <a class="tag" href="index.html?tag=cloud">cloud</a> <a class="tag" href="index.html?tag=css">css</a> <a class="tag" href="index.html?tag=db">db</a> <a class="tag" href="index.html?tag=editor">editor</a> <a class="tag" href="index.html?tag=excel">excel</a> <a class="tag" href="index.html?tag=git">git</a> <a class="tag" href="index.html?tag=graphic">graphic</a> <a class="tag" href="index.html?tag=ime">ime</a> <a class="tag" href="index.html?tag=it">it</a> <a class="tag" href="index.html?tag=java">java</a> <a class="tag" href="index.html?tag=js">js</a> <a class="tag" href="index.html?tag=junit">junit</a> <a class="tag" href="index.html?tag=lang">lang</a> <a class="tag" href="index.html?tag=linux">linux</a> <a class="tag" href="index.html?tag=math">math</a> <a class="tag" href="index.html?tag=misc">misc</a> <a class="tag" href="index.html?tag=money">money</a> <a class="tag" href="index.html?tag=oracle">oracle</a> <a class="tag" href="index.html?tag=python">python</a> <a class="tag" href="index.html?tag=ref">ref</a> <a class="tag" href="index.html?tag=rust">rust</a> <a class="tag" href="index.html?tag=shell">shell</a> <a class="tag" href="index.html?tag=spring">spring</a> <a class="tag" href="index.html?tag=sql">sql</a> <a class="tag" href="index.html?tag=test">test</a> <a class="tag" href="index.html?tag=tips">tips</a> <a class="tag" href="index.html?tag=tmux">tmux</a> <a class="tag" href="index.html?tag=tool">tool</a> <a class="tag" href="index.html?tag=vba">vba</a> <a class="tag" href="index.html?tag=vim">vim</a> <a class="tag" href="index.html?tag=web">web</a> <a class="tag" href="index.html?tag=windows">windows</a> <a class="tag" href="index.html?tag=wip">wip</a> <a class="tag" href="index.html?tag=yaml">yaml</a> <a class="tag" href="index.html?tag=zsh">zsh</a> <a class="tag" href="index.html?tag=中国語">中国語</a> <a class="tag" href="index.html?tag=日本語">日本語</a> <a class="tag" href="index.html?tag=言葉遊び">言葉遊び</a> <a class="tag" href="index.html?tag=読書メモ">読書メモ</a></div>
       </section>
     </main>
 
